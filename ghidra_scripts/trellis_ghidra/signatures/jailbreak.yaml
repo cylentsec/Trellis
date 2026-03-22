@@ -1,0 +1,497 @@
+category: jailbreak
+description: Jailbreak detection techniques including file system checks, process manipulation detection, and runtime environment validation
+
+functions:
+  - name: stat
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: path
+        type: const char*
+        description: File path to check
+      - name: buf
+        type: struct stat*
+        description: Buffer to receive file information
+    return:
+      type: int
+      description: 0 on success, -1 on error
+    security_notes:
+      - Check for jailbreak-related files and paths
+      - Common checks - /Applications/Cydia.app, /Library/MobileSubstrate/MobileSubstrate.dylib
+      - /usr/sbin/sshd, /usr/bin/ssh, /usr/libexec/sftp-server (SSH components)
+      - /private/var/lib/apt/, /private/var/lib/cydia/ (package managers)
+      - /bin/bash, /bin/sh (shell access)
+      - /etc/apt/, /private/var/stash (jailbreak directories)
+      - /usr/share/jailbreak/, /var/cache/apt/, /var/lib/dpkg/
+      - /Library/MobileSubstrate/, /Library/PreferenceBundles/
+      - Flag checks outside app sandbox
+      - Success indicates file exists (potential jailbreak)
+
+  - name: lstat
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: path
+        type: const char*
+        description: File path to check (doesn't follow symlinks)
+      - name: buf
+        type: struct stat*
+        description: Buffer to receive file information
+    return:
+      type: int
+      description: 0 on success, -1 on error
+    security_notes:
+      - Similar to stat but doesn't follow symbolic links
+      - Can detect symlink attacks or sandbox escapes
+      - Check for /Applications symlink (jailbreak indicator)
+      - May validate file system integrity
+      - Flag checks for jailbreak-related symlinks
+
+  - name: access
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: path
+        type: const char*
+        description: File path to check
+      - name: mode
+        type: int
+        description: Access mode to test (R_OK, W_OK, X_OK, F_OK)
+    return:
+      type: int
+      description: 0 if access permitted, -1 otherwise
+    security_notes:
+      - More reliable than stat for jailbreak detection
+      - Checks actual accessibility, not just existence
+      - Common jailbreak file checks (same paths as stat)
+      - W_OK on /private or / indicates write access (jailbreak)
+      - Check for /bin/bash, /usr/sbin/sshd with X_OK
+      - May attempt to write to restricted areas
+      - Flag any access checks outside app sandbox
+      - Multiple sequential checks indicate jailbreak detection routine
+
+  - name: fopen
+    library: libsystem_c.dylib
+    parameters:
+      - name: filename
+        type: const char*
+        description: File path to open
+      - name: mode
+        type: const char*
+        description: Opening mode (r, w, a, etc.)
+    return:
+      type: FILE*
+      description: File pointer or NULL on error
+    security_notes:
+      - Attempts to open jailbreak-related files
+      - Success indicates file exists and is readable/writable
+      - Common checks - same jailbreak paths as stat/access
+      - May try to write to /private/jailbreak.txt
+      - Write mode to restricted paths indicates jailbreak
+      - Flag opens of /etc/fstab, /etc/passwd
+      - Check for opening .plist files outside sandbox
+      - Look for checks of /var/mobile/Library/Preferences/
+
+  - name: open
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: path
+        type: const char*
+        description: File path to open
+      - name: oflag
+        type: int
+        description: Opening flags (O_RDONLY, O_WRONLY, O_RDWR, etc.)
+      - name: ...
+        type: variadic
+        description: Optional mode for O_CREAT
+    return:
+      type: int
+      description: File descriptor or -1 on error
+    security_notes:
+      - Low-level file opening for jailbreak detection
+      - Check for same jailbreak paths
+      - O_WRONLY or O_RDWR to restricted paths indicates jailbreak
+      - May attempt to create files outside sandbox
+      - Flag opens with O_CREAT outside app directories
+      - Check for /dev/ device access attempts
+
+  - name: fork
+    library: libsystem_c.dylib
+    parameters: []
+    return:
+      type: pid_t
+      description: 0 in child, child PID in parent, -1 on error
+    security_notes:
+      - fork() should fail on non-jailbroken devices (returns -1)
+      - Success strongly indicates jailbreak
+      - Sandboxed apps cannot fork
+      - Critical jailbreak detection method
+      - Flag all fork() calls in iOS apps
+      - May be followed by exec to run shell commands
+      - Check error handling - EPERM expected on non-jailbreak
+
+  - name: vfork
+    library: libsystem_c.dylib
+    parameters: []
+    return:
+      type: pid_t
+      description: 0 in child, child PID in parent, -1 on error
+    security_notes:
+      - Similar to fork() - should fail on non-jailbroken devices
+      - vfork() success indicates jailbreak
+      - Used for process creation (typically before exec)
+      - Flag all vfork() usage
+      - Check for subsequent exec family calls
+
+  - name: system
+    library: libsystem_c.dylib
+    parameters:
+      - name: command
+        type: const char*
+        description: Shell command to execute
+    return:
+      type: int
+      description: Exit status or -1 on error
+    security_notes:
+      - system() should fail on non-jailbroken devices
+      - Success indicates shell access (jailbreak)
+      - Critical jailbreak indicator
+      - May execute commands like ls, ps, id
+      - Check command string for jailbreak utilities
+      - Flag all system() calls in iOS apps
+      - Can be used to detect Cydia, dpkg, apt
+
+  - name: popen
+    library: libsystem_c.dylib
+    parameters:
+      - name: command
+        type: const char*
+        description: Shell command to execute
+      - name: type
+        type: const char*
+        description: Mode - "r" for reading output, "w" for writing input
+    return:
+      type: FILE*
+      description: File stream or NULL on error
+    security_notes:
+      - popen() should fail on non-jailbroken devices
+      - Success indicates shell access
+      - Can read command output (e.g., "ls /Applications")
+      - Flag all popen() usage
+      - Check command strings for jailbreak detection
+      - May query for installed packages or processes
+
+  - name: execve
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: path
+        type: const char*
+        description: Path to executable
+      - name: argv
+        type: char* const*
+        description: Argument array
+      - name: envp
+        type: char* const*
+        description: Environment variables
+    return:
+      type: int
+      description: Does not return on success, -1 on error
+    security_notes:
+      - Should fail on non-jailbroken devices
+      - May attempt to execute /bin/sh or /bin/bash
+      - Flag all exec family calls
+      - Check paths for jailbreak utilities
+      - Typically used after fork/vfork
+
+  - name: dlopen
+    library: libdyld.dylib
+    parameters:
+      - name: path
+        type: const char*
+        description: Library path to load or NULL for main program
+      - name: mode
+        type: int
+        description: Loading mode (RTLD_LAZY, RTLD_NOW, RTLD_LOCAL, RTLD_GLOBAL)
+    return:
+      type: void*
+      description: Handle to library or NULL on error
+    security_notes:
+      - Attempt to load jailbreak-related libraries
+      - Check for /Library/MobileSubstrate/MobileSubstrate.dylib
+      - Look for /usr/lib/libsubstrate.dylib, /usr/lib/substrate/
+      - May try to load hooking frameworks (Frida, Cycript)
+      - Success indicates library present (jailbreak indicator)
+      - Flag loads of suspicious system libraries
+      - Can detect runtime injection frameworks
+      - Check for CydiaSubstrate.framework
+
+  - name: dyld_get_image_name
+    library: libdyld.dylib
+    parameters:
+      - name: image_index
+        type: uint32_t
+        description: Index of loaded image
+    return:
+      type: const char*
+      description: Path to image or NULL
+    security_notes:
+      - Enumerate loaded libraries for jailbreak indicators
+      - Check for MobileSubstrate, Substrate, Cycript, Frida
+      - Look for paths containing "substrate", "cycript", "frida"
+      - Flag libraries in /Library/MobileSubstrate/
+      - Check for /usr/lib/libsubstitute.dylib, /usr/lib/libhooker.dylib
+      - May detect runtime hooking frameworks
+      - Part of comprehensive jailbreak detection
+
+  - name: _dyld_image_count
+    library: libdyld.dylib
+    parameters: []
+    return:
+      type: uint32_t
+      description: Number of loaded images
+    security_notes:
+      - Used with dyld_get_image_name for enumeration
+      - Unusual library count may indicate injection
+      - Part of jailbreak detection routine
+      - May establish baseline count
+      - Flag when combined with library name validation
+
+  - name: getenv
+    library: libsystem_c.dylib
+    parameters:
+      - name: name
+        type: const char*
+        description: Environment variable name
+    return:
+      type: char*
+      description: Value of variable or NULL if not set
+    security_notes:
+      - Check for DYLD_INSERT_LIBRARIES (library injection)
+      - Look for suspicious environment variables
+      - DYLD_* variables indicate runtime manipulation
+      - Check for _MSSafeMode (Mobile Substrate safe mode)
+      - Check for _SafeMode (jailbreak detection)
+      - May check PATH for /usr/bin or other system paths
+      - Flag checks for SHELL, TERM, USER variables
+      - Non-NULL DYLD_INSERT_LIBRARIES strongly indicates jailbreak/hooking
+
+  - name: setenv
+    library: libsystem_c.dylib
+    parameters:
+      - name: name
+        type: const char*
+        description: Environment variable name
+      - name: value
+        type: const char*
+        description: Value to set
+      - name: overwrite
+        type: int
+        description: Whether to overwrite existing value
+    return:
+      type: int
+      description: 0 on success, -1 on error
+    security_notes:
+      - May attempt to manipulate environment
+      - Check if clearing DYLD_INSERT_LIBRARIES
+      - Could be anti-anti-jailbreak technique
+      - Flag unusual environment manipulation
+
+  - name: syscall
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: number
+        type: int
+        description: System call number
+      - name: ...
+        type: variadic
+        description: Arguments for system call
+    return:
+      type: int
+      description: Depends on system call
+    security_notes:
+      - Direct syscalls can bypass sandbox restrictions
+      - Check for SYS_fork (2), SYS_vfork (66), SYS_execve (59)
+      - SYS_open (5), SYS_stat (188), SYS_access (33)
+      - May be used to evade API monitoring
+      - Flag all direct syscall usage
+      - Often combined with obfuscation
+      - Can detect if syscall filtering is active
+
+  - name: statfs
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: path
+        type: const char*
+        description: Path to file system
+      - name: buf
+        type: struct statfs*
+        description: Buffer to receive file system information
+    return:
+      type: int
+      description: 0 on success, -1 on error
+    security_notes:
+      - Check file system characteristics
+      - Jailbroken devices may have different mount points
+      - Look for /var, /tmp, /private mounts
+      - May check available space or permissions
+      - Flag checks for unusual file systems
+      - Can detect read-write remount (jailbreak indicator)
+
+  - name: opendir
+    library: libsystem_c.dylib
+    parameters:
+      - name: dirname
+        type: const char*
+        description: Directory path to open
+    return:
+      type: DIR*
+      description: Directory stream or NULL on error
+    security_notes:
+      - Attempt to read jailbreak directories
+      - Check for /Applications, /Library/Ringtones
+      - /usr/share/, /usr/bin/, /usr/sbin/ directories
+      - Success indicates directory accessibility (may indicate jailbreak)
+      - Flag directory opens outside app sandbox
+      - May enumerate installed applications
+
+  - name: readdir
+    library: libsystem_c.dylib
+    parameters:
+      - name: dirp
+        type: DIR*
+        description: Directory stream from opendir
+    return:
+      type: struct dirent*
+      description: Next directory entry or NULL at end
+    security_notes:
+      - Read directory contents for jailbreak files
+      - Used after opendir to enumerate files
+      - Look for Cydia.app, MobileSubstrate, etc.
+      - Part of comprehensive jailbreak detection
+      - Flag when used with restricted directories
+
+  - name: NSFileManager_fileExistsAtPath
+    library: Foundation.framework
+    parameters:
+      - name: path
+        type: NSString*
+        description: File path to check
+    return:
+      type: BOOL
+      description: YES if file exists, NO otherwise
+    security_notes:
+      - High-level Objective-C file existence check
+      - Common jailbreak detection method
+      - Check for same jailbreak paths as stat/access
+      - More common in Swift/Objective-C code
+      - Flag checks outside app sandbox
+      - Often used in combination with isReadableFileAtPath
+
+  - name: NSFileManager_isReadableFileAtPath
+    library: Foundation.framework
+    parameters:
+      - name: path
+        type: NSString*
+        description: File path to check
+    return:
+      type: BOOL
+      description: YES if file is readable, NO otherwise
+    security_notes:
+      - Checks both existence and readability
+      - More thorough than fileExistsAtPath
+      - Common jailbreak detection method
+      - Flag checks for jailbreak-related files
+      - May bypass sandbox restrictions on jailbroken devices
+
+  - name: NSFileManager_isWritableFileAtPath
+    library: Foundation.framework
+    parameters:
+      - name: path
+        type: NSString*
+        description: File path to check
+    return:
+      type: BOOL
+      description: YES if file is writable, NO otherwise
+    security_notes:
+      - Write access to restricted paths indicates jailbreak
+      - Check for /private, /, /var write attempts
+      - Strong jailbreak indicator if successful
+      - Flag all write checks outside app directories
+
+  - name: UIApplication_canOpenURL
+    library: UIKit.framework
+    parameters:
+      - name: url
+        type: NSURL*
+        description: URL scheme to check
+    return:
+      type: BOOL
+      description: YES if URL can be opened, NO otherwise
+    security_notes:
+      - Check for jailbreak app URL schemes
+      - cydia://, sileo://, zbra://, installer:// (package managers)
+      - undecimus://, chimera://, electra://, unc0ver:// (jailbreak tools)
+      - filza://, ifile:// (file managers)
+      - activator://, barrel:// (tweaks)
+      - Success indicates jailbreak app installed
+      - Limited on iOS 9+ (whitelist required)
+      - Flag checks for suspicious URL schemes
+
+  - name: LSApplicationWorkspace_URLOverrideForURL
+    library: MobileCoreServices.framework
+    parameters:
+      - name: url
+        type: NSURL*
+        description: URL to check for overrides
+    return:
+      type: NSURL*
+      description: Override URL or original URL
+    security_notes:
+      - Private API for URL scheme handling
+      - Can detect if jailbreak apps handle certain schemes
+      - Flag usage of private APIs
+      - May indicate jailbreak detection
+
+  - name: getgid
+    library: libsystem_c.dylib
+    parameters: []
+    return:
+      type: gid_t
+      description: Real group ID
+    security_notes:
+      - Check process group ID
+      - May compare against expected mobile group
+      - Unusual GID could indicate privilege escalation
+      - Part of sandbox integrity checks
+
+  - name: getuid
+    library: libsystem_c.dylib
+    parameters: []
+    return:
+      type: uid_t
+      description: Real user ID
+    security_notes:
+      - Check process user ID
+      - Should be mobile user (501) on non-jailbroken devices
+      - Root access (UID 0) indicates jailbreak/compromise
+      - Flag when combined with privilege checks
+
+  - name: getegid
+    library: libsystem_c.dylib
+    parameters: []
+    return:
+      type: gid_t
+      description: Effective group ID
+    security_notes:
+      - Check effective group privileges
+      - May differ from real GID on jailbroken devices
+      - Part of privilege escalation detection
+
+  - name: geteuid
+    library: libsystem_c.dylib
+    parameters: []
+    return:
+      type: uid_t
+      description: Effective user ID
+    security_notes:
+      - Check effective user privileges
+      - Root EUID (0) strongly indicates jailbreak
+      - Critical security check
+      - Flag when used for security decisions

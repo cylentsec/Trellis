@@ -1,0 +1,143 @@
+category: storage
+description: Data persistence and file storage operations (Insecure Data Storage detection)
+
+functions:
+  - name: UserDefaults_objectForKey
+    library: Foundation.framework
+    parameters:
+      - name: defaultName
+        type: NSString*
+        description: Key to retrieve
+    return:
+      type: id
+      description: Value associated with key
+    security_notes:
+      - Check for sensitive data stored in UserDefaults (tokens, passwords, keys)
+      - UserDefaults is NOT encrypted securely (plist file)
+      - Flag retrieval of keys like "password", "token", "auth", "key"
+      - Recommend Keychain for sensitive data
+
+  - name: UserDefaults_setObject_forKey
+    library: Foundation.framework
+    parameters:
+      - name: value
+        type: id
+        description: Value to store
+      - name: defaultName
+        type: NSString*
+        description: Key to associate with value
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Check for sensitive data being stored in UserDefaults
+      - Values are stored in plain text in Info.plist/preferences
+      - Flag storage of potentially sensitive strings
+      - Critical if "password" or "token" is used as key
+
+  - name: NSKeyedArchiver_archivedDataWithRootObject
+    library: Foundation.framework
+    parameters:
+      - name: rootObject
+        type: id
+        description: Object graph to archive
+    return:
+      type: NSData*
+      description: Archived data
+    security_notes:
+      - Archives are often stored on disk
+      - Check if sensitive objects are being archived without encryption
+      - Ensure 'requiringSecureCoding:YES' is used in modern APIs
+      - Verify where the archived data is stored
+
+  - name: NSKeyedUnarchiver_unarchiveObjectWithData
+    library: Foundation.framework
+    parameters:
+      - name: data
+        type: NSData*
+        description: Data to unarchive
+    return:
+      type: id
+      description: Unarchived object graph
+    security_notes:
+      - Vulnerable to object injection/deserialization attacks
+      - Deprecated in favor of unarchivedObjectOfClass:fromData:error:
+      - Flag use of insecure deserialization
+      - Check source of data (network vs local)
+
+  - name: NSFileHandle_fileHandleForWritingAtPath
+    library: Foundation.framework
+    parameters:
+      - name: path
+        type: NSString*
+        description: File path
+    return:
+      type: NSFileHandle*
+      description: File handle or nil
+    security_notes:
+      - Check for writing to insecure paths (/tmp, Documents without protection)
+      - Verify data protection class (NSFileProtectionComplete)
+      - Flag sensitive data writes to standard files
+
+  - name: NSData_writeToFile_atomically
+    library: Foundation.framework
+    parameters:
+      - name: path
+        type: NSString*
+        description: Destination path
+      - name: useAuxiliaryFile
+        type: BOOL
+        description: Whether to write atomically
+    return:
+      type: BOOL
+      description: YES on success
+    security_notes:
+      - Verify file protection level options are used (writeToFile:options:error:)
+      - Basic writeToFile does not apply Data Protection encryption by default
+      - Check if path is in Caches (insecure) or Documents
+      - Recommend writeToFile:options:error: with NSDataWritingFileProtectionComplete
+
+  - name: sqlite3_open
+    library: libsqlite3.dylib
+    parameters:
+      - name: filename
+        type: const char*
+        description: Database filename
+      - name: ppDb
+        type: sqlite3**
+        description: Handle to database
+    return:
+      type: int
+      description: SQLITE_OK on success
+    security_notes:
+      - Standard SQLite is not encrypted
+      - Check if SQLCipher or encrypted alternative is used
+      - Verify database is not storing sensitive user data in plaintext
+      - Look for "wal" (Write-Ahead Log) files which may contain data
+
+  - name: CoreData_NSPersistentContainer_init
+    library: CoreData.framework
+    parameters:
+      - name: name
+        type: NSString*
+        description: Name of the persistent container
+    return:
+      type: NSPersistentContainer*
+      description: New container
+    security_notes:
+      - CoreData stores are SQLite by default (unencrypted)
+      - Check NSPersistentStoreDescription for encryption options
+      - Flag if storing PII or credentials
+      - Verify File Protection attributes on the store URL
+
+  - name: Realm_Configuration_encryptionKey
+    library: Realm.framework
+    parameters: []
+    return:
+      type: NSData*
+      description: Encryption key
+    security_notes:
+      - Realm supports encryption but it must be enabled
+      - Check if encryptionKey is set on configuration
+      - Flag if Realm is initialized without a key
+      - Verify key management (should come from Keychain)

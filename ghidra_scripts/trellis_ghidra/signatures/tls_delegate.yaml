@@ -1,0 +1,202 @@
+category: tls_delegate
+description: URLSession and NSURLConnection TLS certificate validation delegate methods
+
+functions:
+  - name: "URLSession:didReceiveChallenge:completionHandler:"
+    library: Foundation.framework
+    parameters:
+      - name: session
+        type: NSURLSession*
+        description: The session containing the task that received an authentication challenge
+      - name: challenge
+        type: NSURLAuthenticationChallenge*
+        description: The authentication challenge
+      - name: completionHandler
+        type: void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential*)
+        description: Block to call with challenge disposition and credential
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Critical for TLS certificate validation - check implementation carefully
+      - Verify SecTrustEvaluate or SecTrustEvaluateWithError is called
+      - Check disposition parameter passed to completionHandler
+      - NSURLSessionAuthChallengeUseCredential (0) accepts the certificate
+      - NSURLSessionAuthChallengePerformDefaultHandling (1) is safe default
+      - NSURLSessionAuthChallengeCancelAuthenticationChallenge (2) cancels
+      - NSURLSessionAuthChallengeRejectProtectionSpace (3) rejects and tries next
+      - Unconditional acceptance with UseCredential (0) is a critical vulnerability
+      - Look for certificate pinning via SecCertificateCopyData
+      - Ensure proper error handling and conditional logic
+
+  - name: "URLSession:task:didReceiveChallenge:completionHandler:"
+    library: Foundation.framework
+    parameters:
+      - name: session
+        type: NSURLSession*
+        description: The session containing the task
+      - name: task
+        type: NSURLSessionTask*
+        description: The task that received an authentication challenge
+      - name: challenge
+        type: NSURLAuthenticationChallenge*
+        description: The authentication challenge
+      - name: completionHandler
+        type: void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential*)
+        description: Block to call with challenge disposition and credential
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Task-level authentication challenge handler
+      - Same security considerations as session-level handler
+      - Verify trust evaluation is performed
+      - Check for unconditional certificate acceptance
+      - Look for proper conditional logic based on challenge type
+      - Ensure NSURLAuthenticationMethodServerTrust challenges are handled
+      - Certificate pinning should compare server certificate data
+
+  - name: "connection:willSendRequestForAuthenticationChallenge:"
+    library: Foundation.framework
+    parameters:
+      - name: connection
+        type: NSURLConnection*
+        description: The connection that will send the request
+      - name: challenge
+        type: NSURLAuthenticationChallenge*
+        description: The authentication challenge
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Legacy NSURLConnection delegate method (deprecated)
+      - Should migrate to NSURLSession for better security
+      - Check if useCredential:forAuthenticationChallenge: is called unconditionally
+      - Verify SecTrustEvaluate is called for server trust challenges
+      - Look for continueWithoutCredentialForAuthenticationChallenge (bypasses)
+      - cancelAuthenticationChallenge is safe (cancels connection)
+      - rejectProtectionSpaceAndContinueWithChallenge tries next method
+
+  - name: SecTrustEvaluate
+    library: Security.framework
+    parameters:
+      - name: trust
+        type: SecTrustRef
+        description: Trust object containing certificates to evaluate
+      - name: result
+        type: SecTrustResultType*
+        description: Pointer to receive trust evaluation result
+    return:
+      type: OSStatus
+      description: errSecSuccess or error code
+    security_notes:
+      - Deprecated on iOS 12+ - use SecTrustEvaluateWithError instead
+      - Must check result value after successful return
+      - kSecTrustResultProceed (1) - user chose to trust
+      - kSecTrustResultUnspecified (4) - OS policy says OK (safe)
+      - kSecTrustResultRecoverableTrustFailure (5) - failure that can be overridden
+      - Other values indicate trust failure
+      - Check if result is ignored (bypass)
+
+  - name: SecTrustEvaluateWithError
+    library: Security.framework
+    parameters:
+      - name: trust
+        type: SecTrustRef
+        description: Trust object containing certificates to evaluate
+      - name: error
+        type: CFErrorRef*
+        description: Pointer to receive error on failure
+    return:
+      type: bool
+      description: true if trust evaluation succeeded, false otherwise
+    security_notes:
+      - Modern replacement for SecTrustEvaluate
+      - Return value directly indicates trust success/failure
+      - Check if return value is ignored
+      - Verify error handling is proper
+
+  - name: SecTrustEvaluateAsync
+    library: Security.framework
+    parameters:
+      - name: trust
+        type: SecTrustRef
+        description: Trust object containing certificates to evaluate
+      - name: queue
+        type: dispatch_queue_t
+        description: Queue to execute the result block on
+      - name: result
+        type: SecTrustCallback
+        description: Block called with trust evaluation result
+    return:
+      type: OSStatus
+      description: errSecSuccess or error code
+    security_notes:
+      - Asynchronous trust evaluation
+      - Check result block implementation for proper handling
+      - Verify trust result is not ignored
+
+  - name: SecTrustEvaluateAsyncWithError
+    library: Security.framework
+    parameters:
+      - name: trust
+        type: SecTrustRef
+        description: Trust object containing certificates to evaluate
+      - name: queue
+        type: dispatch_queue_t
+        description: Queue to execute the result block on
+      - name: result
+        type: SecTrustWithErrorCallback
+        description: Block called with trust evaluation result
+    return:
+      type: OSStatus
+      description: errSecSuccess or error code
+    security_notes:
+      - Modern async trust evaluation with error handling
+      - Check result block for proper trust validation
+      - Verify errors are handled correctly
+
+  - name: SecCertificateCopyData
+    library: Security.framework
+    parameters:
+      - name: certificate
+        type: SecCertificateRef
+        description: Certificate to get data from
+    return:
+      type: CFDataRef
+      description: DER-encoded certificate data
+    security_notes:
+      - Used for certificate pinning implementations
+      - Compare returned data with known good certificate data
+      - Ensure comparison is done correctly (exact match)
+
+  - name: SecTrustCopyCertificateChain
+    library: Security.framework
+    parameters:
+      - name: trust
+        type: SecTrustRef
+        description: Trust object to get certificate chain from
+    return:
+      type: CFArrayRef
+      description: Array of SecCertificateRef objects in the chain
+    security_notes:
+      - Returns complete certificate chain for validation
+      - Used in certificate pinning to verify chain
+      - Check all certificates in chain if doing pinning
+
+  - name: SecTrustGetCertificateAtIndex
+    library: Security.framework
+    parameters:
+      - name: trust
+        type: SecTrustRef
+        description: Trust object containing certificates
+      - name: ix
+        type: CFIndex
+        description: Index of certificate to retrieve (0 is leaf)
+    return:
+      type: SecCertificateRef
+      description: Certificate at specified index
+    security_notes:
+      - Index 0 is the leaf (server) certificate
+      - Used for certificate pinning on specific cert
+      - Ensure proper bounds checking on index

@@ -1,0 +1,143 @@
+Business Source License 1.1
+
+Parameters
+
+Licensor:             Cylent Security LLC
+Licensed Work:        Trellis
+Additional Use Grant: Non-production use only (see Attribution Requirement below)
+Change Date:          March 22, 2031
+Change License:       Apache License, Version 2.0
+
+For information about commercial licensing arrangements, contact:
+Cylent Security LLC
+
+Notice
+
+The Business Source License (this document, or the "License") is not an Open
+Source license. However, the Licensed Work will eventually be made available
+under an Open Source License, as stated in this License.
+
+License text copyright (c) 2017 MariaDB corporation Ab, All Rights Reserved.
+"Business Source License" is a trademark of MariaDB corporation Ab.
+
+-----------------------------------------------------------------------------
+
+Terms
+
+The Licensor hereby grants you the right to copy, modify, create derivative
+works, redistribute, and make non-production use of the Licensed Work. The
+Licensor may make an Additional Use Grant, above, permitting limited
+production use.
+
+Effective on the Change Date, or the fourth anniversary of the first publicly
+available distribution of a specific version of the Licensed Work under this
+License, whichever comes first, the Licensor hereby grants you rights under
+the terms of the Change License, and the rights granted in the paragraph
+above terminate.
+
+If your use of the Licensed Work does not comply with the requirements
+currently in effect as described in this License, you must purchase a
+commercial license from the Licensor, its affiliated entities, or authorized
+resellers, or you must refrain from using the Licensed Work.
+
+All copies of the original and modified Licensed Work, and derivative works
+of the Licensed Work, are subject to this License. This License applies
+separately for each version of the Licensed Work and the Change Date may vary
+for each version of the Licensed Work released by Licensor.
+
+You must conspicuously display this License on each original or modified copy
+of the Licensed Work. If you receive the Licensed Work in original or modified
+form from a third party, the terms and conditions set forth in this License
+apply to your use of that work.
+
+Any use of the Licensed Work in violation of this License will automatically
+terminate your rights under this License for the current and all other
+versions of the Licensed Work.
+
+This License does not grant you any right in any trademark or logo of Licensor
+or its affiliates (provided that you may use a trademark or logo of Licensor
+as expressly required by this License).
+
+TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSED WORK IS PROVIDED ON
+AN "AS IS" BASIS. LICENSOR HEREBY DISCLAIMS ALL WARRANTIES AND CONDITIONS,
+EXPRESS OR IMPLIED, INCLUDING (WITHOUT LIMITATION) WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND
+TITLE.
+
+-----------------------------------------------------------------------------
+
+Commons Clause Restriction
+
+The rights granted above are subject to the following additional restriction:
+
+"Commons Clause" License Condition v1.0
+
+The Software is provided to you by the Licensor under the License, as defined
+above, subject to the following condition. Without limiting other conditions in
+the License, the grant of rights under the License will not include, and the
+License does not grant to you, the right to Sell the Software.
+
+For purposes of the foregoing, "Sell" means practicing any or all of the
+rights granted to you under the License to provide to third parties, for a fee
+or other consideration (including without limitation fees for hosting or
+consulting/support services related to the Software), a product or service
+whose value derives, entirely or substantially, from the functionality of the
+Software.
+
+"Software" means the Licensed Work as defined in the Parameters above.
+
+-----------------------------------------------------------------------------
+
+Attribution Requirement
+
+Any permitted use, distribution, or modification of the Licensed Work must
+include prominent attribution to the original project. Specifically:
+
+1. All distributions, deployments, and derivative works must include the
+   following notice in all user-facing interfaces, documentation, README
+   files, and any other materials accompanying the work:
+
+       Powered by Trellis — https://github.com/cylentsec/Trellis
+       Copyright (c) Cylent Security LLC
+
+2. The attribution notice must be clearly visible and must not be obscured,
+   removed, or minimized in any way.
+
+3. You may not imply that Cylent Security LLC endorses your use, product, or
+   derivative work without express written permission from Cylent Security LLC.
+
+-----------------------------------------------------------------------------
+
+Contributor License Agreement (CLA)
+
+By submitting a pull request, patch, or any other contribution to this
+repository, you ("Contributor") agree to the following terms:
+
+1. Grant of Rights. You hereby grant Cylent Security LLC an irrevocable,
+   perpetual, worldwide, royalty-free, non-exclusive license to reproduce,
+   prepare derivative works of, publicly display, publicly perform,
+   sublicense, and distribute your contributions and any derivative works
+   thereof.
+
+2. Relicensing Right. You expressly grant Cylent Security LLC the right to
+   relicense your contributions, in whole or in part, under any license terms
+   that Cylent Security LLC may choose at its sole discretion, including
+   proprietary or commercial licenses, without further notice to or consent
+   from you.
+
+3. Copyright Assignment. Upon request by Cylent Security LLC, you agree to
+   execute any documents reasonably necessary to formally assign copyright
+   ownership of your contributions to Cylent Security LLC.
+
+4. Representations. You represent that: (a) each contribution is your
+   original creation; (b) you have the legal right to grant the rights
+   described herein; and (c) if you are making the contribution on behalf of
+   an employer or other entity, you are authorized to bind that entity to
+   these terms.
+
+5. No Compensation. Contributions are voluntary. You are not entitled to
+   compensation of any kind for contributions made under these terms.
+
+6. Acceptance. By submitting any contribution to this repository, you confirm
+   that you have read, understood, and agree to be bound by these CLA terms.
+   These terms apply to all contributions, past and future.

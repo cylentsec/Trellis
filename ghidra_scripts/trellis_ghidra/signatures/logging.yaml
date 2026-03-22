@@ -1,0 +1,164 @@
+category: logging
+description: Logging functions that may expose sensitive data in console output
+
+functions:
+  - name: NSLog
+    library: Foundation.framework
+    parameters:
+      - name: format
+        type: NSString*
+        description: Format string - check for sensitive keywords and data
+    return:
+      type: void
+    security_notes:
+      - Check if format string or arguments contain sensitive data
+      - Sensitive keywords include password, token, key, secret, credential, auth
+      - iOS logs persist and are accessible on jailbroken devices
+      - Logs may be captured by MDM solutions or crash reporters
+
+  - name: os_log
+    library: libsystem_trace.dylib
+    parameters:
+      - name: log
+        type: os_log_t
+        description: Log object
+      - name: type
+        type: os_log_type_t
+        description: Log level (default, info, debug, error, fault)
+      - name: format
+        type: const char*
+        description: Format string
+    return:
+      type: void
+    security_notes:
+      - Modern logging API - same sensitivity concerns as NSLog
+      - os_log_debug should not contain sensitive data
+      - Even os_log_sensitive can be captured with sysdiagnose
+
+  - name: os_log_with_type
+    library: libsystem_trace.dylib
+    parameters:
+      - name: log
+        type: os_log_t
+      - name: type
+        type: os_log_type_t
+      - name: format
+        type: const char*
+    return:
+      type: void
+    security_notes:
+      - Same concerns as os_log
+
+  - name: "_os_log_impl"
+    library: libsystem_trace.dylib
+    parameters:
+      - name: dso
+        type: void*
+      - name: log
+        type: os_log_t
+      - name: type
+        type: os_log_type_t
+      - name: format
+        type: const char*
+    return:
+      type: void
+    security_notes:
+      - Internal implementation of os_log
+      - Hook to capture all os_log calls
+
+  - name: CFLog
+    library: CoreFoundation.framework
+    parameters:
+      - name: level
+        type: CFLogLevel
+        description: Logging level
+      - name: format
+        type: CFStringRef
+        description: Format string
+    return:
+      type: void
+    security_notes:
+      - CoreFoundation logging function
+      - Same sensitivity concerns as NSLog
+
+  - name: asl_log
+    library: libsystem_asl.dylib
+    parameters:
+      - name: client
+        type: asl_object_t
+      - name: msg
+        type: asl_object_t
+      - name: level
+        type: int
+      - name: format
+        type: const char*
+    return:
+      type: int
+    security_notes:
+      - Apple System Logger (deprecated but still used)
+      - Logs persist in system log files
+
+  - name: syslog
+    library: libsystem_c.dylib
+    parameters:
+      - name: priority
+        type: int
+      - name: format
+        type: const char*
+    return:
+      type: void
+    security_notes:
+      - Unix syslog function
+      - Logs may contain sensitive data
+
+  - name: "print(_:separator:terminator:)"
+    library: libswiftCore.dylib
+    parameters:
+      - name: items
+        type: Any...
+        description: Items to print
+      - name: separator
+        type: String
+      - name: terminator
+        type: String
+    return:
+      type: void
+    security_notes:
+      - Swift print statement
+      - Should not be used in production with sensitive data
+      - Outputs to stdout which can be captured
+
+  - name: "debugPrint(_:separator:terminator:)"
+    library: libswiftCore.dylib
+    parameters:
+      - name: items
+        type: Any...
+      - name: separator
+        type: String
+      - name: terminator
+        type: String
+    return:
+      type: void
+    security_notes:
+      - Swift debug print - should be stripped in release builds
+      - If present in production, may expose sensitive debug info
+
+  - name: "dump(_:name:indent:maxDepth:maxItems:)"
+    library: libswiftCore.dylib
+    parameters:
+      - name: value
+        type: Any
+      - name: name
+        type: String?
+      - name: indent
+        type: Int
+      - name: maxDepth
+        type: Int
+      - name: maxItems
+        type: Int
+    return:
+      type: Any
+    security_notes:
+      - Swift dump function - detailed object output
+      - Can expose entire object graphs including sensitive fields
+      - Should never be in production code

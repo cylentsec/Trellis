@@ -1,0 +1,140 @@
+category: sqlite
+description: SQLite database operations and SQL injection risks
+
+functions:
+  - name: sqlite3_exec
+    library: libsqlite3.dylib
+    parameters:
+      - name: db
+        type: sqlite3*
+        description: Database connection handle
+      - name: sql
+        type: const char*
+        description: SQL statement to execute - CHECK FOR STRING CONCATENATION
+      - name: callback
+        type: sqlite3_callback
+        description: Callback function for results
+      - name: arg
+        type: void*
+        description: First argument to callback
+      - name: errmsg
+        type: char**
+        description: Error message output
+    return:
+      type: int
+      description: SQLITE_OK (0) on success
+    security_notes:
+      - If sql parameter contains user input without parameterization, SQL injection possible
+      - Check for string concatenation or stringWithFormat: in sql parameter
+      - Prefer sqlite3_prepare_v2 with bound parameters
+
+  - name: sqlite3_prepare_v2
+    library: libsqlite3.dylib
+    parameters:
+      - name: db
+        type: sqlite3*
+        description: Database connection handle
+      - name: zSql
+        type: const char*
+        description: SQL statement - CHECK FOR STRING CONCATENATION
+      - name: nByte
+        type: int
+        description: Maximum length of zSql in bytes
+      - name: ppStmt
+        type: sqlite3_stmt**
+        description: Output statement handle
+      - name: pzTail
+        type: const char**
+        description: Pointer to unused portion of zSql
+    return:
+      type: int
+      description: SQLITE_OK (0) on success
+    security_notes:
+      - Prepared statements are safe if placeholders (?) are used
+      - String concatenation in zSql indicates injection risk
+      - Check if sqlite3_bind_* is called after prepare
+
+  - name: sqlite3_prepare_v3
+    library: libsqlite3.dylib
+    parameters:
+      - name: db
+        type: sqlite3*
+      - name: zSql
+        type: const char*
+      - name: nByte
+        type: int
+      - name: prepFlags
+        type: unsigned int
+      - name: ppStmt
+        type: sqlite3_stmt**
+      - name: pzTail
+        type: const char**
+    return:
+      type: int
+    security_notes:
+      - Same concerns as sqlite3_prepare_v2
+      - Check for string concatenation in zSql
+
+  - name: "predicateWithFormat:"
+    library: Foundation.framework
+    parameters:
+      - name: predicateFormat
+        type: NSString*
+        description: Predicate format string - CHECK FOR STRING INTERPOLATION
+    return:
+      type: NSPredicate*
+    security_notes:
+      - If format string contains %@ with user input, predicate injection possible
+      - Attackers can inject OR/AND conditions to bypass filters
+      - Use predicateWithFormat:argumentArray: with proper escaping
+
+  - name: "predicateWithFormat:argumentArray:"
+    library: Foundation.framework
+    parameters:
+      - name: predicateFormat
+        type: NSString*
+        description: Predicate format string with placeholders
+      - name: arguments
+        type: NSArray*
+        description: Arguments to substitute
+    return:
+      type: NSPredicate*
+    security_notes:
+      - Safer than predicateWithFormat: if arguments are properly escaped
+      - Still verify format string doesn't contain user input
+
+  - name: "executeFetchRequest:error:"
+    library: CoreData.framework
+    parameters:
+      - name: request
+        type: NSFetchRequest*
+        description: Fetch request with predicate
+      - name: error
+        type: NSError**
+        description: Error output
+    return:
+      type: NSArray*
+    security_notes:
+      - Check if predicate on fetch request uses user input
+      - Trace predicate construction for injection risks
+
+  - name: "setFilterPredicate:"
+    library: Foundation.framework
+    parameters:
+      - name: predicate
+        type: NSPredicate*
+        description: Predicate to set as filter
+    security_notes:
+      - Trace predicate source for user input
+      - Common in array/set filtering with user search
+
+  - name: "filteredArrayUsingPredicate:"
+    library: Foundation.framework
+    parameters:
+      - name: predicate
+        type: NSPredicate*
+    return:
+      type: NSArray*
+    security_notes:
+      - Check if predicate contains user input
+      - Common injection point for search functionality

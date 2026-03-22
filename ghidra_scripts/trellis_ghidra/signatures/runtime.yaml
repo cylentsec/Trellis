@@ -1,0 +1,83 @@
+category: runtime
+description: Runtime manipulation vulnerabilities (client-side auth, hardcoded comparisons)
+
+functions:
+  - name: "isEqualToString:"
+    library: Foundation
+    parameters:
+      - name: aString
+        type: NSString*
+        description: String to compare against
+    return:
+      type: BOOL
+      description: YES if strings are equal
+    security_notes:
+      - Common in client-side credential validation
+      - If comparing against hardcoded string, attacker can extract it
+      - Hook to always return YES to bypass auth
+
+  - name: "isEqual:"
+    library: Foundation
+    parameters:
+      - name: object
+        type: id
+        description: Object to compare against
+    return:
+      type: BOOL
+      description: YES if objects are equal
+    security_notes:
+      - General equality check, may be used for auth
+      - If comparing credentials client-side, easily bypassable
+
+  - name: "compare:"
+    library: Foundation
+    parameters:
+      - name: string
+        type: NSString*
+        description: String to compare against
+    return:
+      type: NSComparisonResult
+      description: Comparison result
+    security_notes:
+      - String comparison that may be used in auth logic
+      - Check caller context for auth-related functions
+
+  - name: "caseInsensitiveCompare:"
+    library: Foundation
+    parameters:
+      - name: string
+        type: NSString*
+        description: String to compare against
+    return:
+      type: NSComparisonResult
+      description: Comparison result
+    security_notes:
+      - Case-insensitive comparison may indicate loose credential checking
+
+  - name: integerValue
+    library: Foundation
+    parameters: []
+    return:
+      type: NSInteger
+      description: Integer value of the string
+    security_notes:
+      - Converting string to integer for comparison
+      - May be used to check validation codes
+
+  - name: intValue
+    library: Foundation
+    parameters: []
+    return:
+      type: int
+      description: Integer value of the string
+    security_notes:
+      - Converting string to integer for validation
+
+  - name: boolValue
+    library: Foundation
+    parameters: []
+    return:
+      type: BOOL
+      description: Boolean value of the string
+    security_notes:
+      - Boolean extraction may indicate auth flag checking

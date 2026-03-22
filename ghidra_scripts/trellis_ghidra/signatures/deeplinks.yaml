@@ -1,0 +1,156 @@
+category: deeplinks
+description: Deep link entry points and URL scheme handling
+
+functions:
+  - name: "application:openURL:options:"
+    library: UIKit.framework
+    parameters:
+      - name: application
+        type: UIApplication*
+        description: The singleton app object
+      - name: url
+        type: NSURL*
+        description: The URL to open
+      - name: options
+        type: NSDictionary*
+        description: Dictionary with options including source app
+    return:
+      type: BOOL
+      description: YES if the URL was handled, NO otherwise
+    security_notes:
+      - Deep link entry point - verify URL source application
+      - Check for UIApplicationOpenURLOptionsSourceApplicationKey in options
+      - Validate URL scheme and host before processing
+      - Sanitize URL parameters to prevent injection attacks
+      - Be cautious of file:// schemes that could access local files
+      - Watch for javascript: schemes if loading in WebView
+
+  - name: "application:handleOpenURL:"
+    library: UIKit.framework
+    parameters:
+      - name: application
+        type: UIApplication*
+        description: The singleton app object
+      - name: url
+        type: NSURL*
+        description: The URL to open
+    return:
+      type: BOOL
+      description: YES if the URL was handled, NO otherwise
+    security_notes:
+      - Deprecated deep link handler - prefer application:openURL:options:
+      - No source app validation available
+      - Validate URL scheme and host before processing
+      - Sanitize URL parameters to prevent injection attacks
+
+  - name: "application:continueUserActivity:restorationHandler:"
+    library: UIKit.framework
+    parameters:
+      - name: application
+        type: UIApplication*
+        description: The singleton app object
+      - name: userActivity
+        type: NSUserActivity*
+        description: User activity object containing Universal Link
+      - name: restorationHandler
+        type: Block
+        description: Block to execute for state restoration
+    return:
+      type: BOOL
+      description: YES if the activity was handled, NO otherwise
+    security_notes:
+      - Universal Links entry point
+      - Check userActivity.activityType for NSUserActivityTypeBrowsingWeb
+      - Validate userActivity.webpageURL before processing
+      - Verify domain matches your AASA file configuration
+      - Be cautious of URL parameters that could lead to injection
+
+  - name: "scene:openURLContexts:"
+    library: UIKit.framework
+    parameters:
+      - name: scene
+        type: UIScene*
+        description: The scene receiving the URL
+      - name: URLContexts
+        type: NSSet<UIOpenURLContext*>*
+        description: Set of URL contexts to handle
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Scene-based deep link handler (iOS 13+)
+      - Check context.options.sourceApplication for source validation
+      - Iterate through all contexts and validate each URL
+      - Verify URL schemes match expected values
+      - Sanitize URL parameters before processing
+
+  - name: "scene:continueUserActivity:"
+    library: UIKit.framework
+    parameters:
+      - name: scene
+        type: UIScene*
+        description: The scene continuing the activity
+      - name: userActivity
+        type: NSUserActivity*
+        description: User activity object containing Universal Link
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Scene-based Universal Links handler (iOS 13+)
+      - Check userActivity.activityType for NSUserActivityTypeBrowsingWeb
+      - Validate userActivity.webpageURL before processing
+      - Verify domain matches your AASA file configuration
+
+  - name: "openURL:"
+    library: UIKit.framework
+    parameters:
+      - name: url
+        type: NSURL*
+        description: The URL to open
+    return:
+      type: BOOL
+      description: YES if the URL was opened successfully
+    security_notes:
+      - Opens URL in external app (deprecated, use openURL:options:completionHandler:)
+      - Can trigger other apps without user confirmation
+      - Validate URL scheme to prevent opening unintended apps
+      - Be cautious with tel:, sms:, mailto: schemes
+
+  - name: "openURL:options:completionHandler:"
+    library: UIKit.framework
+    parameters:
+      - name: url
+        type: NSURL*
+        description: The URL to open
+      - name: options
+        type: NSDictionary*
+        description: Options dictionary (usually empty)
+      - name: completion
+        type: Block
+        description: Completion handler with success status
+    return:
+      type: void
+      description: No return value (result in completion handler)
+    security_notes:
+      - Opens URL in external app
+      - Can trigger other apps with user confirmation
+      - Validate URL scheme to prevent opening unintended apps
+      - Monitor completion handler for success/failure
+      - Consider UIApplicationOpenExternalURLOptionsUniversalLinksOnly option
+
+  - name: "canOpenURL:"
+    library: UIKit.framework
+    parameters:
+      - name: url
+        type: NSURL*
+        description: The URL to check
+    return:
+      type: BOOL
+      description: YES if the URL can be opened
+    security_notes:
+      - Checks if URL scheme is registered
+      - Limited to 50 schemes in LSApplicationQueriesSchemes
+      - Can be used for app fingerprinting/detection
+      - Returns false for unregistered schemes (privacy protection)
+      - Monitor for jailbreak detection patterns

@@ -1,0 +1,358 @@
+category: antidebug
+description: Anti-debugging and anti-tampering techniques used to detect debuggers, prevent analysis, and detect runtime modifications
+
+functions:
+  - name: ptrace
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: request
+        type: int
+        description: Operation to perform (PT_DENY_ATTACH, PT_TRACE_ME, etc.)
+      - name: pid
+        type: pid_t
+        description: Process ID to operate on (0 for self)
+      - name: addr
+        type: caddr_t
+        description: Address argument (depends on request)
+      - name: data
+        type: int
+        description: Data argument (depends on request)
+    return:
+      type: int
+      description: 0 on success, -1 on error
+    security_notes:
+      - PT_DENY_ATTACH (31) prevents debugger attachment
+      - Common anti-debugging technique on iOS
+      - Can be bypassed with kernel patches or hooking
+      - Check if used in combination with other checks
+      - May indicate app is trying to hide functionality
+      - Can interfere with legitimate security analysis
+      - Look for obfuscated ptrace calls
+      - Flag usage in security assessments
+
+  - name: sysctl
+    library: libsystem_c.dylib
+    parameters:
+      - name: name
+        type: int*
+        description: MIB array identifying information to retrieve
+        size_param: namelen
+      - name: namelen
+        type: u_int
+        description: Number of elements in name array
+      - name: oldp
+        type: void*
+        description: Buffer to receive current value
+        size_param: oldlenp
+      - name: oldlenp
+        type: size_t*
+        description: Pointer to size of oldp buffer, receives actual size
+      - name: newp
+        type: void*
+        description: Buffer containing new value (NULL to only read)
+        size_param: newlen
+      - name: newlen
+        type: size_t
+        description: Size of newp buffer
+    return:
+      type: int
+      description: 0 on success, -1 on error
+    security_notes:
+      - Check for CTL_KERN + KERN_PROC + KERN_PROC_PID (process info query)
+      - P_TRACED flag in kp_proc.p_flag indicates debugger attached
+      - Common technique to detect debugger presence
+      - Can check if parent process is suspicious (getppid)
+      - May query for process arguments or environment
+      - Look for repeated calls (continuous monitoring)
+      - Can be bypassed but indicates anti-analysis intent
+      - Flag when combined with protective actions
+
+  - name: syscall
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: number
+        type: int
+        description: System call number to invoke
+      - name: ...
+        type: variadic
+        description: Arguments for the system call
+    return:
+      type: int
+      description: Depends on system call
+    security_notes:
+      - Direct syscall bypasses library function hooks
+      - Check for SYS_ptrace (26) - anti-debugging
+      - Check for SYS_sysctl (202) - debugger detection
+      - Look for SYS_getpid, SYS_getppid - parent process checks
+      - Check for SYS_exit (1) - emergency exit on detection
+      - SYS_kill can be used to self-terminate
+      - May indicate attempt to evade API monitoring
+      - Often combined with obfuscation
+      - Flag all direct syscall usage as suspicious
+
+  - name: task_get_exception_ports
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: task
+        type: task_t
+        description: Task to query (mach_task_self() for current task)
+      - name: exception_mask
+        type: exception_mask_t
+        description: Which exception types to query
+      - name: masks
+        type: exception_mask_array_t
+        description: Array to receive exception masks
+      - name: masksCnt
+        type: mach_msg_type_number_t*
+        description: Size of masks array, receives count
+      - name: old_handlers
+        type: exception_handler_array_t
+        description: Array to receive exception handler ports
+      - name: old_behaviors
+        type: exception_behavior_array_t
+        description: Array to receive exception behaviors
+      - name: old_flavors
+        type: exception_flavor_array_t
+        description: Array to receive thread state flavors
+    return:
+      type: kern_return_t
+      description: KERN_SUCCESS or error code
+    security_notes:
+      - Debuggers install exception handlers to catch breakpoints
+      - Checking for non-NULL exception ports can detect debuggers
+      - Look for EXC_BREAKPOINT or EXC_SOFTWARE exception checks
+      - May be used to detect if exception ports have been modified
+      - Can indicate sophisticated anti-debugging
+      - Often paired with task_set_exception_ports to install custom handlers
+      - Flag as anti-analysis technique
+
+  - name: task_set_exception_ports
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: task
+        type: task_t
+        description: Task to modify
+      - name: exception_mask
+        type: exception_mask_t
+        description: Which exception types to handle
+      - name: new_port
+        type: mach_port_t
+        description: Mach port to receive exceptions
+      - name: behavior
+        type: exception_behavior_t
+        description: How to handle exceptions
+      - name: new_flavor
+        type: thread_state_flavor_t
+        description: Thread state format
+    return:
+      type: kern_return_t
+      description: KERN_SUCCESS or error code
+    security_notes:
+      - Installing custom exception handlers prevents debugger from seeing exceptions
+      - Anti-debugging technique to hide breakpoints
+      - May be used to implement custom crash handling
+      - Can interfere with legitimate debugging
+      - Look for exception handlers that hide crashes
+      - Check if used with task_get_exception_ports (port swapping)
+      - Flag as potential anti-analysis
+
+  - name: getppid
+    library: libsystem_c.dylib
+    parameters: []
+    return:
+      type: pid_t
+      description: Parent process ID
+    security_notes:
+      - Used to detect if parent is a debugger or suspicious process
+      - Compare against known debugger names (debugserver, lldb, gdb)
+      - May check if parent died (ppid becomes 1 or launchd)
+      - Simple anti-debugging check
+      - Can be bypassed but indicates defensive programming
+      - Often combined with process name checks
+      - Flag when used for process validation
+
+  - name: isatty
+    library: libsystem_c.dylib
+    parameters:
+      - name: fd
+        type: int
+        description: File descriptor to check (usually 0, 1, or 2)
+    return:
+      type: int
+      description: 1 if fd is a terminal, 0 if not
+    security_notes:
+      - Check if stdin/stdout/stderr are connected to terminal
+      - Debuggers may not provide TTY, causing isatty to return 0
+      - Anti-debugging heuristic to detect non-interactive execution
+      - May alter behavior when not running in terminal
+      - Can detect if running under lldb or other debuggers
+      - Flag when used to modify execution flow
+      - Relatively weak anti-debugging technique
+
+  - name: getpid
+    library: libsystem_c.dylib
+    parameters: []
+    return:
+      type: pid_t
+      description: Current process ID
+    security_notes:
+      - Often used with sysctl to query own process information
+      - Check if combined with KERN_PROC_PID queries
+      - May be used to detect process info manipulation
+      - Can be part of debugger detection routine
+      - Look for PID validation or integrity checks
+
+  - name: task_info
+    library: libsystem_kernel.dylib
+    parameters:
+      - name: target_task
+        type: task_name_t
+        description: Task to query
+      - name: flavor
+        type: task_flavor_t
+        description: Type of information to retrieve
+      - name: task_info_out
+        type: task_info_t
+        description: Buffer to receive task information
+      - name: task_info_outCnt
+        type: mach_msg_type_number_t*
+        description: Size of buffer, receives actual count
+    return:
+      type: kern_return_t
+      description: KERN_SUCCESS or error code
+    security_notes:
+      - TASK_DYLD_INFO can enumerate loaded libraries
+      - Check for detection of injected dylibs (Frida, Cydia Substrate)
+      - MACH_TASK_BASIC_INFO provides task statistics
+      - May detect unusual memory layout or timing
+      - Can be used to find debugger-related libraries
+      - Flag when used with library name validation
+      - Part of anti-hooking/anti-injection checks
+
+  - name: mach_task_self
+    library: libsystem_kernel.dylib
+    parameters: []
+    return:
+      type: mach_port_t
+      description: Mach port for current task
+    security_notes:
+      - Returns task port needed for many Mach operations
+      - Used with task_get_exception_ports for debugger detection
+      - Required for task_info queries
+      - Part of many anti-debugging techniques
+      - Generally benign alone but check usage context
+
+  - name: dladdr
+    library: libdyld.dylib
+    parameters:
+      - name: addr
+        type: const void*
+        description: Address to look up
+      - name: info
+        type: Dl_info*
+        description: Structure to receive information about address
+    return:
+      type: int
+      description: Non-zero on success, 0 on error
+    security_notes:
+      - Can detect if return addresses are in expected libraries
+      - Used to detect hooked functions or injected code
+      - Check if validating caller addresses
+      - May detect stack tampering or unusual call chains
+      - Part of anti-hooking measures
+      - Look for validation of dli_fname or dli_sname
+      - Flag when used for security decisions
+
+  - name: dlsym
+    library: libdyld.dylib
+    parameters:
+      - name: handle
+        type: void*
+        description: Handle from dlopen or RTLD_DEFAULT/RTLD_NEXT
+      - name: symbol
+        type: const char*
+        description: Symbol name to look up
+    return:
+      type: void*
+      description: Symbol address or NULL if not found
+    security_notes:
+      - Can be used to dynamically resolve anti-debugging functions
+      - Look for resolution of ptrace, sysctl, syscall
+      - May attempt to bypass static analysis
+      - Check for suspicious symbol names
+      - Can be used to detect presence of hooking frameworks
+      - Flag when resolving security-sensitive functions
+
+  - name: _dyld_get_image_name
+    library: libdyld.dylib
+    parameters:
+      - name: image_index
+        type: uint32_t
+        description: Index of loaded image
+    return:
+      type: const char*
+      description: Path to image or NULL
+    security_notes:
+      - Used to enumerate loaded dylibs
+      - Detects injected libraries (Substrate, Frida, etc.)
+      - Look for checks against known hooking frameworks
+      - May validate loaded library paths
+      - Check for suspicious library names or paths
+      - Part of anti-hooking/jailbreak detection
+      - Flag when used with string comparisons
+
+  - name: _dyld_image_count
+    library: libdyld.dylib
+    parameters: []
+    return:
+      type: uint32_t
+      description: Number of loaded images
+    security_notes:
+      - Used with _dyld_get_image_name to enumerate libraries
+      - Can detect unusual number of loaded libraries
+      - Part of injection detection
+      - May establish baseline count and monitor changes
+      - Flag when combined with library validation
+
+  - name: exit
+    library: libsystem_c.dylib
+    parameters:
+      - name: status
+        type: int
+        description: Exit status code
+    return:
+      type: void
+      description: Does not return
+    security_notes:
+      - Abrupt termination may indicate detection trigger
+      - Look for calls after anti-debugging checks
+      - May be obfuscated or called indirectly
+      - Check for unusual exit codes
+      - Part of defensive response to tampering detection
+
+  - name: abort
+    library: libsystem_c.dylib
+    parameters: []
+    return:
+      type: void
+      description: Does not return
+    security_notes:
+      - Abnormal termination signal (SIGABRT)
+      - May be triggered by integrity check failures
+      - Look for calls after detection routines
+      - Can indicate security check failure
+      - Flag when used as anti-tampering response
+
+  - name: asm_ptrace_deny_attach
+    library: inline_assembly
+    parameters: []
+    return:
+      type: void
+      description: Inline assembly wrapper for ptrace
+    security_notes:
+      - Inline assembly to call ptrace(PT_DENY_ATTACH, 0, 0, 0)
+      - Harder to detect in static analysis
+      - Look for mov x0, #31 (PT_DENY_ATTACH) patterns
+      - May use syscall instruction directly
+      - Flag all inline ptrace usage
+      - Check for obfuscated assembly sequences

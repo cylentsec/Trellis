@@ -1,0 +1,65 @@
+category: biometric
+description: Biometric authentication (Touch ID / Face ID) via LocalAuthentication framework
+
+functions:
+  - name: "evaluatePolicy:localizedReason:reply:"
+    library: LocalAuthentication.framework
+    parameters:
+      - name: policy
+        type: LAPolicy
+        description: Authentication policy (e.g., LAPolicyDeviceOwnerAuthenticationWithBiometrics)
+      - name: localizedReason
+        type: NSString*
+        description: Reason string displayed to user during authentication prompt
+      - name: reply
+        type: "void (^)(BOOL, NSError*)"
+        description: Completion handler called with success/failure result
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Client-side biometric check only - result is a simple BOOL
+      - Easily bypassed by hooking the reply block or method
+      - Must be combined with Keychain access control (kSecAccessControlBiometryAny) for security
+      - LAContext.evaluatePolicy alone does NOT protect any data
+      - Attacker can bypass by Frida hook returning success, patching branch, or runtime swizzle
+
+  - name: "canEvaluatePolicy:error:"
+    library: LocalAuthentication.framework
+    parameters:
+      - name: policy
+        type: LAPolicy
+        description: Authentication policy to check availability for
+      - name: error
+        type: "NSError**"
+        description: Error output if policy cannot be evaluated
+    return:
+      type: BOOL
+      description: Whether biometric authentication is available
+    security_notes:
+      - Checks if biometric authentication is available on device
+      - May be used to decide whether to show biometric option
+      - Not a security boundary itself
+
+  - name: "evaluateAccessControl:operation:localizedReason:reply:"
+    library: LocalAuthentication.framework
+    parameters:
+      - name: accessControl
+        type: SecAccessControlRef
+        description: Access control object specifying authentication requirements
+      - name: operation
+        type: LAAccessControlOperation
+        description: The operation to evaluate
+      - name: localizedReason
+        type: NSString*
+        description: Reason string displayed to user
+      - name: reply
+        type: "void (^)(BOOL, NSError*)"
+        description: Completion handler with result
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - More secure than evaluatePolicy when combined with Keychain
+      - Used with SecAccessControl for Keychain-bound biometric protection
+      - Still verify server-side validation exists

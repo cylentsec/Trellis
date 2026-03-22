@@ -1,0 +1,253 @@
+category: insecure_storage
+description: Insecure data persistence and storage patterns
+
+functions:
+  - name: "setObject:forKey:"
+    library: Foundation
+    parameters:
+      - name: value
+        type: id
+        description: Object to store (any NSObject)
+      - name: defaultName
+        type: NSString*
+        description: Key name for the preference
+    return:
+      type: void
+      description: Stores object in NSUserDefaults
+    security_notes:
+      - NSUserDefaults is stored in plaintext plist files
+      - Data is not encrypted and can be accessed by other apps with shared container
+      - Never store sensitive data like passwords, tokens, or keys
+      - Data persists even after app uninstallation on some iOS versions
+      - Accessible in device backups
+
+  - name: "objectForKey:"
+    library: Foundation
+    parameters:
+      - name: defaultName
+        type: NSString*
+        description: Key name to retrieve
+    return:
+      type: id
+      description: Retrieved object or nil
+    security_notes:
+      - Reading from unencrypted storage
+      - Check if sensitive data is being retrieved
+
+  - name: "setBool:forKey:"
+    library: Foundation
+    parameters:
+      - name: value
+        type: BOOL
+        description: Boolean value to store
+      - name: defaultName
+        type: NSString*
+        description: Key name for the preference
+    return:
+      type: void
+      description: Stores boolean in NSUserDefaults
+    security_notes:
+      - Can be used for security policy bypass (e.g., "isJailbroken", "skipAuth")
+      - Check for security-relevant boolean flags
+
+  - name: "setInteger:forKey:"
+    library: Foundation
+    parameters:
+      - name: value
+        type: NSInteger
+        description: Integer value to store
+      - name: defaultName
+        type: NSString*
+        description: Key name for the preference
+    return:
+      type: void
+      description: Stores integer in NSUserDefaults
+    security_notes:
+      - Often used for security state (retry counts, trust levels)
+      - Check for security-relevant integer values
+
+  - name: "stringForKey:"
+    library: Foundation
+    parameters:
+      - name: defaultName
+        type: NSString*
+        description: Key name to retrieve
+    return:
+      type: NSString*
+      description: Retrieved string or nil
+    security_notes:
+      - Common for storing URLs, endpoints, tokens
+      - Check for hardcoded sensitive strings
+
+  - name: "arrayForKey:"
+    library: Foundation
+    parameters:
+      - name: defaultName
+        type: NSString*
+        description: Key name to retrieve
+    return:
+      type: NSArray*
+      description: Retrieved array or nil
+    security_notes:
+      - Can store lists of trusted hosts or certificates
+      - Check for security-relevant arrays
+
+  - name: "boolForKey:"
+    library: Foundation
+    parameters:
+      - name: defaultName
+        type: NSString*
+        description: Key name to retrieve
+    return:
+      type: BOOL
+      description: Retrieved boolean value
+    security_notes:
+      - Reading security policy flags
+      - Check for authentication bypass conditions
+
+  - name: synchronize
+    library: Foundation
+    parameters: []
+    return:
+      type: BOOL
+      description: YES if successful
+    security_notes:
+      - Deprecated in iOS 12+ but still used
+      - Forces immediate write to disk
+      - Indicates legacy code that may have security issues
+
+  - name: "writeToFile:atomically:"
+    library: Foundation
+    parameters:
+      - name: path
+        type: NSString*
+        description: File path to write to
+      - name: useAuxiliaryFile
+        type: BOOL
+        description: Whether to use atomic write
+    return:
+      type: BOOL
+      description: YES if successful
+    security_notes:
+      - Writes NSDictionary/NSArray to plaintext plist
+      - No encryption unless manually implemented
+      - Check file path for world-readable locations
+      - Atomic writes leave temporary files
+
+  - name: "initWithContentsOfFile:"
+    library: Foundation
+    parameters:
+      - name: path
+        type: NSString*
+        description: File path to read from
+    return:
+      type: instancetype
+      description: Initialized object or nil
+    security_notes:
+      - Reads from potentially insecure file locations
+      - No integrity verification
+      - Vulnerable to file manipulation attacks
+
+  - name: "archivedDataWithRootObject:requiringSecureCoding:error:"
+    library: Foundation
+    parameters:
+      - name: object
+        type: id
+        description: Object to archive
+      - name: requiresSecureCoding
+        type: BOOL
+        description: Whether to require secure coding
+      - name: error
+        type: NSError**
+        description: Error output parameter
+    return:
+      type: NSData*
+      description: Archived data
+    security_notes:
+      - Secure coding should be YES for untrusted data
+      - Archives can contain serialized sensitive data
+      - Check what objects are being archived
+
+  - name: "archivedDataWithRootObject:"
+    library: Foundation
+    parameters:
+      - name: rootObject
+        type: id
+        description: Object to archive
+    return:
+      type: NSData*
+      description: Archived data
+    security_notes:
+      - DEPRECATED - no secure coding protection
+      - Vulnerable to deserialization attacks
+      - Should use archivedDataWithRootObject:requiringSecureCoding:error: instead
+
+  - name: sqlite3_open
+    library: libsqlite3.dylib
+    parameters:
+      - name: filename
+        type: const char*
+        description: Database file path
+      - name: ppDb
+        type: sqlite3**
+        description: Database handle output
+    return:
+      type: int
+      description: SQLITE_OK or error code
+    security_notes:
+      - SQLite databases are unencrypted by default
+      - Check if database is in Documents or other accessible directories
+      - Should use SQLCipher or iOS Data Protection for sensitive data
+      - Vulnerable to SQL injection if queries not parameterized
+
+  - name: sqlite3_exec
+    library: libsqlite3.dylib
+    parameters:
+      - name: db
+        type: sqlite3*
+        description: Database handle
+      - name: sql
+        type: const char*
+        description: SQL statement to execute
+      - name: callback
+        type: callback
+        description: Callback function for results
+      - name: arg
+        type: void*
+        description: User data for callback
+      - name: errmsg
+        type: char**
+        description: Error message output
+    return:
+      type: int
+      description: SQLITE_OK or error code
+    security_notes:
+      - Direct SQL execution - high risk of SQL injection
+      - Check for string concatenation in SQL queries
+      - Should use prepared statements instead
+
+  - name: sqlite3_prepare_v2
+    library: libsqlite3.dylib
+    parameters:
+      - name: db
+        type: sqlite3*
+        description: Database handle
+      - name: zSql
+        type: const char*
+        description: SQL statement
+      - name: nByte
+        type: int
+        description: Maximum bytes to read
+      - name: ppStmt
+        type: sqlite3_stmt**
+        description: Prepared statement output
+      - name: pzTail
+        type: const char**
+        description: Pointer to unused SQL
+    return:
+      type: int
+      description: SQLITE_OK or error code
+    security_notes:
+      - Safer than sqlite3_exec but still check query construction
+      - Ensure parameterized queries with sqlite3_bind_*
+      - Check for sensitive data in queries

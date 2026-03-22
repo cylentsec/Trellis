@@ -1,0 +1,172 @@
+category: deserialization
+description: Deserialization and object archiving operations
+
+functions:
+  - name: unarchiveObjectWithData
+    library: Foundation.framework
+    parameters:
+      - name: data
+        type: NSData*
+        description: Data to unarchive
+    return:
+      type: id
+      description: Unarchived object graph
+    security_notes:
+      - DEPRECATED - No class validation, vulnerable to object injection
+      - Can lead to Remote Code Execution (RCE) if data is from untrusted source
+      - Allows instantiation of ANY class that implements NSCoding
+      - Can trigger arbitrary code in initWithCoder: methods
+      - Use unarchivedObjectOfClass:fromData:error: instead
+
+  - name: unarchivedObjectOfClass_fromData_error
+    library: Foundation.framework
+    parameters:
+      - name: cls
+        type: Class
+        description: Expected class of root object
+      - name: data
+        type: NSData*
+        description: Data to unarchive
+      - name: error
+        type: NSError**
+        description: Error output parameter
+    return:
+      type: id
+      description: Unarchived object of specified class
+    security_notes:
+      - Modern secure API - validates class before deserialization
+      - Only allows specified class (and its properties) to be deserialized
+      - Still check data source - network data needs extra validation
+      - Ensure requiresSecureCoding is YES on the unarchiver
+
+  - name: unarchivedObjectOfClasses_fromData_error
+    library: Foundation.framework
+    parameters:
+      - name: classes
+        type: NSSet*
+        description: Set of allowed classes
+      - name: data
+        type: NSData*
+        description: Data to unarchive
+      - name: error
+        type: NSError**
+        description: Error output parameter
+    return:
+      type: id
+      description: Unarchived object from allowed classes
+    security_notes:
+      - Secure API - only allows specified classes
+      - Verify the class set is minimal and trusted
+      - Be careful with foundation classes that can contain arbitrary objects
+      - Network data still requires validation
+
+  - name: initForReadingFromData_error
+    library: Foundation.framework
+    parameters:
+      - name: data
+        type: NSData*
+        description: Data to read from
+      - name: error
+        type: NSError**
+        description: Error output parameter
+    return:
+      type: instancetype
+      description: Initialized unarchiver
+    security_notes:
+      - NSKeyedUnarchiver initializer
+      - Must call setRequiresSecureCoding:YES after init
+      - Without secure coding, vulnerable to object injection
+      - Check if followed by requiresSecureCoding setter
+
+  - name: decodeObjectForKey
+    library: Foundation.framework
+    parameters:
+      - name: key
+        type: NSString*
+        description: Key to decode object for
+    return:
+      type: id
+      description: Decoded object
+    security_notes:
+      - NSCoder method without class validation
+      - Vulnerable variant - allows any class
+      - Use decodeObjectOfClass:forKey: instead
+      - Can instantiate malicious objects
+
+  - name: decodeObjectOfClass_forKey
+    library: Foundation.framework
+    parameters:
+      - name: cls
+        type: Class
+        description: Expected class of object
+      - name: key
+        type: NSString*
+        description: Key to decode object for
+    return:
+      type: id
+      description: Decoded object of specified class
+    security_notes:
+      - Secure NSCoder variant with class validation
+      - Only allows specified class to be decoded
+      - Preferred over decodeObjectForKey:
+      - Still verify class is appropriate
+
+  - name: unarchiveTopLevelObjectWithData_error
+    library: Foundation.framework
+    parameters:
+      - name: data
+        type: NSData*
+        description: Data to unarchive
+      - name: error
+        type: NSError**
+        description: Error output parameter
+    return:
+      type: id
+      description: Top-level unarchived object
+    security_notes:
+      - DEPRECATED - No class validation
+      - Similar vulnerabilities to unarchiveObjectWithData:
+      - Can lead to RCE with untrusted data
+      - Use unarchivedObjectOfClass:fromData:error: instead
+
+  - name: setRequiresSecureCoding
+    library: Foundation.framework
+    parameters:
+      - name: requiresSecureCoding
+        type: BOOL
+        description: Whether to require secure coding
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - NSKeyedUnarchiver setting for secure deserialization
+      - Setting to NO (0) disables security checks - CRITICAL
+      - Must be YES (1) for secure deserialization
+      - Check value being set - false/0 is vulnerable
+
+  - name: NSCoding_initWithCoder
+    library: Foundation.framework
+    parameters:
+      - name: coder
+        type: NSCoder*
+        description: Coder to initialize from
+    return:
+      type: instancetype
+      description: Initialized object
+    security_notes:
+      - NSCoding protocol method - executed during deserialization
+      - Can contain arbitrary code that runs on object creation
+      - Attackers can trigger this with crafted archives
+      - Look for dangerous operations in implementations
+
+  - name: supportsSecureCoding
+    library: Foundation.framework
+    parameters: []
+    return:
+      type: BOOL
+      description: Whether class supports secure coding
+    security_notes:
+      - NSSecureCoding protocol class method
+      - Classes returning NO don't support secure coding
+      - Such classes are vulnerable when deserialized
+      - Flag classes that return NO or don't implement

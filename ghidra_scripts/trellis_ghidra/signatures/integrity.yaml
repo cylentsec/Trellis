@@ -1,0 +1,127 @@
+category: integrity
+description: Device integrity, app attestation, and anti-tampering verification
+
+functions:
+  - name: DCDevice_generateTokenWithCompletionHandler
+    library: DeviceCheck.framework
+    parameters:
+      - name: completionHandler
+        type: void_block
+        description: Block receiving token and error
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Generates ephemeral token for DeviceCheck API
+      - Used to identify devices while preserving privacy
+      - Verify token is sent to server for validation
+      - Check error handling
+      - Flag as device identification mechanism
+
+  - name: DCAppAttestService_generateKeyWithCompletionHandler
+    library: DeviceCheck.framework
+    parameters:
+      - name: completionHandler
+        type: void_block
+        description: Block receiving keyId and error
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Generates cryptographic key on device
+      - Part of App Attest (iOS 14+) to verify app integrity
+      - Key is hardware-backed
+      - Strong indicator of anti-tampering protection
+      - Difficult to bypass without jailbreak/hooking
+
+  - name: DCAppAttestService_attestKey_clientDataHash_completionHandler
+    library: DeviceCheck.framework
+    parameters:
+      - name: keyId
+        type: NSString*
+        description: Key identifier
+      - name: clientDataHash
+        type: NSData*
+        description: Hash of challenge data
+      - name: completionHandler
+        type: void_block
+        description: Block receiving attestation object
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Requests Apple attestation of the key
+      - Verifies app is genuine and not modified
+      - Attestation object must be verified on server
+      - Critical integrity check mechanism
+      - Flag as strong anti-tampering
+
+  - name: DCAppAttestService_generateAssertion_clientDataHash_completionHandler
+    library: DeviceCheck.framework
+    parameters:
+      - name: keyId
+        type: NSString*
+        description: Key identifier
+      - name: clientDataHash
+        type: NSData*
+        description: Hash of request data
+      - name: completionHandler
+        type: void_block
+        description: Block receiving assertion object
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Signs data with the attested key
+      - Ensures request comes from valid app instance
+      - Used for API request signing
+      - Flag as API security mechanism
+
+  - name: ASIdentifierManager_advertisingIdentifier
+    library: AdSupport.framework
+    parameters: []
+    return:
+      type: NSUUID*
+      description: IDFA (Advertising ID)
+    security_notes:
+      - Check usage of IDFA (tracking)
+      - Requires App Tracking Transparency permission (iOS 14+)
+      - Verify NSUserTrackingUsageDescription
+      - Flag if used for non-advertising purposes (policy violation)
+
+  - name: UIDevice_identifierForVendor
+    library: UIKit.framework
+    parameters: []
+    return:
+      type: NSUUID*
+      description: IDFV (Vendor ID)
+    security_notes:
+      - Unique ID for app vendor
+      - Used for device identification
+      - Check if used for persistent tracking
+      - Resets when all vendor apps are uninstalled
+
+  - name: bundleIdentifier
+    library: Foundation.framework
+    parameters: []
+    return:
+      type: NSString*
+      description: Bundle ID
+    security_notes:
+      - Often checked to verify app identity (anti-repackaging)
+      - Look for string comparisons with expected bundle ID
+      - Common simple anti-tampering check
+      - Can be spoofed or hooked
+
+  - name: mobileprovision
+    library: embedded.mobileprovision
+    parameters: []
+    return:
+      type: void
+      description: N/A
+    security_notes:
+      - Check for logic reading embedded.mobileprovision
+      - Used to verify code signing entitlements
+      - Detects if app was resigned (e.g., by Cydia Impactor)
+      - Look for file reads of "embedded.mobileprovision"
+      - Flag as integrity check

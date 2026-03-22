@@ -1,0 +1,247 @@
+category: webview
+description: WebView JavaScript bridge attack surface for WKWebView
+
+functions:
+  - name: "addScriptMessageHandler:name:"
+    library: WebKit.framework
+    parameters:
+      - name: handler
+        type: "id<WKScriptMessageHandler>"
+        description: Handler object that will receive JavaScript messages
+      - name: name
+        type: NSString*
+        description: Handler name exposed to JavaScript as window.webkit.messageHandlers.NAME
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Exposes native functionality to JavaScript via postMessage
+      - Handler name becomes globally accessible from web content
+      - Check handler implementation for sensitive operations
+      - Verify input validation in userContentController:didReceiveScriptMessage:
+      - Consider using WKContentWorld to isolate handlers (iOS 14+)
+      - Ensure handler doesn't expose file access, URL opening, or credentials
+
+  - name: "addScriptMessageHandler:contentWorld:name:"
+    library: WebKit.framework
+    parameters:
+      - name: handler
+        type: "id<WKScriptMessageHandler>"
+        description: Handler object that will receive JavaScript messages
+      - name: contentWorld
+        type: WKContentWorld*
+        description: Content world to isolate the handler (iOS 14+)
+      - name: name
+        type: NSString*
+        description: Handler name exposed to JavaScript in specified content world
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - iOS 14+ variant with content world isolation
+      - Better security through isolated JavaScript execution contexts
+      - Still check handler implementation for sensitive operations
+      - Content world isolation doesn't prevent all attacks
+      - Verify proper use of WKContentWorld.pageWorld vs custom worlds
+
+  - name: "userContentController:didReceiveScriptMessage:"
+    library: WebKit.framework
+    parameters:
+      - name: userContentController
+        type: WKUserContentController*
+        description: The user content controller
+      - name: message
+        type: WKScriptMessage*
+        description: Message from JavaScript containing name and body
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - This is the handler implementation that processes JS messages
+      - Critical security boundary - all inputs are untrusted
+      - Check for URL navigation, file I/O, keychain access, or network requests
+      - Validate and sanitize all message.body contents
+      - Never pass message data directly to system APIs
+      - Log suspicious messages for security monitoring
+      - Consider rate limiting to prevent abuse
+
+  - name: "evaluateJavaScript:completionHandler:"
+    library: WebKit.framework
+    parameters:
+      - name: javaScriptString
+        type: NSString*
+        description: JavaScript code to execute in the web content
+      - name: completionHandler
+        type: "void (^)(id, NSError*)"
+        description: Block called with result or error after execution
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Injects JavaScript from native code into web content
+      - Risk of XSS if JavaScript string contains user input
+      - Never construct JavaScript strings from untrusted data
+      - Use JSON encoding for passing data to JavaScript
+      - Result in completion handler may contain sensitive data
+      - Consider using callAsyncJavaScript for better security (iOS 14+)
+
+  - name: "callAsyncJavaScript:arguments:inFrame:inContentWorld:completionHandler:"
+    library: WebKit.framework
+    parameters:
+      - name: functionBody
+        type: NSString*
+        description: JavaScript function body to execute
+      - name: arguments
+        type: NSDictionary*
+        description: Arguments passed to JavaScript function (auto-serialized)
+      - name: frame
+        type: WKFrameInfo*
+        description: Frame to execute in (nil for main frame)
+      - name: contentWorld
+        type: WKContentWorld*
+        description: Content world for execution isolation
+      - name: completionHandler
+        type: "void (^)(id, NSError*)"
+        description: Block called with result or error
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - iOS 14+ async JavaScript execution with better security
+      - Arguments are automatically serialized (safer than string concatenation)
+      - Content world isolation limits scope of execution
+      - Still validate functionBody doesn't contain untrusted input
+      - Check completion handler doesn't leak sensitive data
+
+  - name: "addUserScript:"
+    library: WebKit.framework
+    parameters:
+      - name: userScript
+        type: WKUserScript*
+        description: Script to inject into all web content
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Injects script into all pages loaded in the WebView
+      - Runs at document start or end depending on injection time
+      - Scripts have full access to page content and APIs
+      - Can expose message handlers or modify page behavior
+      - Verify script doesn't create security holes
+      - Consider using content worlds for isolation (iOS 14+)
+
+  - name: "webView:startURLSchemeTask:"
+    library: WebKit.framework
+    parameters:
+      - name: webView
+        type: WKWebView*
+        description: The web view making the request
+      - name: urlSchemeTask
+        type: "id<WKURLSchemeTask>"
+        description: Task object containing the custom scheme request
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Handles custom URL schemes (app://*, custom://*)
+      - Critical security boundary for file access
+      - JavaScript can trigger these requests via fetch() or navigation
+      - Must validate and sanitize all URL paths
+      - Check for path traversal attempts (../)
+      - Never directly map URL paths to file paths
+      - Implement allowlist of accessible resources
+      - Consider using WKWebView's loadFileURL instead
+
+  - name: "webView:stopURLSchemeTask:"
+    library: WebKit.framework
+    parameters:
+      - name: webView
+        type: WKWebView*
+        description: The web view that made the request
+      - name: urlSchemeTask
+        type: "id<WKURLSchemeTask>"
+        description: Task to stop/cancel
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Called when a custom scheme request is cancelled
+      - Ensure proper cleanup of any resources
+      - Check for race conditions in async operations
+
+  - name: "webView:decidePolicyForNavigationAction:decisionHandler:"
+    library: WebKit.framework
+    parameters:
+      - name: webView
+        type: WKWebView*
+        description: The web view requesting navigation
+      - name: navigationAction
+        type: WKNavigationAction*
+        description: Information about the navigation action
+      - name: decisionHandler
+        type: "void (^)(WKNavigationActionPolicy)"
+        description: Block to call with allow/cancel decision
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Controls which URLs the WebView can navigate to
+      - Implement strict allowlist of permitted domains
+      - Check navigationAction.navigationType for context
+      - Verify HTTPS for all external navigations
+      - Block file:// URLs unless explicitly needed
+      - Prevent navigation to app:// or other custom schemes
+      - Consider blocking all external navigations for security
+
+  - name: "postMessage:"
+    library: WebKit.framework
+    parameters:
+      - name: message
+        type: id
+        description: JavaScript object/value to send to native handler
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - JavaScript-side API (window.webkit.messageHandlers.NAME.postMessage)
+      - Not directly hooked but important for understanding data flow
+      - Any JavaScript (including XSS) can call this
+      - Message arrives at native handler untrusted
+      - Implement rate limiting on native side
+      - Log all messages for security monitoring
+
+  # HTML content loading (XSS risk)
+  - name: "loadHTMLString:baseURL:"
+    library: WebKit.framework
+    parameters:
+      - name: string
+        type: NSString*
+        description: HTML string to load into the WebView
+      - name: baseURL
+        type: NSURL*
+        description: Base URL for relative references (nil removes origin restrictions)
+    return:
+      type: "WKNavigation*"
+      description: Navigation object for tracking the load
+    security_notes:
+      - If baseURL is nil, JavaScript has no origin restrictions (XSS risk)
+      - If HTML string includes untrusted input, XSS is possible
+      - Used by both WKWebView and deprecated UIWebView
+      - Sanitize all dynamic content before loading
+      - Always provide a restrictive baseURL
+
+  - name: "loadRequest:"
+    library: WebKit.framework
+    parameters:
+      - name: request
+        type: NSURLRequest*
+        description: URL request to load in the WebView
+    return:
+      type: "WKNavigation*"
+      description: Navigation object for tracking the load
+    security_notes:
+      - Loads external content into the WebView
+      - Verify all loaded URLs use HTTPS
+      - May be UIWebView (deprecated) or WKWebView
+      - Implement WKNavigationDelegate to control navigation
+      - Check for HTTP downgrade attacks

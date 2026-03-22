@@ -1,0 +1,151 @@
+category: privacy
+description: Privacy-sensitive API usage (Location, Camera, Contacts, Photos, Microphone)
+
+functions:
+  - name: CLLocationManager_startUpdatingLocation
+    library: CoreLocation.framework
+    parameters: []
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Starts continuous location tracking
+      - Verify "NSLocationWhenInUseUsageDescription" in Info.plist
+      - Check if high precision is required (kCLLocationAccuracyBest)
+      - Flag if used in background without "location" background mode
+      - Privacy risk if location is sent to third parties
+
+  - name: CLLocationManager_requestWhenInUseAuthorization
+    library: CoreLocation.framework
+    parameters: []
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Requests user permission for location
+      - Check context of request (is it necessary?)
+      - Verify prompt explains *why* location is needed
+
+  - name: CLLocationManager_requestAlwaysAuthorization
+    library: CoreLocation.framework
+    parameters: []
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - High privacy impact - location even when app is closed
+      - Verify "NSLocationAlwaysAndWhenInUseUsageDescription"
+      - Apple discourages Always authorization unless critical
+      - Flag as potential privacy concern
+
+  - name: AVCaptureDevice_requestAccessForMediaType_completionHandler
+    library: AVFoundation.framework
+    parameters:
+      - name: mediaType
+        type: AVMediaType
+        description: Media type (Video/Audio)
+      - name: handler
+        type: void_block
+        description: Completion block
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Requests Camera (AVMediaTypeVideo) or Microphone (AVMediaTypeAudio) access
+      - Verify NSCameraUsageDescription or NSMicrophoneUsageDescription
+      - Check for recording indicators in UI
+      - Flag if used for surreptitious recording
+
+  - name: PHPhotoLibrary_requestAuthorization
+    library: Photos.framework
+    parameters:
+      - name: handler
+        type: void_block
+        description: Completion block
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Requests full access to user's photo library
+      - Verify NSPhotoLibraryUsageDescription
+      - Recommend PHPicker (limited access) instead of full library access
+      - Flag as privacy sensitive - allows reading all metadata (GPS, time)
+
+  - name: CNContactStore_requestAccessForEntityType_completionHandler
+    library: Contacts.framework
+    parameters:
+      - name: entityType
+        type: CNEntityType
+        description: Entity type (Contacts)
+      - name: handler
+        type: void_block
+        description: Completion block
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Requests access to full address book
+      - Verify NSContactsUsageDescription
+      - High privacy risk - often used for social graphing/spam
+      - Check if access is necessary or if CNContactPickerViewController can be used
+
+  - name: EKEventStore_requestAccessToEntityType_completion
+    library: EventKit.framework
+    parameters:
+      - name: entityType
+        type: EKEntityType
+        description: Event or Reminder
+      - name: completion
+        type: void_block
+        description: Completion block
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Access to Calendar (Events) or Reminders
+      - Verify NSCalendarsUsageDescription / NSRemindersUsageDescription
+      - Calendar data often contains sensitive corporate/personal info
+      - Flag for review
+
+  - name: HKHealthStore_requestAuthorizationToShareTypes_readTypes_completion
+    library: HealthKit.framework
+    parameters:
+      - name: typesToShare
+        type: NSSet*
+        description: Types to write
+      - name: typesToRead
+        type: NSSet*
+        description: Types to read
+      - name: completion
+        type: void_block
+        description: Completion block
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Access to Health data (extremely sensitive)
+      - Verify NSHealthShareUsageDescription / NSHealthUpdateUsageDescription
+      - Data must be handled with highest security standards
+      - Check for third-party SDKs accessing HealthKit
+
+  - name: LAContext_evaluatePolicy_localizedReason_reply
+    library: LocalAuthentication.framework
+    parameters:
+      - name: policy
+        type: LAPolicy
+        description: Biometric policy
+      - name: localizedReason
+        type: NSString*
+        description: Reason string
+      - name: reply
+        type: void_block
+        description: Reply block
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - FaceID / TouchID authentication
+      - Verify policy (DeviceOwnerAuthenticationWithBiometrics)
+      - Check fallback mechanism (passcode)
+      - Note: LocalAuthentication returns boolean, does not give access to biometric data
+      - Ensure success/fail logic cannot be bypassed by runtime hooking

@@ -1,0 +1,380 @@
+category: crypto
+description: Cryptographic operations including encryption, hashing, HMAC, and key management
+
+functions:
+  - name: CCCrypt
+    library: libcommonCrypto.dylib
+    parameters:
+      - name: op
+        type: CCOperation
+        description: kCCEncrypt or kCCDecrypt
+      - name: alg
+        type: CCAlgorithm
+        description: Cipher algorithm (AES, DES, 3DES, CAST, RC4, RC2, Blowfish)
+      - name: options
+        type: CCOptions
+        description: Options flags (e.g., kCCOptionPKCS7Padding, kCCOptionECBMode)
+      - name: key
+        type: const void*
+        description: Raw key bytes
+      - name: keyLength
+        type: size_t
+        description: Length of key in bytes
+      - name: iv
+        type: const void*
+        description: Initialization vector (optional, can be NULL for ECB)
+      - name: dataIn
+        type: const void*
+        description: Data to encrypt or decrypt
+        size_param: dataInLength
+      - name: dataInLength
+        type: size_t
+        description: Length of input data in bytes
+      - name: dataOut
+        type: void*
+        description: Result buffer
+        size_param: dataOutAvailable
+      - name: dataOutAvailable
+        type: size_t
+        description: Size of output buffer
+      - name: dataOutMoved
+        type: size_t*
+        description: Pointer to receive actual bytes written
+    return:
+      type: CCCryptorStatus
+      description: kCCSuccess or error code
+    security_notes:
+      - Check for weak algorithms (DES, RC4, MD5)
+      - Verify IV is not NULL for CBC mode
+      - Check for ECB mode usage (kCCOptionECBMode)
+      - Ensure key length matches algorithm requirements
+      - Look for hardcoded keys or IVs in binary
+      - Verify proper padding option is used
+
+  - name: CCCryptorCreate
+    library: libcommonCrypto.dylib
+    parameters:
+      - name: op
+        type: CCOperation
+        description: kCCEncrypt or kCCDecrypt
+      - name: alg
+        type: CCAlgorithm
+        description: Cipher algorithm
+      - name: options
+        type: CCOptions
+        description: Options flags
+      - name: key
+        type: const void*
+        description: Raw key bytes
+      - name: keyLength
+        type: size_t
+        description: Length of key in bytes
+      - name: iv
+        type: const void*
+        description: Initialization vector
+      - name: cryptorRef
+        type: CCCryptorRef*
+        description: Pointer to receive cryptor reference
+    return:
+      type: CCCryptorStatus
+      description: kCCSuccess or error code
+    security_notes:
+      - Check for weak algorithms
+      - Verify IV usage for non-ECB modes
+      - Ensure cryptor is released with CCCryptorRelease
+      - Look for hardcoded cryptographic parameters
+
+  - name: CCCryptorUpdate
+    library: libcommonCrypto.dylib
+    parameters:
+      - name: cryptorRef
+        type: CCCryptorRef
+        description: Cryptor reference from CCCryptorCreate
+      - name: dataIn
+        type: const void*
+        description: Data to process
+        size_param: dataInLength
+      - name: dataInLength
+        type: size_t
+        description: Length of input data
+      - name: dataOut
+        type: void*
+        description: Result buffer
+        size_param: dataOutAvailable
+      - name: dataOutAvailable
+        type: size_t
+        description: Size of output buffer
+      - name: dataOutMoved
+        type: size_t*
+        description: Pointer to receive bytes written
+    return:
+      type: CCCryptorStatus
+      description: kCCSuccess or error code
+    security_notes:
+      - Verify output buffer is sized correctly
+      - Check for buffer overflow vulnerabilities
+      - Ensure all input is processed before finalization
+
+  - name: CCCryptorFinal
+    library: libcommonCrypto.dylib
+    parameters:
+      - name: cryptorRef
+        type: CCCryptorRef
+        description: Cryptor reference
+      - name: dataOut
+        type: void*
+        description: Final output buffer
+        size_param: dataOutAvailable
+      - name: dataOutAvailable
+        type: size_t
+        description: Size of output buffer
+      - name: dataOutMoved
+        type: size_t*
+        description: Pointer to receive final bytes written
+    return:
+      type: CCCryptorStatus
+      description: kCCSuccess or error code
+    security_notes:
+      - Verify proper padding handling
+      - Check for padding oracle vulnerabilities
+      - Ensure buffer is cleared after use
+
+  - name: CCCryptorRelease
+    library: libcommonCrypto.dylib
+    parameters:
+      - name: cryptorRef
+        type: CCCryptorRef
+        description: Cryptor reference to release
+    return:
+      type: CCCryptorStatus
+      description: kCCSuccess or error code
+    security_notes:
+      - Verify all cryptors are properly released
+      - Check for resource leaks
+
+  - name: CCHmac
+    library: libcommonCrypto.dylib
+    parameters:
+      - name: algorithm
+        type: CCHmacAlgorithm
+        description: HMAC algorithm (SHA1, MD5, SHA256, SHA384, SHA512)
+      - name: key
+        type: const void*
+        description: HMAC key
+        size_param: keyLength
+      - name: keyLength
+        type: size_t
+        description: Length of key in bytes
+      - name: data
+        type: const void*
+        description: Data to authenticate
+        size_param: dataLength
+      - name: dataLength
+        type: size_t
+        description: Length of data in bytes
+      - name: macOut
+        type: void*
+        description: Output buffer for HMAC result
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Check for weak HMAC algorithms (MD5, SHA1)
+      - Verify key length is sufficient (minimum 16 bytes recommended)
+      - Look for hardcoded HMAC keys
+      - Ensure output buffer is sized correctly for algorithm
+
+  - name: CCHmacInit
+    library: libcommonCrypto.dylib
+    parameters:
+      - name: ctx
+        type: CCHmacContext*
+        description: HMAC context to initialize
+      - name: algorithm
+        type: CCHmacAlgorithm
+        description: HMAC algorithm
+      - name: key
+        type: const void*
+        description: HMAC key
+        size_param: keyLength
+      - name: keyLength
+        type: size_t
+        description: Length of key in bytes
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Check for weak algorithms
+      - Verify key material quality
+      - Look for hardcoded keys
+
+  - name: CCHmacUpdate
+    library: libcommonCrypto.dylib
+    parameters:
+      - name: ctx
+        type: CCHmacContext*
+        description: HMAC context
+      - name: data
+        type: const void*
+        description: Data to add to HMAC
+        size_param: dataLength
+      - name: dataLength
+        type: size_t
+        description: Length of data in bytes
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Verify context is properly initialized
+      - Check for use-after-final vulnerabilities
+
+  - name: CCHmacFinal
+    library: libcommonCrypto.dylib
+    parameters:
+      - name: ctx
+        type: CCHmacContext*
+        description: HMAC context
+      - name: macOut
+        type: void*
+        description: Output buffer for HMAC result
+    return:
+      type: void
+      description: No return value
+    security_notes:
+      - Verify output buffer size matches algorithm
+      - Check for timing attacks in HMAC comparison
+      - Ensure context is not reused after finalization
+
+  - name: CCKeyDerivationPBKDF
+    library: libcommonCrypto.dylib
+    parameters:
+      - name: algorithm
+        type: CCPBKDFAlgorithm
+        description: PBKDF algorithm (kCCPBKDF2)
+      - name: password
+        type: const char*
+        description: Password string (RAW PASSWORD - security sensitive!)
+        size_param: passwordLen
+      - name: passwordLen
+        type: size_t
+        description: Length of password in bytes
+      - name: salt
+        type: const uint8_t*
+        description: Salt bytes for key derivation
+        size_param: saltLen
+      - name: saltLen
+        type: size_t
+        description: Length of salt in bytes
+      - name: prf
+        type: CCPseudoRandomAlgorithm
+        description: PRF algorithm (SHA1, SHA224, SHA256, SHA384, SHA512)
+      - name: rounds
+        type: uint32_t
+        description: Number of iterations (higher = slower but more secure)
+      - name: derivedKey
+        type: uint8_t*
+        description: Output buffer for derived key
+        size_param: derivedKeyLen
+      - name: derivedKeyLen
+        type: size_t
+        description: Desired length of derived key in bytes
+    return:
+      type: int
+      description: kCCSuccess or error code
+    security_notes:
+      - PASSWORD IS VISIBLE IN PLAINTEXT - high value for credential capture
+      - Check iteration count (minimum 10000 recommended, 100000+ preferred)
+      - Verify salt is random and sufficient length (minimum 8 bytes, 16+ recommended)
+      - Look for hardcoded salts in binary
+      - Check PRF algorithm strength (prefer SHA256 or higher)
+      - Low iteration counts indicate weak key derivation
+
+  # Note: CC_MD5, CC_SHA1, CC_SHA256, CC_SHA512 deliberately omitted.
+  # These hash functions generate noise without revealing HOW crypto is used.
+  # Focus is on functions that expose key material, IVs, modes, and algorithms.
+
+  - name: SecKeyEncrypt
+    library: Security.framework
+    parameters:
+      - name: key
+        type: SecKeyRef
+        description: Public key reference for encryption
+      - name: padding
+        type: SecPadding
+        description: Padding scheme (PKCS1, OAEP, none)
+      - name: plainText
+        type: const uint8_t*
+        description: Data to encrypt
+        size_param: plainTextLen
+      - name: plainTextLen
+        type: size_t
+        description: Length of plaintext in bytes
+      - name: cipherText
+        type: uint8_t*
+        description: Output buffer for encrypted data
+        size_param: cipherTextLen
+      - name: cipherTextLen
+        type: size_t*
+        description: Pointer to size of output buffer, receives actual size
+    return:
+      type: OSStatus
+      description: errSecSuccess or error code
+    security_notes:
+      - Check padding scheme (PKCS1 vulnerable to padding oracle)
+      - Verify key size is sufficient (minimum 2048-bit RSA)
+      - Look for unpadded encryption (kSecPaddingNone)
+      - Ensure proper error handling
+      - Note this API is deprecated - recommend SecKeyCreateEncryptedData
+
+  - name: SecKeyDecrypt
+    library: Security.framework
+    parameters:
+      - name: key
+        type: SecKeyRef
+        description: Private key reference for decryption
+      - name: padding
+        type: SecPadding
+        description: Padding scheme
+      - name: cipherText
+        type: const uint8_t*
+        description: Data to decrypt
+        size_param: cipherTextLen
+      - name: cipherTextLen
+        type: size_t
+        description: Length of ciphertext in bytes
+      - name: plainText
+        type: uint8_t*
+        description: Output buffer for decrypted data
+        size_param: plainTextLen
+      - name: plainTextLen
+        type: size_t*
+        description: Pointer to size of output buffer, receives actual size
+    return:
+      type: OSStatus
+      description: errSecSuccess or error code
+    security_notes:
+      - Check for padding oracle vulnerabilities
+      - Verify error handling doesn't leak timing info
+      - Ensure private key is properly protected
+      - Note this API is deprecated - recommend SecKeyCreateDecryptedData
+      - Check for side-channel attack vulnerabilities
+
+  - name: SecKeyCreateRandomKey
+    library: Security.framework
+    parameters:
+      - name: parameters
+        type: CFDictionaryRef
+        description: Dictionary of key parameters (type, size, attributes)
+      - name: error
+        type: CFErrorRef*
+        description: Pointer to receive error on failure
+    return:
+      type: SecKeyRef
+      description: New key reference or NULL on failure
+    security_notes:
+      - Verify key size is adequate (RSA >= 2048, EC >= 256)
+      - Check key type and algorithm strength
+      - Ensure keys are stored in Keychain with proper protection
+      - Verify kSecAttrIsPermanent is set appropriately
+      - Check for keys stored in app sandbox vs Keychain
+      - Look for weak key generation parameters

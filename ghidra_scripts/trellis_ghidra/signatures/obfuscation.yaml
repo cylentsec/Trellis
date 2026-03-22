@@ -1,0 +1,61 @@
+# Obfuscation-related function signatures for Trellis
+# Functions commonly used for Base64/Hex decoding and data deobfuscation
+
+functions:
+  # iOS/Foundation Base64 APIs
+  - name: "initWithBase64EncodedString:"
+    framework: Foundation
+    description: "Initialize NSData from Base64 string"
+    tags: [obfuscation, base64, decode]
+    
+  - name: "initWithBase64EncodedData:"
+    framework: Foundation
+    description: "Initialize NSData from Base64 data"
+    tags: [obfuscation, base64, decode]
+    
+  - name: "base64EncodedStringWithOptions:"
+    framework: Foundation
+    description: "Encode data as Base64 string"
+    tags: [obfuscation, base64, encode]
+    
+  - name: "base64EncodedDataWithOptions:"
+    framework: Foundation
+    description: "Encode data as Base64 data"
+    tags: [obfuscation, base64, encode]
+    
+  # Third-party Base64 libraries
+  - name: "GTMBase64"
+    framework: GoogleToolbox
+    description: "Google Toolbox Base64 decoder"
+    tags: [obfuscation, base64, decode, third-party]
+    
+  - name: "RXBase64"
+    framework: RXCollections
+    description: "RXCollections Base64 decoder"
+    tags: [obfuscation, base64, decode, third-party]
+    
+  - name: "dataFromBase64String"
+    framework: Custom
+    description: "Custom Base64 decode function"
+    tags: [obfuscation, base64, decode, custom]
+    
+  - name: "base64Decoded"
+    framework: Custom
+    description: "Custom Base64 decode method"
+    tags: [obfuscation, base64, decode, custom]
+    
+  # Hex string decoding
+  - name: "dataFromHexString:"
+    framework: Custom
+    description: "Convert hex string to data"
+    tags: [obfuscation, hex, decode]
+    
+  - name: "hexString"
+    framework: Custom
+    description: "Convert data to hex string"
+    tags: [obfuscation, hex, encode]
+    
+  - name: "unhexlify"
+    framework: Custom
+    description: "Python-style hex to data converter"
+    tags: [obfuscation, hex, decode]

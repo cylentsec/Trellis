@@ -1,0 +1,345 @@
+category: keychain
+description: Keychain Services for secure storage and retrieval of sensitive data like passwords, keys, and certificates
+
+functions:
+  - name: SecItemAdd
+    library: Security.framework
+    parameters:
+      - name: attributes
+        type: CFDictionaryRef
+        description: Dictionary containing item class, attributes, and data to store
+      - name: result
+        type: CFTypeRef*
+        description: Optional pointer to receive reference to newly added item
+    return:
+      type: OSStatus
+      description: errSecSuccess, errSecDuplicateItem, or error code
+    security_notes:
+      - Check kSecAttrAccessible value (data protection class)
+      - Flag kSecAttrAccessibleAlways (data accessible even when locked)
+      - Verify kSecAttrAccessibleWhenUnlocked or better is used
+      - Look for kSecAttrAccessibleAfterFirstUnlock for background access
+      - Ensure kSecAttrSynchronizable is false for sensitive items (prevents iCloud sync)
+      - Check if kSecAttrAccessControl is used for biometric/passcode protection
+      - Verify appropriate kSecAttrAccessGroup for shared keychain access
+      - Look for sensitive data stored with weak protection
+      - Ensure passwords/keys use appropriate kSecClass (kSecClassGenericPassword, kSecClassKey)
+
+  - name: SecItemCopyMatching
+    library: Security.framework
+    parameters:
+      - name: query
+        type: CFDictionaryRef
+        description: Dictionary specifying search criteria
+      - name: result
+        type: CFTypeRef*
+        description: Pointer to receive matching item(s) or attributes
+    return:
+      type: OSStatus
+      description: errSecSuccess, errSecItemNotFound, or error code
+    security_notes:
+      - Check if kSecReturnData is true (returns decrypted data)
+      - Verify proper query scope (kSecMatchLimit)
+      - Look for overly broad queries that may expose data
+      - Ensure result is properly released after use
+      - Check if query includes kSecAttrAccessGroup (limits to app group)
+      - Verify kSecUseAuthenticationContext for sensitive operations
+      - Look for queries without proper authentication requirements
+      - Ensure data is cleared from memory after use
+
+  - name: SecItemUpdate
+    library: Security.framework
+    parameters:
+      - name: query
+        type: CFDictionaryRef
+        description: Dictionary specifying items to update
+      - name: attributesToUpdate
+        type: CFDictionaryRef
+        description: Dictionary of attributes to change
+    return:
+      type: OSStatus
+      description: errSecSuccess, errSecItemNotFound, or error code
+    security_notes:
+      - Check if accessibility class is being downgraded
+      - Verify kSecAttrAccessible is not changed to less secure value
+      - Look for removal of kSecAttrAccessControl (reduces security)
+      - Ensure query is specific enough to update intended items only
+      - Check if kSecAttrSynchronizable is being enabled for sensitive items
+      - Verify updates maintain or improve security posture
+      - Look for updates that remove biometric requirements
+
+  - name: SecItemDelete
+    library: Security.framework
+    parameters:
+      - name: query
+        type: CFDictionaryRef
+        description: Dictionary specifying items to delete
+    return:
+      type: OSStatus
+      description: errSecSuccess, errSecItemNotFound, or error code
+    security_notes:
+      - Verify query is specific enough to delete intended items only
+      - Look for overly broad queries that delete unintended items
+      - Check error handling for errSecItemNotFound
+      - Ensure deletion is intentional and properly authorized
+      - Look for missing deletions of temporary keys/credentials
+      - Verify secure data is deleted when no longer needed
+
+  - name: SecAccessControlCreateWithFlags
+    library: Security.framework
+    parameters:
+      - name: allocator
+        type: CFAllocatorRef
+        description: Allocator for object (usually kCFAllocatorDefault or NULL)
+      - name: protection
+        type: CFTypeRef
+        description: Protection class (kSecAttrAccessible* constant)
+      - name: flags
+        type: SecAccessControlCreateFlags
+        description: Access control flags (biometry, passcode, application password)
+      - name: error
+        type: CFErrorRef*
+        description: Pointer to receive error on failure
+    return:
+      type: SecAccessControlRef
+      description: Access control object or NULL on failure
+    security_notes:
+      - Verify appropriate protection class is used
+      - Check for kSecAccessControlUserPresence (biometry or passcode)
+      - Look for kSecAccessControlBiometryAny or kSecAccessControlBiometryCurrentSet
+      - kSecAccessControlBiometryAny allows new enrolled biometrics (less secure)
+      - kSecAccessControlBiometryCurrentSet invalidates on biometry changes (more secure)
+      - Verify kSecAccessControlDevicePasscode for passcode-only access
+      - Check for kSecAccessControlPrivateKeyUsage for key operations
+      - Ensure flags match security requirements for data sensitivity
+
+  - name: SecKeyCreateRandomKey
+    library: Security.framework
+    parameters:
+      - name: parameters
+        type: CFDictionaryRef
+        description: Dictionary of key generation parameters
+      - name: error
+        type: CFErrorRef*
+        description: Pointer to receive error on failure
+    return:
+      type: SecKeyRef
+      description: New key reference or NULL on failure
+    security_notes:
+      - Check kSecAttrKeyType (RSA, EC, ECSECPrimeRandom)
+      - Verify kSecAttrKeySizeInBits is adequate (RSA >= 2048, EC >= 256)
+      - Ensure kSecAttrTokenID is kSecAttrTokenIDSecureEnclave for sensitive keys
+      - Look for keys stored in Secure Enclave vs software
+      - Verify kSecAttrIsPermanent to control keychain storage
+      - Check kSecPrivateKeyAttrs for private key protection attributes
+      - Ensure kSecAttrAccessControl or kSecAttrAccessible is specified
+      - Look for keys with weak protection or accessibility
+      - Verify kSecAttrApplicationTag for key identification
+
+  - name: SecKeyCreateSignature
+    library: Security.framework
+    parameters:
+      - name: key
+        type: SecKeyRef
+        description: Private key for signing
+      - name: algorithm
+        type: SecKeyAlgorithm
+        description: Signature algorithm (RSA, ECDSA, with hash)
+      - name: dataToSign
+        type: CFDataRef
+        description: Data to create signature for
+      - name: error
+        type: CFErrorRef*
+        description: Pointer to receive error on failure
+    return:
+      type: CFDataRef
+      description: Signature data or NULL on failure
+    security_notes:
+      - Check algorithm strength (prefer SHA256 or higher)
+      - Flag SHA1-based algorithms (weak)
+      - Verify key is appropriate for algorithm
+      - Ensure error handling is proper
+      - Check if key requires authentication (Secure Enclave keys)
+      - Look for signature without proper data validation
+
+  - name: SecKeyVerifySignature
+    library: Security.framework
+    parameters:
+      - name: key
+        type: SecKeyRef
+        description: Public key for verification
+      - name: algorithm
+        type: SecKeyAlgorithm
+        description: Signature algorithm
+      - name: signedData
+        type: CFDataRef
+        description: Original data that was signed
+      - name: signature
+        type: CFDataRef
+        description: Signature to verify
+      - name: error
+        type: CFErrorRef*
+        description: Pointer to receive error on failure
+    return:
+      type: bool
+      description: true if signature is valid, false otherwise
+    security_notes:
+      - Verify return value is checked
+      - Ensure algorithm matches signing algorithm
+      - Check error handling for verification failures
+      - Look for acceptance of invalid signatures
+      - Verify public key authenticity
+
+  - name: SecKeyCreateEncryptedData
+    library: Security.framework
+    parameters:
+      - name: key
+        type: SecKeyRef
+        description: Public key for encryption
+      - name: algorithm
+        type: SecKeyAlgorithm
+        description: Encryption algorithm (RSA with padding)
+      - name: plaintext
+        type: CFDataRef
+        description: Data to encrypt
+      - name: error
+        type: CFErrorRef*
+        description: Pointer to receive error on failure
+    return:
+      type: CFDataRef
+      description: Encrypted data or NULL on failure
+    security_notes:
+      - Check algorithm for proper padding (OAEP preferred)
+      - Flag PKCS1 padding (vulnerable to oracle attacks)
+      - Verify key size is adequate for data + padding
+      - Ensure error handling is proper
+      - Look for encryption of large data (should use hybrid encryption)
+
+  - name: SecKeyCreateDecryptedData
+    library: Security.framework
+    parameters:
+      - name: key
+        type: SecKeyRef
+        description: Private key for decryption
+      - name: algorithm
+        type: SecKeyAlgorithm
+        description: Decryption algorithm
+      - name: ciphertext
+        type: CFDataRef
+        description: Data to decrypt
+      - name: error
+        type: CFErrorRef*
+        description: Pointer to receive error on failure
+    return:
+      type: CFDataRef
+      description: Decrypted data or NULL on failure
+    security_notes:
+      - Check for padding oracle vulnerabilities
+      - Verify error handling doesn't leak timing information
+      - Ensure private key requires authentication if sensitive
+      - Look for side-channel attack vulnerabilities
+      - Verify plaintext is cleared from memory after use
+
+  - name: SecKeyCopyExternalRepresentation
+    library: Security.framework
+    parameters:
+      - name: key
+        type: SecKeyRef
+        description: Key to export
+      - name: error
+        type: CFErrorRef*
+        description: Pointer to receive error on failure
+    return:
+      type: CFDataRef
+      description: Key data in external format or NULL on failure
+    security_notes:
+      - Critical security issue for private keys
+      - Verify private keys are not exported unnecessarily
+      - Check if exported key data is transmitted or stored insecurely
+      - Ensure Secure Enclave keys cannot be exported (will fail)
+      - Look for hardcoding of exported key material
+      - Verify proper protection of exported key data
+
+  - name: SecKeyCopyPublicKey
+    library: Security.framework
+    parameters:
+      - name: key
+        type: SecKeyRef
+        description: Private key to extract public key from
+    return:
+      type: SecKeyRef
+      description: Public key reference or NULL on failure
+    security_notes:
+      - Generally safe operation
+      - Verify public key is used appropriately
+      - Check if public key is transmitted securely for verification
+
+  - name: SecKeyIsAlgorithmSupported
+    library: Security.framework
+    parameters:
+      - name: key
+        type: SecKeyRef
+        description: Key to check
+      - name: operation
+        type: SecKeyOperationType
+        description: Operation type (sign, verify, encrypt, decrypt, key exchange)
+      - name: algorithm
+        type: SecKeyAlgorithm
+        description: Algorithm to check support for
+    return:
+      type: bool
+      description: true if algorithm is supported, false otherwise
+    security_notes:
+      - Verify appropriate fallback if algorithm not supported
+      - Check for downgrade to weaker algorithm
+      - Ensure compatibility checking doesn't weaken security
+
+  - name: SecCertificateCopyData
+    library: Security.framework
+    parameters:
+      - name: certificate
+        type: SecCertificateRef
+        description: Certificate to get data from
+    return:
+      type: CFDataRef
+      description: DER-encoded certificate data
+    security_notes:
+      - Generally safe operation for reading certificates
+      - Verify certificate data is validated before trust
+      - Check if certificate data is stored or transmitted securely
+
+  - name: SecIdentityCopyCertificate
+    library: Security.framework
+    parameters:
+      - name: identityRef
+        type: SecIdentityRef
+        description: Identity to extract certificate from
+      - name: certificateRef
+        type: SecCertificateRef*
+        description: Pointer to receive certificate
+    return:
+      type: OSStatus
+      description: errSecSuccess or error code
+    security_notes:
+      - Verify identity is obtained securely
+      - Check certificate validity and expiration
+      - Ensure private key access is properly controlled
+
+  - name: SecIdentityCopyPrivateKey
+    library: Security.framework
+    parameters:
+      - name: identityRef
+        type: SecIdentityRef
+        description: Identity to extract private key from
+      - name: privateKeyRef
+        type: SecKeyRef*
+        description: Pointer to receive private key reference
+    return:
+      type: OSStatus
+      description: errSecSuccess or error code
+    security_notes:
+      - Critical operation - accessing private keys
+      - Verify proper authentication is required
+      - Check if private key reference is leaked or misused
+      - Ensure private key operations are audited
+      - Look for export of private key material

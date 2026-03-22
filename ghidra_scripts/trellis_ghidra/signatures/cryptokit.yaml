@@ -1,0 +1,102 @@
+category: cryptokit
+description: Apple CryptoKit framework operations (Swift-native cryptography)
+
+functions:
+  # Hashing
+  - name: SHA256.hash
+    library: CryptoKit.framework
+    parameters:
+      - name: data
+        type: Data
+        description: Input data to hash
+    return:
+      type: SHA256.Digest
+      description: Computed hash digest
+    security_notes:
+      - Standard SHA-256 hash
+      - Check if used for password hashing (should use PBKDF2/Argon2 instead)
+      - Verify input data sensitivity
+
+  # Encryption (Symmetric)
+  - name: AES.GCM.seal
+    library: CryptoKit.framework
+    parameters:
+      - name: data
+        type: Data
+        description: Data to encrypt
+      - name: key
+        type: SymmetricKey
+        description: Encryption key
+      - name: nonce
+        type: AES.GCM.Nonce
+        description: Initialization vector (IV)
+    return:
+      type: AES.GCM.SealedBox
+      description: Encrypted data and tag
+    security_notes:
+      - AES-GCM is secure (authenticated encryption)
+      - Verify key is not hardcoded
+      - Verify nonce is random and unique for each encryption
+      - Check key management (Keychain vs UserDefaults)
+
+  - name: ChaChaPoly.seal
+    library: CryptoKit.framework
+    parameters:
+      - name: data
+        type: Data
+        description: Data to encrypt
+      - name: key
+        type: SymmetricKey
+        description: Encryption key
+      - name: nonce
+        type: ChaChaPoly.Nonce
+        description: Initialization vector (IV)
+    return:
+      type: ChaChaPoly.SealedBox
+      description: Encrypted data and tag
+    security_notes:
+      - ChaCha20-Poly1305 is secure
+      - Verify key quality and protection
+      - Ensure nonce uniqueness
+
+  # Key Agreement
+  - name: Curve25519.KeyAgreement.PrivateKey.init
+    library: CryptoKit.framework
+    parameters: []
+    return:
+      type: Curve25519.KeyAgreement.PrivateKey
+      description: New private key
+    security_notes:
+      - Generates ephemeral key pair
+      - Check if private key is stored securely (Keychain)
+      - Verify public key is distributed securely
+
+  # Signatures
+  - name: P256.Signing.PrivateKey.init
+    library: CryptoKit.framework
+    parameters: []
+    return:
+      type: P256.Signing.PrivateKey
+      description: NIST P-256 private key
+    security_notes:
+      - ECDSA signing key
+      - Ensure private key protection (Secure Enclave preferred)
+      - Verify signature verification logic
+
+  # Key Derivation
+  - name: HKDF.deriveKey
+    library: CryptoKit.framework
+    parameters:
+      - name: inputKeyMaterial
+        type: SymmetricKey
+        description: Input keying material
+      - name: salt
+        type: Data
+        description: Salt value
+    return:
+      type: SymmetricKey
+      description: Derived key
+    security_notes:
+      - HKDF is robust for key derivation
+      - Verify salt is random/unique
+      - Check input key material strength
