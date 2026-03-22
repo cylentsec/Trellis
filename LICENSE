@@ -4,11 +4,15 @@ Parameters
 
 Licensor:             Cylent Security LLC
 Licensed Work:        Trellis
-Additional Use Grant: Non-production use only (see Attribution Requirement below)
+Additional Use Grant: You may use the Licensed Work for any purpose,
+                      including commercial use (for example, as a tool in
+                      the course of paid consulting, research, or other
+                      professional services), subject to the Productization
+                      Restriction and Attribution Requirement below.
 Change Date:          March 22, 2031
 Change License:       Apache License, Version 2.0
 
-For information about commercial licensing arrangements, contact:
+For information about alternative licensing arrangements, contact:
 Cylent Security LLC
 
 Notice
@@ -66,25 +70,36 @@ TITLE.
 
 -----------------------------------------------------------------------------
 
-Commons Clause Restriction
+Productization Restriction
 
-The rights granted above are subject to the following additional restriction:
+The rights granted above do not include the right to incorporate the Licensed
+Work, or any substantial portion thereof, into a product or service that is
+sold, licensed, hosted, or otherwise commercially distributed to third
+parties (a "Commercial Product").
 
-"Commons Clause" License Condition v1.0
+For the avoidance of doubt:
 
-The Software is provided to you by the Licensor under the License, as defined
-above, subject to the following condition. Without limiting other conditions in
-the License, the grant of rights under the License will not include, and the
-License does not grant to you, the right to Sell the Software.
+(a) Using the Licensed Work as a tool in the course of paid professional
+    services (such as security consulting, penetration testing, auditing,
+    or research) is permitted and is NOT considered creating a Commercial
+    Product.
 
-For purposes of the foregoing, "Sell" means practicing any or all of the
-rights granted to you under the License to provide to third parties, for a fee
-or other consideration (including without limitation fees for hosting or
-consulting/support services related to the Software), a product or service
-whose value derives, entirely or substantially, from the functionality of the
-Software.
+(b) Distributing the Licensed Work in its original or modified form, without
+    charge and with attribution, is permitted.
 
-"Software" means the Licensed Work as defined in the Parameters above.
+(c) The following activities ARE considered creating a Commercial Product and
+    are NOT permitted without a separate commercial license from the Licensor:
+
+    - Embedding, bundling, or integrating the Licensed Work (or substantial
+      portions thereof) into a software product or platform that is sold or
+      licensed to third parties;
+    - Offering the Licensed Work as part of a hosted or managed service for
+      which third parties pay a fee;
+    - Rebranding or repackaging the Licensed Work for sale or commercial
+      distribution.
+
+If you are unsure whether your intended use constitutes a Commercial Product,
+contact Cylent Security LLC for clarification.
 
 -----------------------------------------------------------------------------
 

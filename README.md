@@ -446,10 +446,11 @@ class MySecurityChecker(SecurityChecker):
 
 ## License
 
-Trellis is licensed under the [Business Source License 1.1](LICENSE) with a Commons Clause restriction.
+Trellis is licensed under the [Business Source License 1.1](LICENSE).
 
-- **Non-production use** is freely permitted with attribution.
-- **Commercial use or selling** the software is not permitted without a commercial license from Cylent Security LLC.
+- **Commercial use as a tool is permitted** — security consultants, researchers, and other professionals may freely use Trellis in the course of paid work.
+- **Productization is not permitted** — you may not embed, bundle, or integrate Trellis into a commercial product or hosted service without a separate license from Cylent Security LLC.
+- **Free redistribution** of original or modified versions is permitted with attribution.
 - On **March 22, 2031**, the license automatically converts to the Apache License 2.0.
 - **Attribution required**: All permitted uses must display `Powered by Trellis — https://github.com/cylentsec/Trellis`.
 - **Contributors**: By submitting a pull request you agree to the Contributor License Agreement embedded in the [LICENSE](LICENSE) file, granting Cylent Security LLC relicensing and copyright rights over your contribution.
