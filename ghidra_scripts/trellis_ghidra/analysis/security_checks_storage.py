@@ -17,18 +17,22 @@ if TYPE_CHECKING:
 
 
 # Key name patterns that indicate security-sensitive data
+# NOTE: avoid single-word patterns like "key", "url", "host", "user", "email"
+# that match benign keys ("baseUrl", "hostName", "currentUser").  Use compound
+# patterns that are unambiguously sensitive.
 SENSITIVE_KEY_PATTERNS = {
     # Authentication
     "token", "auth", "password", "credential", "secret", "apikey", "api_key",
     "access_token", "refresh_token", "session", "jwt", "bearer",
+    "user_password", "user_token",
     # Cryptographic
-    "key", "encryption", "decrypt", "private_key", "public_key", "certificate",
-    "cert", "pin", "hmac",
-    # Security policy
-    "trusted", "allowed", "whitelist", "allowlist", "blocklist", "blacklist",
-    "domain", "host", "endpoint", "url",
+    "auth_key", "encryption_key", "encryption", "decrypt", "private_key",
+    "public_key", "certificate", "cert", "pin", "hmac",
+    # Network / endpoint (compound only)
+    "api_url", "auth_url",
     # Personal data
-    "ssn", "social_security", "credit_card", "card_number", "cvv", "account",
+    "ssn", "social_security", "credit_card", "card_number", "cvv",
+    "account_number", "email_address",
 }
 
 # High-sensitivity patterns (should NEVER be in UserDefaults)
