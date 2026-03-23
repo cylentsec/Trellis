@@ -354,8 +354,7 @@ class JailbreakSecurityChecker(SecurityChecker):
         if func_name in ("canOpenURL:", "openURL:"):
             if extracted_info and hasattr(extracted_info, 'parameters'):
                 for param in extracted_info.parameters:
-                    if param and hasattr(param, 'value'):
-                        val = str(param.value) if param.value else ""
+                    for val in _get_param_string_values(param):
                         for scheme in JAILBREAK_URL_SCHEMES:
                             if scheme in val:
                                 findings.append(SecurityFinding(
