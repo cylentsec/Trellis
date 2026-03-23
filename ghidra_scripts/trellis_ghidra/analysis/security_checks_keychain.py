@@ -256,25 +256,36 @@ class KeychainSecurityChecker(SecurityChecker):
 
         return findings
 
+    @staticmethod
+    def _get_param_string_values(param):
+        """Get all string representations of a parameter value for matching."""
+        values = []
+        if not param:
+            return values
+        if hasattr(param, 'value_as_string') and param.value_as_string:
+            values.append(param.value_as_string)
+        if hasattr(param, 'value_str') and param.value_str:
+            values.append(param.value_str)
+        if hasattr(param, 'variable_name') and param.variable_name:
+            values.append(param.variable_name)
+        return values
+
     def _extract_accessibility(self, extracted_info):
         """Extract accessibility value from extracted parameters."""
         if not extracted_info or not hasattr(extracted_info, 'parameters'):
             return None
 
         for param in extracted_info.parameters:
-            if not param:
-                continue
-            val = str(param.value) if hasattr(param, 'value') and param.value else ""
-            
-            # Check for known accessibility constants
-            for acc in list(INSECURE_ACCESSIBILITY.keys()) + list(SECURE_ACCESSIBILITY.keys()):
-                if acc in val:
-                    return acc
-                    
-            # Check for raw values
-            for raw_val in ["ak", "ck", "dk", "akpu", "aku", "cku", "dku"]:
-                if val == raw_val:
-                    return raw_val
+            for val in self._get_param_string_values(param):
+                # Check for known accessibility constants
+                for acc in list(INSECURE_ACCESSIBILITY.keys()) + list(SECURE_ACCESSIBILITY.keys()):
+                    if acc in val:
+                        return acc
+
+                # Check for raw values
+                for raw_val in ["ak", "ck", "dk", "akpu", "aku", "cku", "dku"]:
+                    if val == raw_val:
+                        return raw_val
 
         return None
 
@@ -284,13 +295,10 @@ class KeychainSecurityChecker(SecurityChecker):
             return False
 
         for param in extracted_info.parameters:
-            if not param:
-                continue
-            val = str(param.value) if hasattr(param, 'value') and param.value else ""
-            
-            if "kSecAttrSynchronizable" in val:
-                if "True" in val or "true" in val or "YES" in val:
-                    return True
+            for val in self._get_param_string_values(param):
+                if "kSecAttrSynchronizable" in val:
+                    if "True" in val or "true" in val or "YES" in val:
+                        return True
 
         return False
 
@@ -300,13 +308,10 @@ class KeychainSecurityChecker(SecurityChecker):
             return False
 
         for param in extracted_info.parameters:
-            if not param:
-                continue
-            val = str(param.value) if hasattr(param, 'value') and param.value else ""
-            
-            if "kSecReturnData" in val:
-                if "True" in val or "true" in val or "YES" in val:
-                    return True
+            for val in self._get_param_string_values(param):
+                if "kSecReturnData" in val:
+                    if "True" in val or "true" in val or "YES" in val:
+                        return True
 
         return False
 
@@ -316,12 +321,9 @@ class KeychainSecurityChecker(SecurityChecker):
             return False
 
         for param in extracted_info.parameters:
-            if not param:
-                continue
-            val = str(param.value) if hasattr(param, 'value') and param.value else ""
-            
-            if "kSecMatchLimitAll" in val or "All" in val:
-                return True
+            for val in self._get_param_string_values(param):
+                if "kSecMatchLimitAll" in val:
+                    return True
 
         return False
 
