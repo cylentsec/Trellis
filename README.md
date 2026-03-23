@@ -33,23 +33,31 @@ Trellis provides static analysis of iOS binaries to detect security-relevant fun
 
 ## Installation
 
-This has been tested only on Kali Linux. While I'm sure it will work on other Linux distros and macOS, the others will not be supported here.
+This has been tested only on Kali Linux and macOS. While I'm sure it will work on other Linux distros or Windows, the others will not be supported here.
 
 1. Install Ghidra if not already installed.
 2. Create an alias in `~/.zshrc` to start Ghidra with Python support:
-
+   Kali:
    ```bash
-   ghidra=/usr/share/ghidra/support/pyghidraRun
+   ghidra='/usr/share/ghidra/support/pyghidraRun'
+   ```
+   macOS:
+   ```bash
+   ghidra='/opt/homebrew/Cellar/ghidra/12.0.4/libexec/support/pyghidraRun'
    ```
 3. Source your alias: `source ~/.zshrc`
 4. Start Ghidra from the terminal to create the Python virtual environment: `ghidra`
 5. Note the Ghidra version path in the terminal output.
 6. Ensure PyYAML is available in Ghidra's Python environment: (replace the version with the version found in step 5)
-
+   Kali:
    ```bash
    ~/.config/ghidra/ghidra_<version>/venv/bin/pip install pyyaml
    ```
-7. Open the binary you want to analyze and allow Ghidra to finish the analysis
+   macOS:
+   ```bash
+   ~/Library/ghidra/ghidra_<version>_PUBLIC/venv/bin/pip3 install pyyaml
+   ```
+7. Start ghidra from the cli alias, open the binary you want to analyze and allow Ghidra to finish the analysis
 8. Click on Window -> Script Manager, then click the Manage Script Directories button. Next, click the plus button, and choose the path: `/path/to/Trellis/ghidra_scripts`
 9. In the Script Manager window, find the `iOS Security` folder and ensure that both scripts are checked.
 
@@ -66,6 +74,50 @@ You should now see two options under the `Tools` -> `Trellis` menu, `Analyze All
 3. In the Ghidra menu, click `Tools` -> `Trellis`, and select either `Analyze All` or `Generate Frida Scripts` as desired
 4. Run the script
 5. When prompted, choose an output directory for reports or Frida scripts
+
+### Running the Analysis from the Command Line
+
+`trellis_headless.py` runs the full pipeline — Ghidra auto-analysis, Markdown reports, and Frida scripts — without opening the GUI. It uses [PyGhidra](https://github.com/NationalSecurityAgency/ghidra/tree/master/Ghidra/Features/PyGhidra) to drive Ghidra headlessly.
+
+**Prerequisites:** Run the script with the Python interpreter from Ghidra's virtual environment (the same one created by `pyghidraRun`):
+
+```bash
+~/.config/ghidra/ghidra_<version>/venv/bin/python trellis_headless.py --help
+```
+
+**Full pipeline** (Ghidra analysis + Markdown reports + Frida scripts):
+
+```bash
+python trellis_headless.py -b /path/to/DecryptedApp -o /tmp/trellis-results
+```
+
+**Reports only** (skip Frida script generation):
+
+```bash
+python trellis_headless.py -b /path/to/DecryptedApp -o /tmp/trellis-results --skip-frida
+```
+
+**Frida scripts only** (re-generate scripts from a prior analysis run without re-running Ghidra):
+
+```bash
+python trellis_headless.py -b /path/to/DecryptedApp -o /tmp/trellis-results --skip-analysis
+```
+
+**Persistent Ghidra project** (saves the Ghidra project so subsequent runs skip re-analysis):
+
+```bash
+python trellis_headless.py -b /path/to/DecryptedApp -o /tmp/trellis-results --project-dir /tmp/ghidra-proj
+```
+
+| Argument | Description |
+|----------|-------------|
+| `-b / --binary` | Path to the decrypted iOS Mach-O binary |
+| `-o / --output` | Output directory for reports and Frida scripts (created if needed) |
+| `--project-dir` | Ghidra project directory (default: temp dir, deleted after run) |
+| `--skip-analysis` | Skip Markdown report generation |
+| `--skip-frida` | Skip Frida script generation |
+
+The output directory will contain per-category `.md` reports, findings `.json` files (used by findings-driven Frida hooks), and `.js` Frida scripts — identical to what the GUI workflow produces.
 
 ### Analysis Categories
 
