@@ -47,6 +47,9 @@ _CRYPTO_SINK_KEYWORDS = [
     'SymmetricKey', 'hmac', 'pbkdf', 'derive',
 ]
 
+# Maximum call-chain depth for interprocedural xref analysis
+_MAX_CALL_CHAIN_DEPTH = 3
+
 
 class SecretSinkSecurityChecker(SecurityChecker):
     """Analyzes data flow from hardcoded strings to sensitive sinks."""
@@ -145,11 +148,15 @@ class SecretSinkSecurityChecker(SecurityChecker):
 
     def _xref_fallback(self, function_sig, call_site, config):
         """
-        Fallback: when parameter extraction fails, check if the caller function
-        references any known secret strings from the StringScan.
+        Fallback: when parameter extraction fails, walk up the call chain
+        to find functions that reference known secret strings.
 
-        This catches hardcoded encryption keys in Swift code where the
-        decompiler/backward-slice cannot resolve parameters.
+        Uses interprocedural BFS: starting from the sink's direct caller,
+        walk callers-of-callers up to _MAX_CALL_CHAIN_DEPTH hops. At each
+        hop, check if the function references any known secret string.
+
+        This catches patterns like:
+          textFieldShouldReturn (has secret) → RNEncryptor.encryptData → CCCrypt (sink)
         """
         findings = []
 
@@ -160,7 +167,7 @@ class SecretSinkSecurityChecker(SecurityChecker):
         if not caller_name:
             return findings
 
-        # Get the caller function object
+        # Get the direct caller function
         caller_func = None
         try:
             caller_func = self.program.get_function_containing(
@@ -172,15 +179,15 @@ class SecretSinkSecurityChecker(SecurityChecker):
         if not caller_func:
             return findings
 
-        # Strategy 1: Check if any known secret string addresses are
-        # referenced within the caller function's body
-        matched_secrets = self._find_secret_refs_in_function(caller_func)
+        # --- Interprocedural BFS up the call chain ---
+        matched = self._find_secret_in_call_chain(caller_func)
 
-        for secret_addr, secret_value in matched_secrets:
+        for secret_addr, secret_value, chain in matched:
+            chain_display = " → ".join(n[:40] for n in chain)
             findings.append(SecurityFinding(
                 severity=Severity.CRITICAL,
                 issue_type="Hardcoded Secret Flows to Crypto Sink",
-                description="Function referencing hardcoded secret also calls {} sink".format(
+                description="Hardcoded secret reaches {} sink via call chain".format(
                     function_sig.name),
                 location=call_site.call_instruction_address,
                 function_name=caller_name,
@@ -189,7 +196,9 @@ class SecretSinkSecurityChecker(SecurityChecker):
                     "sink_type": config["desc"],
                     "secret_value": secret_value[:50],
                     "secret_address": hex(secret_addr),
-                    "detection_method": "string_xref_fallback",
+                    "call_chain": chain_display,
+                    "chain_depth": str(len(chain)),
+                    "detection_method": "interprocedural_xref",
                 },
                 impact="Hardcoded secret is used in {} — all app installations "
                        "share the same key/password".format(config["desc"]),
@@ -197,7 +206,7 @@ class SecretSinkSecurityChecker(SecurityChecker):
                                "iOS Keychain for secret storage"
             ))
 
-        # Strategy 2: Decompile the caller and search for string literals
+        # Strategy 2: Decompile the direct caller and search for string literals
         if not findings:
             findings.extend(self._decompiler_string_scan(
                 function_sig, call_site, config, caller_func
@@ -205,29 +214,86 @@ class SecretSinkSecurityChecker(SecurityChecker):
 
         return findings
 
-    def _find_secret_refs_in_function(self, func):
+    def _find_secret_in_call_chain(self, start_func):
         """
-        Check if any known secret-string addresses are referenced
-        within the given function.
+        BFS up the call chain from start_func, checking each function
+        for references to known secret strings.
 
-        Returns list of (address, value) tuples for matched secrets.
+        Args:
+            start_func: GhidraFunction to start traversal from
+
+        Returns:
+            List of (secret_addr, secret_value, call_chain_names) tuples.
+            call_chain_names is the list of function names from the secret
+            source down to start_func.
         """
-        matched = []
         if not self._secret_strings:
-            return matched
+            return []
+
+        # Build a cache of which functions reference which secrets
+        # (avoids re-querying xrefs at every hop)
+        if not hasattr(self, '_secret_ref_cache'):
+            self._secret_ref_cache = self._build_secret_ref_cache()
+
+        results = []
+        # BFS queue: (function_address, depth, chain_names)
+        visited = set()
+        queue = [(start_func.address, 0, [start_func.name])]
+        visited.add(start_func.address)
+
+        while queue:
+            func_addr, depth, chain = queue.pop(0)
+
+            # Check if this function references any secret
+            if func_addr in self._secret_ref_cache:
+                for secret_addr, secret_value in self._secret_ref_cache[func_addr]:
+                    # chain is ordered from sink-caller outward; reverse for display
+                    display_chain = list(reversed(chain))
+                    results.append((secret_addr, secret_value, display_chain))
+
+            # Stop expanding if we've hit max depth
+            if depth >= _MAX_CALL_CHAIN_DEPTH:
+                continue
+
+            # Find callers of this function and add to queue
+            try:
+                callers = self.program.get_callers(func_addr)
+                for ref in callers:
+                    caller_func = self.program.get_function_containing(ref.from_address)
+                    if caller_func and caller_func.address not in visited:
+                        visited.add(caller_func.address)
+                        queue.append((
+                            caller_func.address,
+                            depth + 1,
+                            chain + [caller_func.name]
+                        ))
+            except Exception:
+                continue
+
+        return results
+
+    def _build_secret_ref_cache(self):
+        """
+        Build a lookup: function_address → [(secret_addr, secret_value), ...]
+
+        Queries xrefs for every known secret string once and caches the
+        result for reuse across all call-chain traversals.
+        """
+        cache = {}  # func_addr -> list of (secret_addr, secret_value)
 
         for secret_addr, secret_value in self._secret_strings.items():
             try:
                 refs = self.program.get_references_to(secret_addr)
                 for ref in refs:
-                    ref_func = self.program.get_function_containing(ref.from_address)
-                    if ref_func and ref_func.address == func.address:
-                        matched.append((secret_addr, secret_value))
-                        break
+                    func = self.program.get_function_containing(ref.from_address)
+                    if func:
+                        if func.address not in cache:
+                            cache[func.address] = []
+                        cache[func.address].append((secret_addr, secret_value))
             except Exception:
                 continue
 
-        return matched
+        return cache
 
     def _decompiler_string_scan(self, function_sig, call_site, config, caller_func):
         """
