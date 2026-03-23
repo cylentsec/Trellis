@@ -50,6 +50,17 @@ _CRYPTO_SINK_KEYWORDS = [
 # Maximum call-chain depth for interprocedural xref analysis
 _MAX_CALL_CHAIN_DEPTH = 3
 
+# Crypto/encryption ObjC selectors that indicate a function calls crypto code.
+# Used by the forward-search strategy to bridge objc_msgSend dispatch.
+_CRYPTO_SELECTORS = [
+    'encryptData:', 'decryptData:', 'encryptData:with', 'decryptData:with',
+    'RNEncryptor', 'RNDecryptor',
+    'initWithOperation:settings:key:', 'initWithPassword:',
+    'CCCrypt', 'CCCryptorCreate', 'CCKeyDerivation',
+    'SecItemAdd', 'SecItemUpdate',
+    'evaluateJavaScript:',
+]
+
 
 class SecretSinkSecurityChecker(SecurityChecker):
     """Analyzes data flow from hardcoded strings to sensitive sinks."""
@@ -70,9 +81,14 @@ class SecretSinkSecurityChecker(SecurityChecker):
         for f in secret_findings:
             if f.severity in (Severity.CRITICAL, Severity.HIGH):
                 addr = f.location
-                val = f.evidence.get("value", f.evidence.get("value_preview", ""))
+                val = f.evidence.get("value", f.evidence.get(
+                    "value_preview", f.evidence.get("string_value", "")))
                 if val:
                     self._secret_strings[addr] = val
+        print("[Trellis] SecretSinkChecker: loaded {} secret strings for xref".format(
+            len(self._secret_strings)))
+        for addr, val in list(self._secret_strings.items())[:5]:
+            print("[Trellis]   {} = {}".format(hex(addr), val[:40]))
 
     def check_call_site(self, function_sig, call_site, extracted_info):
         """Check if hardcoded strings flow into sensitive sinks."""
@@ -206,7 +222,14 @@ class SecretSinkSecurityChecker(SecurityChecker):
                                "iOS Keychain for secret storage"
             ))
 
-        # Strategy 2: Decompile the direct caller and search for string literals
+        # Strategy 2: Forward search — check if any secret-holding function
+        # also references crypto selectors (bridges objc_msgSend dispatch)
+        if not findings:
+            findings.extend(self._forward_selector_search(
+                function_sig, call_site, config
+            ))
+
+        # Strategy 3: Decompile the direct caller and search for string literals
         if not findings:
             findings.extend(self._decompiler_string_scan(
                 function_sig, call_site, config, caller_func
@@ -272,6 +295,97 @@ class SecretSinkSecurityChecker(SecurityChecker):
 
         return results
 
+    def _forward_selector_search(self, function_sig, call_site, config):
+        """
+        Forward search: for each function that references a known secret,
+        check if that function also references crypto-related ObjC selectors.
+
+        This bridges the objc_msgSend gap. In ObjC, the call from
+        textFieldShouldReturn to RNEncryptor.encryptData goes through
+        objc_msgSend — invisible to get_callers(). But the caller function
+        DOES reference the selector string 'encryptData:withSettings:password:error:'.
+        If a function references both a secret AND a crypto selector, the
+        secret flows to crypto code.
+        """
+        findings = []
+
+        if not self._secret_strings:
+            return findings
+
+        # Build the secret-ref cache if not already done
+        if not hasattr(self, '_secret_ref_cache'):
+            self._secret_ref_cache = self._build_secret_ref_cache()
+
+        # Build crypto-selector address cache (once)
+        if not hasattr(self, '_crypto_selector_addrs'):
+            self._crypto_selector_addrs = self._build_crypto_selector_cache()
+
+        if not self._crypto_selector_addrs:
+            return findings
+
+        # For each function that references a secret, check if it also
+        # references a crypto selector
+        for func_addr, secrets in self._secret_ref_cache.items():
+            # Get all strings referenced by this function by checking
+            # if any crypto selector address is also referenced from here
+            for sel_addr, sel_name in self._crypto_selector_addrs:
+                try:
+                    refs = self.program.get_references_to(sel_addr)
+                    for ref in refs:
+                        ref_func = self.program.get_function_containing(ref.from_address)
+                        if ref_func and ref_func.address == func_addr:
+                            # This function references BOTH a secret AND a crypto selector
+                            for secret_addr, secret_value in secrets:
+                                func_obj = self.program.get_function_at(func_addr)
+                                func_name = func_obj.name if func_obj else hex(func_addr)
+                                findings.append(SecurityFinding(
+                                    severity=Severity.CRITICAL,
+                                    issue_type="Hardcoded Secret Flows to Crypto Sink",
+                                    description="Function references both hardcoded secret "
+                                                "and crypto selector '{}'".format(sel_name),
+                                    location=func_addr,
+                                    function_name=func_name,
+                                    evidence={
+                                        "sink": function_sig.name,
+                                        "sink_type": config["desc"],
+                                        "secret_value": secret_value[:50],
+                                        "secret_address": hex(secret_addr),
+                                        "crypto_selector": sel_name,
+                                        "detection_method": "forward_selector_search",
+                                    },
+                                    impact="Hardcoded secret is passed to crypto operation "
+                                           "via ObjC message dispatch",
+                                    recommendation="Derive keys from user input at runtime "
+                                                   "or use iOS Keychain for secret storage"
+                                ))
+                            # Found a match for this function, stop checking selectors
+                            raise StopIteration
+                except StopIteration:
+                    break
+                except Exception:
+                    continue
+
+        return findings
+
+    def _build_crypto_selector_cache(self):
+        """
+        Find addresses of crypto-related ObjC selector strings in the binary.
+
+        Returns list of (address, selector_name) tuples.
+        """
+        results = []
+        for address, string_value in self.program.get_defined_strings():
+            if not string_value:
+                continue
+            for sel in _CRYPTO_SELECTORS:
+                if sel in string_value and ':' in string_value:
+                    results.append((address, string_value))
+                    break
+
+        print("[Trellis] SecretSinkChecker: found {} crypto selector strings".format(
+            len(results)))
+        return results
+
     def _build_secret_ref_cache(self):
         """
         Build a lookup: function_address → [(secret_addr, secret_value), ...]
@@ -292,6 +406,12 @@ class SecretSinkSecurityChecker(SecurityChecker):
                         cache[func.address].append((secret_addr, secret_value))
             except Exception:
                 continue
+
+        print("[Trellis] SecretSinkChecker: built secret-ref cache with {} functions".format(
+            len(cache)))
+        for func_addr, secrets in list(cache.items())[:5]:
+            print("[Trellis]   func {} refs {} secrets".format(
+                hex(func_addr), len(secrets)))
 
         return cache
 

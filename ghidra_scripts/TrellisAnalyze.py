@@ -835,6 +835,8 @@ def run_analysis(program, output_dir, monitor):
 
     # Secret sinks analysis — runs after string scan to enable xref fallback
     if not monitor.isCancelled():
+        print("[Trellis] Passing {} string findings to secret_sinks".format(
+            len(string_scan_findings)))
         result = analyze_category(program, "secret_sinks", monitor, output_dir,
                                   secret_string_findings=string_scan_findings)
         if result:
