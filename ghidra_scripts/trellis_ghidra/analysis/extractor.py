@@ -119,6 +119,14 @@ _ARM64_ARG_REGISTERS = {
 # Maximum number of instructions to scan backward from call site
 _BACKWARD_SLICE_DEPTH = 20
 
+# Branch mnemonics that mark basic-block boundaries — scanning past these
+# would attribute values from a different execution path to the call site.
+_BRANCH_MNEMONICS = frozenset({
+    "b", "b.eq", "b.ne", "b.lt", "b.gt", "b.le", "b.ge",
+    "b.hi", "b.lo", "b.hs", "b.ls", "b.cs", "b.cc",
+    "cbz", "cbnz", "tbz", "tbnz", "ret",
+})
+
 
 def _backward_slice_arm64(program, call_address, num_params):
     """
@@ -144,7 +152,8 @@ def _backward_slice_arm64(program, call_address, num_params):
     # We process instructions newest-first, so we see the final write first
     resolved_regs = set()  # Registers we've already resolved
     reg_values = {}  # reg_name -> int value
-    adrp_pending = {}  # reg_name -> page_base (waiting for ADD)
+    adrp_pending = {}  # canonical x-reg -> page_base or ADD offset (waiting for pair)
+    movk_pending = {}  # canonical x-reg -> list of (imm, shift) from MOVK insns
 
     instructions = program.get_instructions_before(call_address, _BACKWARD_SLICE_DEPTH)
 
@@ -154,6 +163,11 @@ def _backward_slice_arm64(program, call_address, num_params):
             num_ops = insn.getNumOperands()
         except Exception:
             continue
+
+        # Stop at basic-block boundaries — a branch means the preceding
+        # instructions belong to a different execution path
+        if mnemonic in _BRANCH_MNEMONICS:
+            break
 
         # Skip non-relevant instructions
         if num_ops < 2:
@@ -167,6 +181,9 @@ def _backward_slice_arm64(program, call_address, num_params):
             dest_name = dest_reg.getName().lower()
         except Exception:
             continue
+
+        # Canonical x-form for cross-width lookups (w1 <-> x1)
+        canon_name = "x" + dest_name[1:]
 
         # Only care about argument registers
         if dest_name not in _ARM64_ARG_REGISTERS:
@@ -183,9 +200,7 @@ def _backward_slice_arm64(program, call_address, num_params):
             continue
 
         # Also skip if we resolved the x-variant of a w-register or vice versa
-        x_name = "x" + dest_name[1:]
-        w_name = "w" + dest_name[1:]
-        if x_name in resolved_regs or w_name in resolved_regs:
+        if canon_name in resolved_regs or ("w" + dest_name[1:]) in resolved_regs:
             continue
 
         # Pattern: MOV Xn, #imm / MOVZ Xn, #imm
@@ -197,6 +212,11 @@ def _backward_slice_arm64(program, call_address, num_params):
                     for obj in scalars:
                         val = _try_get_scalar_value(obj)
                         if val is not None:
+                            # Combine with any pending MOVK instructions
+                            if mnemonic == "movz" and canon_name in movk_pending:
+                                for movk_imm, movk_shift in movk_pending[canon_name]:
+                                    val = val | (movk_imm << movk_shift)
+                                del movk_pending[canon_name]
                             reg_values[dest_name] = val
                             resolved_regs.add(dest_name)
                             results[param_idx] = (val, 'int')
@@ -205,11 +225,30 @@ def _backward_slice_arm64(program, call_address, num_params):
                 pass
 
         # Pattern: MOVK Xn, #imm, LSL #shift
-        # This modifies an existing value, combining with prior MOVZ
+        # Scanning backward, we see MOVK before its paired MOVZ.
+        # Store the (imm, shift) and combine when MOVZ is found.
         elif mnemonic == "movk":
-            # We'd need to track the full MOV chain — skip for now
-            # as simple constants are usually loaded with a single MOV
-            pass
+            try:
+                scalars = insn.getOpObjects(1)
+                if scalars:
+                    for obj in scalars:
+                        imm = _try_get_scalar_value(obj)
+                        if imm is not None:
+                            shift = 0
+                            if num_ops >= 3:
+                                shift_ops = insn.getOpObjects(2)
+                                if shift_ops:
+                                    for sobj in shift_ops:
+                                        sval = _try_get_scalar_value(sobj)
+                                        if sval is not None:
+                                            shift = sval
+                                            break
+                            if canon_name not in movk_pending:
+                                movk_pending[canon_name] = []
+                            movk_pending[canon_name].append((imm, shift))
+                            break
+            except Exception:
+                pass
 
         # Pattern: ADRP Xn, #page_addr
         elif mnemonic == "adrp":
@@ -220,17 +259,17 @@ def _backward_slice_arm64(program, call_address, num_params):
                         val = _try_get_scalar_value(obj)
                         if val is not None:
                             # Check if we already have an ADD for this reg
-                            if dest_name in adrp_pending:
+                            if canon_name in adrp_pending:
                                 # This is the ADRP part of ADRP+ADD
-                                full_addr = val + adrp_pending[dest_name]
+                                full_addr = val + adrp_pending[canon_name]
                                 reg_values[dest_name] = full_addr
                                 resolved_regs.add(dest_name)
                                 # Try to read string at this address
                                 results[param_idx] = (full_addr, 'string_addr')
-                                del adrp_pending[dest_name]
+                                del adrp_pending[canon_name]
                             else:
                                 # Just store the page base
-                                adrp_pending[dest_name] = val
+                                adrp_pending[canon_name] = val
                             break
             except Exception:
                 pass
@@ -240,20 +279,20 @@ def _backward_slice_arm64(program, call_address, num_params):
             try:
                 # Check source register matches destination (ADD Xn, Xn, #imm)
                 src_reg = insn.getRegister(1)
-                if src_reg and src_reg.getName().lower() == dest_name:
+                if src_reg and src_reg.getName().lower() in (dest_name, canon_name):
                     scalars = insn.getOpObjects(2)
                     if scalars:
                         for obj in scalars:
                             val = _try_get_scalar_value(obj)
                             if val is not None:
-                                if dest_name in adrp_pending:
+                                if canon_name in adrp_pending:
                                     # We have both ADRP base and ADD offset
                                     # But wait — we're scanning backward,
                                     # so we see ADD before ADRP
                                     # Store the ADD offset, wait for ADRP
                                     pass
                                 # Store offset for when we find the ADRP
-                                adrp_pending[dest_name] = val
+                                adrp_pending[canon_name] = val
                                 break
             except Exception:
                 pass
