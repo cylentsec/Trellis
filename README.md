@@ -26,7 +26,7 @@ Trellis provides static analysis of iOS binaries to detect security-relevant fun
 - **String-Table Scanning**: Detect hardcoded passwords, API keys, HTTP cleartext URLs, and embedded credentials directly from the binary's string table (no decompiler required)
 - **Biometric Authentication**: Detect insecure client-side-only LAContext biometric checks that are trivially bypassable
 - **Runtime Manipulation**: Detect hardcoded credential comparisons, client-side authentication checks, and validation logic that can be bypassed via Frida hooking
-- **Enhanced Detection**: ARM64 backward-slice parameter extraction fallback, caller-name heuristic checks, ObjC selector matching via `objc_msgSend`, and string cross-referencing with security-critical call sites
+- **Enhanced Detection**: ARM64 backward-slice parameter extraction fallback, caller-name heuristic checks, ObjC selector matching via `objc_msgSend`, and string cross-referencing with security-critical call sites. [Details](Trellis_Enhanced_Detection.md)
 - **Swift Support**: Automatic Swift symbol demangling
 - **Report Generation**: Markdown reports saved to a user-chosen directory
 - **Frida Script Generation**: Generate ready-to-use instrumentation scripts
