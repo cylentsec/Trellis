@@ -540,24 +540,48 @@ Single-hop cross-referencing (checking only the sink's direct caller) misses thi
 
 ### How It Works
 
-The analyzer uses BFS (breadth-first search) to walk *up* the call graph from each sink call site, checking at each hop whether the current function references a known secret string.
+The analyzer uses three strategies in sequence, each designed to handle a different call-graph topology.
 
-**Step 1 — Build the secret-ref cache (once per analysis run):**
+**Step 1 — Build caches (once per analysis run):**
 
-For every CRITICAL/HIGH string finding from the string-table scanner, query Ghidra's cross-references to find which functions reference that string. Build a lookup table: `function_address → [(secret_address, secret_value), ...]`.
+- **Secret-ref cache:** For every CRITICAL/HIGH string finding from the string-table scanner, query Ghidra's cross-references to find which functions reference that string. Build a lookup table: `function_address → [(secret_address, secret_value), ...]`.
+- **Crypto-selector cache:** Scan the binary's string table for ObjC selector strings that indicate crypto operations (e.g., `encryptData:withSettings:password:error:`, `initWithPassword:`, `SecItemAdd`). Store their addresses.
 
-**Step 2 — BFS from each sink call site:**
+**Step 2 — Strategy 1: BFS call-chain traversal (direct calls):**
 
-For each unresolved sink call (where parameter extraction failed), start BFS from the sink's direct caller:
+For each unresolved sink call, start BFS from the sink's direct caller:
 
 1. Check if the current function is in the secret-ref cache → if yes, we found a match
 2. If depth < max (3 hops), query `get_callers()` for this function and add each caller to the BFS queue
 3. Track visited functions to avoid cycles
 4. Record the full call chain for each match
 
-**Step 3 — Report with call chain evidence:**
+This catches secrets flowing through direct `BL`/`B` call chains (C functions calling C functions).
 
-Matched findings include the complete call chain from the secret source to the sink, enabling the analyst to verify the data flow.
+**Step 3 — Strategy 2: Forward selector search (ObjC dispatch):**
+
+The BFS strategy has a fundamental limitation: `get_callers()` only finds direct branch instructions. In Objective-C, method calls go through `objc_msgSend(receiver, selectorString, ...)` — the runtime dispatcher. The compiler emits a `BL _objc_msgSend` instruction with the selector loaded as a string argument, not a direct call to the target method. This means `get_callers()` on `RNEncryptor.encryptData:...` returns nothing useful — it sees calls to `_objc_msgSend`, not calls to the encryption method.
+
+The forward selector search reverses the direction: instead of walking up from the sink, it checks each function in the secret-ref cache (functions that reference a known secret) to see if that same function *also* references a crypto-related ObjC selector string. If a function references both the secret AND a crypto selector, the secret flows to crypto code via `objc_msgSend` dispatch.
+
+For the DVIA-v2 encryption key:
+
+```
+textFieldShouldReturn:
+  ├── references string "@daloq3as$qweasdlasasjdnj"  ← secret (in cache)
+  └── references selector "encryptData:withSettings:password:error:"  ← crypto selector
+      (dispatched via objc_msgSend to RNEncryptor)
+```
+
+Both references are in the same function → CRITICAL finding.
+
+**Step 4 — Strategy 3: Decompiler string scan (last resort):**
+
+If strategies 1 and 2 find nothing, decompile the sink's direct caller and regex-search the pseudocode for string literals that look like secrets (high entropy, special characters).
+
+**Step 5 — Report with evidence:**
+
+Matched findings include the detection method and context (call chain for BFS, selector name for forward search), enabling the analyst to verify the data flow.
 
 ### Source Code
 
@@ -622,7 +646,39 @@ def _find_secret_in_call_chain(self, start_func):
     return results
 ```
 
-**Integration in the xref fallback:**
+**Forward selector search:**
+
+```python
+_CRYPTO_SELECTORS = [
+    'encryptData:', 'decryptData:', 'encryptData:with', 'decryptData:with',
+    'RNEncryptor', 'RNDecryptor',
+    'initWithOperation:settings:key:', 'initWithPassword:',
+    'CCCrypt', 'CCCryptorCreate', 'CCKeyDerivation',
+    'SecItemAdd', 'SecItemUpdate',
+]
+
+def _forward_selector_search(self, function_sig, call_site, config):
+    """Check if secret-holding functions also reference crypto selectors."""
+    for func_addr, secrets in self._secret_ref_cache.items():
+        for sel_addr, sel_name in self._crypto_selector_addrs:
+            refs = self.program.get_references_to(sel_addr)
+            for ref in refs:
+                ref_func = self.program.get_function_containing(ref.from_address)
+                if ref_func and ref_func.address == func_addr:
+                    # Function references BOTH a secret AND a crypto selector
+                    for secret_addr, secret_value in secrets:
+                        findings.append(SecurityFinding(
+                            severity=Severity.CRITICAL,
+                            issue_type="Hardcoded Secret Flows to Crypto Sink",
+                            evidence={
+                                "secret_value": secret_value[:50],
+                                "crypto_selector": sel_name,
+                                "detection_method": "forward_selector_search",
+                            },
+                        ))
+```
+
+**Integration in the xref fallback (three strategies in sequence):**
 
 ```python
 def _xref_fallback(self, function_sig, call_site, config):
@@ -630,35 +686,34 @@ def _xref_fallback(self, function_sig, call_site, config):
         call_site.call_instruction_address
     )
 
-    # Interprocedural BFS up the call chain
+    # Strategy 1: BFS up the call chain (direct BL/B calls)
     matched = self._find_secret_in_call_chain(caller_func)
+    # ... generate findings from matched ...
 
-    for secret_addr, secret_value, chain in matched:
-        chain_display = " → ".join(n[:40] for n in chain)
-        findings.append(SecurityFinding(
-            severity=Severity.CRITICAL,
-            issue_type="Hardcoded Secret Flows to Crypto Sink",
-            evidence={
-                "sink": function_sig.name,
-                "secret_value": secret_value[:50],
-                "call_chain": chain_display,
-                "chain_depth": str(len(chain)),
-                "detection_method": "interprocedural_xref",
-            },
+    # Strategy 2: Forward selector search (bridges objc_msgSend)
+    if not findings:
+        findings.extend(self._forward_selector_search(
+            function_sig, call_site, config
+        ))
+
+    # Strategy 3: Decompiler string scan (last resort)
+    if not findings:
+        findings.extend(self._decompiler_string_scan(
+            function_sig, call_site, config, caller_func
         ))
 ```
 
 ### Performance
 
-The secret-ref cache is built once per analysis run (one xref query per known secret string). BFS is bounded by `_MAX_CALL_CHAIN_DEPTH = 3` and a visited-set that prevents revisiting functions. For a binary with 55 sink functions and ~7 secret strings, the total work is approximately 385 starting pairs × a few hops each — completing in seconds even on large binaries.
+The secret-ref cache and crypto-selector cache are built once per analysis run. The BFS is bounded by `_MAX_CALL_CHAIN_DEPTH = 3` and a visited-set. The forward selector search iterates secret-holding functions × crypto selectors and checks xrefs, but both sets are small (tens of functions, tens of selectors). The entire analysis completes in seconds.
 
 ### Practical Impact
 
 Without interprocedural analysis, the hardcoded encryption key `@daloq3as$qweasdlasasjdnj` is flagged by the string scanner as a suspicious password, but the secret sinks module reports 0 findings — it cannot connect the key to the `CCCryptorCreate` call through the RNEncryptor wrapper.
 
-With interprocedural analysis, Trellis reports:
+The BFS alone also cannot bridge this gap because `get_callers()` doesn't see ObjC message dispatch. The forward selector search solves this:
 
-> **Hardcoded Secret Flows to Crypto Sink** — Hardcoded secret reaches `CCCryptorCreate` sink via call chain: `textFieldShouldReturn → encryptData → initWithOperation:settings:key:IV:error: → CCCryptorCreate`. Detection method: interprocedural_xref (depth: 3).
+> **Hardcoded Secret Flows to Crypto Sink** — Function `textFieldShouldReturn` references both hardcoded secret `@daloq3as$qweasdlasasjdnj` and crypto selector `encryptData:withSettings:password:error:`. Detection method: forward_selector_search.
 
 ---
 
@@ -689,7 +744,8 @@ Binary Analysis Pipeline
 
 5. Interprocedural secret-sink analysis
    ├── Secret-ref cache         → maps functions to known secret strings
-   └── BFS call-chain traversal → walks callers up to 3 hops to connect secrets to sinks
+   ├── BFS call-chain traversal → walks callers up to 3 hops (direct BL/B calls)
+   └── Forward selector search  → bridges objc_msgSend by matching secret + crypto selector in same function
 ```
 
 Each layer catches what the previous one missed, producing comprehensive coverage without requiring any single technique to be perfect.
