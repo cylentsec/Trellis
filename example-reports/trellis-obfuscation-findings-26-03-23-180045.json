@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "category": "obfuscation",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-180045",
+    "total_findings": 1,
+    "severity_counts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "INFO",
+      "issue_type": "Obfuscation: Hex Decode",
+      "description": "Hex string decoding detected",
+      "location": 4297936076,
+      "function_name": "installationIDAsBytes",
+      "evidence": {
+        "function": "dataFromHexString:"
+      },
+      "impact": "May be used to hide binary data or keys",
+      "recommendation": "Inspect input string for hidden keys or sensitive data"
+    }
+  ]
+}

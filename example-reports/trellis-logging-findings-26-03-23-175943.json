@@ -1,0 +1,3691 @@
+{
+  "metadata": {
+    "category": "logging",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-175943",
+    "total_findings": 306,
+    "severity_counts": {
+      "critical": 0,
+      "high": 1,
+      "medium": 14,
+      "low": 0
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4296773756,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298061988,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298062060,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297133984,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297134084,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297980632,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297997092,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298291496,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4296210868,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298226136,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298374036,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298422780,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298013408,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298063020,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298226580,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298161124,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298161192,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298161356,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298158884,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298159320,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298159440,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298309132,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298407020,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298407052,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298407144,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298407244,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298407276,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298407360,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298407432,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298407460,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298407496,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297981464,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298259932,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297473340,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297473624,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297473712,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297474104,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297474120,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298046888,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298161724,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298489272,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298227348,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298489364,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298489456,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297916152,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298309720,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298309856,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298489544,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298407836,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297917148,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298178556,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297998328,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298326316,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298305928,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298273416,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298273488,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298158616,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298158704,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298371996,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298175164,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298175192,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298175572,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298175640,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298257216,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297929972,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297930100,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298421244,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298306444,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298142952,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298241224,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298257524,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298143384,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297930732,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298061624,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297471772,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297914868,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298225688,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298422592,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298176552,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297911128,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4296665408,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298058372,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298189484,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298353248,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298468184,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298468332,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298468360,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298189796,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298157500,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298353956,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297469196,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298059320,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298468580,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298468720,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298468756,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298370636,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298141864,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297469496,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297469564,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298354324,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298043316,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298190556,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298191140,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297010852,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297011856,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298371204,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298272844,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298272916,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298406404,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298406536,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298406668,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298406800,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298420340,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298420572,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298420664,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298170712,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298220548,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298367468,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298154796,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298351684,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298384852,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297942328,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297942512,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298302744,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298270112,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298204480,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298352144,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298140256,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298368916,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298204868,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298303236,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298270640,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298222240,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298385648,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298352736,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298398060,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297971760,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297972136,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297972204,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297972340,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297972408,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297972456,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298283660,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298250740,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298333460,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298152844,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298365828,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297972748,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297972880,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298284152,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298251524,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298251756,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298169432,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298366164,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298186384,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298350032,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298350104,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298252908,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298219564,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298350312,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298350384,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298334196,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298154008,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298154252,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298248508,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298248792,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298183328,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298412516,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298429204,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298215896,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298249216,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298249500,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298183660,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298167648,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298167832,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298235704,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298216912,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297479700,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297479832,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298184196,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298184312,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297971360,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298332324,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298397648,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297971544,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298102760,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297480168,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298365100,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298365172,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298365376,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298365456,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298365648,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297971672,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298410368,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298410432,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4296231276,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297902720,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298328744,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298328828,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298426908,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298410808,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298410872,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298427072,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298230732,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298166020,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298166084,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298329224,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298181716,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297903316,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298231272,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298100488,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297970388,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298182184,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297920288,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298182332,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298412040,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4295954208,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4295954248,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4295954796,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298182844,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297920660,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298101128,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297933084,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298178816,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298113424,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298310228,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298179116,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298408524,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298408648,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298408808,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298408868,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298228412,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297136784,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298326616,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297933508,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297474660,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297474880,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297474896,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297475284,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297475460,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297475644,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297475660,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4296786748,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298179412,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297901028,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298228932,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298179656,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4296230296,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4296230480,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297999976,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298311524,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298179908,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298409460,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298409584,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298409744,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298409804,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297919660,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298065392,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298376900,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298229440,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298180432,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298131100,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297968568,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298278816,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298131476,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4296231004,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298181036,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298328352,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298377416,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298000916,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297117564,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298158240,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297469284,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298130436,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298154404,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298155164,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298155376,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298155544,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298155712,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298241312,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298248044,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298287588,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298352932,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298429736,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4296666492,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297910532,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4297995336,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298060212,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298229636,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298278508,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "NSLog in Production",
+      "description": "NSLog call detected - logs are visible in device console",
+      "location": 4298403184,
+      "function_name": "NSLog",
+      "evidence": {
+        "api": "NSLog"
+      },
+      "impact": "NSLog output can be read by any app or attacker with device access",
+      "recommendation": "Use os_log with privacy modifiers or remove in production builds"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297800464,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297800652,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "Sensitive Data in Log",
+      "description": "Potential sensitive data 'iv' found in log message",
+      "location": 4297800652,
+      "function_name": "asl_log",
+      "evidence": {
+        "keyword": "iv",
+        "context": "[PLCrashReporter] Failure occured deleting live crash report: %s"
+      },
+      "impact": "'iv' related data may be leaked to device logs",
+      "recommendation": "Remove sensitive data from logs or use privacy modifiers"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297896132,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297897736,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297895280,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297895368,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297862328,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297895996,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297823256,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297823640,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297802172,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297802336,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4295639912,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deprecated ASL Logging",
+      "description": "asl_log call detected - deprecated API",
+      "location": 4297797236,
+      "function_name": "asl_log",
+      "evidence": {
+        "api": "asl_log"
+      },
+      "impact": "ASL is deprecated; logs may have inconsistent behavior",
+      "recommendation": "Migrate to os_log unified logging"
+    }
+  ]
+}

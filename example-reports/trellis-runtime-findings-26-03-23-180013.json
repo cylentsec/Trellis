@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "category": "runtime",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-180013",
+    "total_findings": 11,
+    "severity_counts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 11,
+      "low": 0
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Client-Side Authentication Check",
+      "description": "isEqualToString: called in authentication function (parameters unresolved)",
+      "location": 4296799700,
+      "function_name": "isEqualToString:",
+      "evidence": {
+        "comparison_method": "isEqualToString:",
+        "caller": "continueAsyncLoginWithURL:continuation:",
+        "note": "String comparison in auth context — likely comparing against hardcoded or locally-stored credential"
+      },
+      "impact": "Client-side authentication can be bypassed by hooking the comparison method to always return true",
+      "recommendation": "Implement server-side authentication; client should only send credentials, not validate them locally"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Client-Side Authentication Check",
+      "description": "caseInsensitiveCompare: called in authentication function (parameters unresolved)",
+      "location": 4296800848,
+      "function_name": "caseInsensitiveCompare:",
+      "evidence": {
+        "comparison_method": "caseInsensitiveCompare:",
+        "caller": "___69-[CBLOpenIDConnectAuthorizer_continueAsyncLoginWithURL:continuation:]_bl...",
+        "note": "String comparison in auth context — likely comparing against hardcoded or locally-stored credential"
+      },
+      "impact": "Client-side authentication can be bypassed by hooking the comparison method to always return true",
+      "recommendation": "Implement server-side authentication; client should only send credentials, not validate them locally"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Client-Side Authentication Check",
+      "description": "isEqualToString: called in authentication function (parameters unresolved)",
+      "location": 4297243348,
+      "function_name": "isEqualToString:",
+      "evidence": {
+        "comparison_method": "isEqualToString:",
+        "caller": "verifyDigest:",
+        "note": "String comparison in auth context — likely comparing against hardcoded or locally-stored credential"
+      },
+      "impact": "Client-side authentication can be bypassed by hooking the comparison method to always return true",
+      "recommendation": "Implement server-side authentication; client should only send credentials, not validate them locally"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Client-Side Authentication Check",
+      "description": "isEqualToString: called in authentication function (parameters unresolved)",
+      "location": 4297324608,
+      "function_name": "isEqualToString:",
+      "evidence": {
+        "comparison_method": "isEqualToString:",
+        "caller": "checkAuthentication:user:",
+        "note": "String comparison in auth context — likely comparing against hardcoded or locally-stored credential"
+      },
+      "impact": "Client-side authentication can be bypassed by hooking the comparison method to always return true",
+      "recommendation": "Implement server-side authentication; client should only send credentials, not validate them locally"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Client-Side Authentication Check",
+      "description": "isEqualToString: called in authentication function (parameters unresolved)",
+      "location": 4297332808,
+      "function_name": "isEqualToString:",
+      "evidence": {
+        "comparison_method": "isEqualToString:",
+        "caller": "credentialForAuthHeader:",
+        "note": "String comparison in auth context — likely comparing against hardcoded or locally-stored credential"
+      },
+      "impact": "Client-side authentication can be bypassed by hooking the comparison method to always return true",
+      "recommendation": "Implement server-side authentication; client should only send credentials, not validate them locally"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Client-Side Authentication Check",
+      "description": "isEqualToString: called in authentication function (parameters unresolved)",
+      "location": 4297332852,
+      "function_name": "isEqualToString:",
+      "evidence": {
+        "comparison_method": "isEqualToString:",
+        "caller": "credentialForAuthHeader:",
+        "note": "String comparison in auth context — likely comparing against hardcoded or locally-stored credential"
+      },
+      "impact": "Client-side authentication can be bypassed by hooking the comparison method to always return true",
+      "recommendation": "Implement server-side authentication; client should only send credentials, not validate them locally"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Client-Side Authentication Check",
+      "description": "isEqualToString: called in authentication function (parameters unresolved)",
+      "location": 4297566456,
+      "function_name": "isEqualToString:",
+      "evidence": {
+        "comparison_method": "isEqualToString:",
+        "caller": "isAuthenticated",
+        "note": "String comparison in auth context — likely comparing against hardcoded or locally-stored credential"
+      },
+      "impact": "Client-side authentication can be bypassed by hooking the comparison method to always return true",
+      "recommendation": "Implement server-side authentication; client should only send credentials, not validate them locally"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Client-Side Authentication Check",
+      "description": "isEqualToString: called in authentication function (parameters unresolved)",
+      "location": 4297566548,
+      "function_name": "isEqualToString:",
+      "evidence": {
+        "comparison_method": "isEqualToString:",
+        "caller": "isAuthenticated",
+        "note": "String comparison in auth context — likely comparing against hardcoded or locally-stored credential"
+      },
+      "impact": "Client-side authentication can be bypassed by hooking the comparison method to always return true",
+      "recommendation": "Implement server-side authentication; client should only send credentials, not validate them locally"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Client-Side Authentication Check",
+      "description": "isEqualToString: called in authentication function (parameters unresolved)",
+      "location": 4297566552,
+      "function_name": "isEqualToString:",
+      "evidence": {
+        "comparison_method": "isEqualToString:",
+        "caller": "isAuthenticated",
+        "note": "String comparison in auth context — likely comparing against hardcoded or locally-stored credential"
+      },
+      "impact": "Client-side authentication can be bypassed by hooking the comparison method to always return true",
+      "recommendation": "Implement server-side authentication; client should only send credentials, not validate them locally"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Client-Side Authentication Check",
+      "description": "isEqualToString: called in authentication function (parameters unresolved)",
+      "location": 4297566884,
+      "function_name": "isEqualToString:",
+      "evidence": {
+        "comparison_method": "isEqualToString:",
+        "caller": "isAuthenticated",
+        "note": "String comparison in auth context — likely comparing against hardcoded or locally-stored credential"
+      },
+      "impact": "Client-side authentication can be bypassed by hooking the comparison method to always return true",
+      "recommendation": "Implement server-side authentication; client should only send credentials, not validate them locally"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Client-Side Authentication Check",
+      "description": "isEqualToString: called in authentication function (parameters unresolved)",
+      "location": 4297567992,
+      "function_name": "isEqualToString:",
+      "evidence": {
+        "comparison_method": "isEqualToString:",
+        "caller": "isAuthenticated",
+        "note": "String comparison in auth context — likely comparing against hardcoded or locally-stored credential"
+      },
+      "impact": "Client-side authentication can be bypassed by hooking the comparison method to always return true",
+      "recommendation": "Implement server-side authentication; client should only send credentials, not validate them locally"
+    }
+  ]
+}

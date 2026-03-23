@@ -1,0 +1,1450 @@
+{
+  "metadata": {
+    "category": "insecure_storage",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-180042",
+    "total_findings": 143,
+    "severity_counts": {
+      "critical": 0,
+      "high": 45,
+      "medium": 4,
+      "low": 0
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4296496184,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4296541972,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4296558956,
+      "function_name": "setBool:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4296639684,
+      "function_name": "setBool:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4296740952,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4296976216,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297091656,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297110868,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297111204,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297142184,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297221936,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297222804,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297222856,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297222900,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297222972,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297223716,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297399980,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297400488,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297471664,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297569836,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297570040,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297570092,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297846408,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297914448,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297917964,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297919032,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297919220,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297919268,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297919492,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297919568,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297919604,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297919636,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4297921836,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298017444,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298066204,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298066256,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298066348,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298066496,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Insecure Archiving",
+      "description": "Using deprecated archiver without secure coding",
+      "location": 4298066880,
+      "function_name": "archivedDataWithRootObject:",
+      "evidence": {},
+      "impact": "No protection against deserialization attacks",
+      "recommendation": "Use archivedDataWithRootObject:requiringSecureCoding:error: with secure coding enabled"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Insecure Archiving",
+      "description": "Using deprecated archiver without secure coding",
+      "location": 4298067116,
+      "function_name": "archivedDataWithRootObject:",
+      "evidence": {},
+      "impact": "No protection against deserialization attacks",
+      "recommendation": "Use archivedDataWithRootObject:requiringSecureCoding:error: with secure coding enabled"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298067828,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298068132,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298068420,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298090088,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298090384,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298118892,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298119528,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298119704,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298120568,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298120928,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298122048,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298122128,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298122608,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298125812,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298169704,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298201624,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298203076,
+      "function_name": "setInteger:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298213960,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298214120,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298214320,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298214452,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298254392,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298304548,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298304920,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298310556,
+      "function_name": "setInteger:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298311336,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298311368,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "File Write",
+      "description": "Writing plist file to: 16552",
+      "location": 4298313548,
+      "function_name": "writeToFile:atomically:",
+      "evidence": {
+        "path": "16552"
+      },
+      "impact": "Plist files are unencrypted XML/binary format",
+      "recommendation": "Consider encryption for sensitive data"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298339556,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298340128,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298340440,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298343692,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Insecure Archiving",
+      "description": "Using deprecated archiver without secure coding",
+      "location": 4298411824,
+      "function_name": "archivedDataWithRootObject:",
+      "evidence": {},
+      "impact": "No protection against deserialization attacks",
+      "recommendation": "Use archivedDataWithRootObject:requiringSecureCoding:error: with secure coding enabled"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298419644,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298420104,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298425336,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298425660,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298426104,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298426368,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298433164,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298464412,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298490456,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298490844,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298491000,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298492868,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298496868,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298502460,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298502740,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298504148,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298504580,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298504688,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298505112,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298505392,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298506100,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298506708,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298532772,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295407948,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295146292,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295408312,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295408616,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295408888,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295737068,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295737612,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295671924,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4296159748,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4296160076,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295600404,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295503384,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295503904,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295504680,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295505456,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295372216,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295192496,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4296139660,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295399648,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295399924,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295400208,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295400468,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295400816,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295401180,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295401460,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295401740,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295234220,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295955468,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295611556,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295234956,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295235308,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295235660,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295236012,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295612928,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295673228,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295673904,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295855076,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295738244,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295738596,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295410372,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295410700,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295943832,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295944116,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295945776,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQL Injection Risk",
+      "description": "Using sqlite3_exec with direct SQL execution",
+      "location": 4295946060,
+      "function_name": "sqlite3_exec",
+      "evidence": {},
+      "impact": "High risk of SQL injection if queries use string concatenation",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Insecure Archiving",
+      "description": "Using deprecated archiver without secure coding",
+      "location": 4298569128,
+      "function_name": "archivedDataWithRootObject:",
+      "evidence": {},
+      "impact": "No protection against deserialization attacks",
+      "recommendation": "Use archivedDataWithRootObject:requiringSecureCoding:error: with secure coding enabled"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "UserDefaults Storage",
+      "description": "Storing data in NSUserDefaults (key unknown)",
+      "location": 4298601224,
+      "function_name": "setObject:forKey:",
+      "evidence": {},
+      "impact": "NSUserDefaults is not suitable for sensitive data",
+      "recommendation": "Verify no sensitive data is stored"
+    }
+  ]
+}

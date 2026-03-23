@@ -1,0 +1,631 @@
+{
+  "metadata": {
+    "category": "antidebug",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-175911",
+    "total_findings": 45,
+    "severity_counts": {
+      "critical": 0,
+      "high": 1,
+      "medium": 13,
+      "low": 31
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Hook: dladdr",
+      "description": "dladdr call detected (validates caller address or detects function hooking)",
+      "location": 4297797172,
+      "function_name": "dladdr",
+      "evidence": {
+        "technique": "Address-to-symbol resolution",
+        "detects": "Function hooks, injected code, unexpected callers"
+      },
+      "impact": "Can detect if functions have been hooked by checking if return addresses are in expected libraries",
+      "recommendation": "Hook dladdr to return expected Dl_info values"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4296138876,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis",
+        "caller": "_disable_gdb",
+        "caller_context": "GDB/debugger disabling function"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook ptrace in '_disable_gdb' and return 0 to prevent debugger denial; alternatively NOP the call instruction"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298544100,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298544956,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298545204,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298545252,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298545552,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298545600,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298541256,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298541280,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298541304,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298541324,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298541352,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298541376,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298541400,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298541424,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298541448,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: dlsym",
+      "description": "dlsym call detected (dynamic symbol resolution, may resolve anti-debug APIs at runtime)",
+      "location": 4298541472,
+      "function_name": "dlsym",
+      "evidence": {
+        "technique": "Dynamic symbol resolution",
+        "note": "May resolve ptrace, sysctl, or other anti-debug functions to evade static analysis"
+      },
+      "impact": "Can dynamically resolve security-sensitive functions to bypass static analysis detection",
+      "recommendation": "Hook dlsym to monitor which symbols are being resolved"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Injection: _dyld_get_image_name",
+      "description": "_dyld_get_image_name call detected (enumerates loaded library paths)",
+      "location": 4296138984,
+      "function_name": "_dyld_get_image_name",
+      "evidence": {
+        "technique": "Loaded library path enumeration",
+        "detects": "Frida, Cydia Substrate, injected dylibs",
+        "caller": "_detect_injected_dylds",
+        "caller_context": "Injected dylib detection"
+      },
+      "impact": "Can detect injected libraries by checking image paths for known hooking frameworks",
+      "recommendation": "Hook _dyld_image_count/_dyld_get_image_name to hide injected libraries, or hook '_detect_injected_dylds' to return false/0"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Injection: _dyld_image_count",
+      "description": "_dyld_image_count call detected (counts loaded images)",
+      "location": 4296138940,
+      "function_name": "_dyld_image_count",
+      "evidence": {
+        "technique": "Loaded image count check",
+        "note": "Typically used with _dyld_get_image_name to enumerate libraries",
+        "caller": "_detect_injected_dylds",
+        "caller_context": "Injected dylib detection"
+      },
+      "impact": "Can detect unexpected libraries by monitoring loaded image count",
+      "recommendation": "Hook _dyld_image_count/_dyld_get_image_name to hide injected libraries, or hook '_detect_injected_dylds' to return false/0"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Debug: sysctl",
+      "description": "sysctl call detected checking P_TRACED flag",
+      "location": 4297894592,
+      "function_name": "sysctl",
+      "evidence": {
+        "technique": "kinfo_proc P_TRACED flag check",
+        "mib_pattern": "{CTL_KERN, KERN_PROC, KERN_PROC_PID, pid}",
+        "mib_len": "4"
+      },
+      "impact": "Can detect if process is being traced by a debugger",
+      "recommendation": "Hook sysctl to clear P_TRACED flag (0x800) in response"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Debug: sysctl",
+      "description": "sysctl call detected checking P_TRACED flag",
+      "location": 4298136296,
+      "function_name": "sysctl",
+      "evidence": {
+        "technique": "kinfo_proc P_TRACED flag check",
+        "mib_pattern": "{CTL_KERN, KERN_PROC, KERN_PROC_PID, pid}",
+        "mib_len": "4"
+      },
+      "impact": "Can detect if process is being traced by a debugger",
+      "recommendation": "Hook sysctl to clear P_TRACED flag (0x800) in response"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Debug: sysctl",
+      "description": "sysctl call detected checking P_TRACED flag",
+      "location": 4296139288,
+      "function_name": "sysctl",
+      "evidence": {
+        "technique": "kinfo_proc P_TRACED flag check",
+        "mib_pattern": "{CTL_KERN, KERN_PROC, KERN_PROC_PID, pid}",
+        "mib_len": "4",
+        "caller": "_isDebugged",
+        "caller_context": "Debugger detection function"
+      },
+      "impact": "Can detect if process is being traced by a debugger",
+      "recommendation": "Hook '_isDebugged' to always return false/0 to bypass debugger detection; or hook sysctl to return benign values"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive exit",
+      "description": "exit call detected (possible defensive termination after tampering detection)",
+      "location": 4296372588,
+      "function_name": "exit",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "exit",
+        "exit_code": "4294967295"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook exit to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Debug: Defensive exit",
+      "description": "exit call detected (possible defensive termination after tampering detection)",
+      "location": 4296139128,
+      "function_name": "exit",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "exit",
+        "exit_code": "0",
+        "caller": "_detect_injected_dylds",
+        "caller_context": "Injected dylib detection"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook _dyld_image_count/_dyld_get_image_name to hide injected libraries, or hook '_detect_injected_dylds' to return false/0"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive exit",
+      "description": "exit call detected (possible defensive termination after tampering detection)",
+      "location": 4296285368,
+      "function_name": "exit",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "exit",
+        "exit_code": "0"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook exit to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive exit",
+      "description": "exit call detected (possible defensive termination after tampering detection)",
+      "location": 4296296472,
+      "function_name": "exit",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "exit",
+        "exit_code": "0"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook exit to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive exit",
+      "description": "exit call detected (possible defensive termination after tampering detection)",
+      "location": 4297964840,
+      "function_name": "exit",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "exit",
+        "exit_code": "0"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook exit to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive abort",
+      "description": "abort call detected (possible defensive termination after tampering detection)",
+      "location": 4297134296,
+      "function_name": "abort",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "abort",
+        "exit_code": "unknown"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook abort to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive abort",
+      "description": "abort call detected (possible defensive termination after tampering detection)",
+      "location": 4297865116,
+      "function_name": "abort",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "abort",
+        "exit_code": "unknown"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook abort to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive abort",
+      "description": "abort call detected (possible defensive termination after tampering detection)",
+      "location": 4297796732,
+      "function_name": "abort",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "abort",
+        "exit_code": "unknown"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook abort to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive abort",
+      "description": "abort call detected (possible defensive termination after tampering detection)",
+      "location": 4297134424,
+      "function_name": "abort",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "abort",
+        "exit_code": "unknown"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook abort to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive abort",
+      "description": "abort call detected (possible defensive termination after tampering detection)",
+      "location": 4297273488,
+      "function_name": "abort",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "abort",
+        "exit_code": "unknown"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook abort to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive abort",
+      "description": "abort call detected (possible defensive termination after tampering detection)",
+      "location": 4296446016,
+      "function_name": "abort",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "abort",
+        "exit_code": "unknown"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook abort to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive abort",
+      "description": "abort call detected (possible defensive termination after tampering detection)",
+      "location": 4297108632,
+      "function_name": "abort",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "abort",
+        "exit_code": "unknown"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook abort to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive abort",
+      "description": "abort call detected (possible defensive termination after tampering detection)",
+      "location": 4297803908,
+      "function_name": "abort",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "abort",
+        "exit_code": "unknown"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook abort to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive abort",
+      "description": "abort call detected (possible defensive termination after tampering detection)",
+      "location": 4298544068,
+      "function_name": "abort",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "abort",
+        "exit_code": "unknown"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook abort to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Anti-Debug: Defensive abort",
+      "description": "abort call detected (possible defensive termination after tampering detection)",
+      "location": 4298544360,
+      "function_name": "abort",
+      "evidence": {
+        "technique": "Defensive process termination",
+        "function": "abort",
+        "exit_code": "unknown"
+      },
+      "impact": "May terminate the process when debugging or tampering is detected",
+      "recommendation": "Hook abort to prevent termination; investigate caller for detection logic"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Debug: Exception Ports",
+      "description": "task_get_exception_ports call detected (debugger handler check)",
+      "location": 4297895492,
+      "function_name": "task_get_exception_ports",
+      "evidence": {
+        "technique": "Exception handler enumeration",
+        "target": "mach_task_self() or target task"
+      },
+      "impact": "Debuggers register exception handlers - checking ports reveals them",
+      "recommendation": "Hook to return empty exception port list"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Injection: task_info",
+      "description": "task_info call detected (may enumerate loaded libraries via TASK_DYLD_INFO)",
+      "location": 4298406048,
+      "function_name": "task_info",
+      "evidence": {
+        "technique": "Mach task library enumeration",
+        "detects": "Injected dylibs, hooking frameworks"
+      },
+      "impact": "TASK_DYLD_INFO can enumerate all loaded libraries to detect injection",
+      "recommendation": "Hook task_info to filter injected libraries from results"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Injection: task_info",
+      "description": "task_info call detected (may enumerate loaded libraries via TASK_DYLD_INFO)",
+      "location": 4298137508,
+      "function_name": "task_info",
+      "evidence": {
+        "technique": "Mach task library enumeration",
+        "detects": "Injected dylibs, hooking frameworks"
+      },
+      "impact": "TASK_DYLD_INFO can enumerate all loaded libraries to detect injection",
+      "recommendation": "Hook task_info to filter injected libraries from results"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Injection: task_info",
+      "description": "task_info call detected (may enumerate loaded libraries via TASK_DYLD_INFO)",
+      "location": 4298164520,
+      "function_name": "task_info",
+      "evidence": {
+        "technique": "Mach task library enumeration",
+        "detects": "Injected dylibs, hooking frameworks"
+      },
+      "impact": "TASK_DYLD_INFO can enumerate all loaded libraries to detect injection",
+      "recommendation": "Hook task_info to filter injected libraries from results"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Injection: task_info",
+      "description": "task_info call detected (may enumerate loaded libraries via TASK_DYLD_INFO)",
+      "location": 4295954136,
+      "function_name": "task_info",
+      "evidence": {
+        "technique": "Mach task library enumeration",
+        "detects": "Injected dylibs, hooking frameworks"
+      },
+      "impact": "TASK_DYLD_INFO can enumerate all loaded libraries to detect injection",
+      "recommendation": "Hook task_info to filter injected libraries from results"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Injection: task_info",
+      "description": "task_info call detected (may enumerate loaded libraries via TASK_DYLD_INFO)",
+      "location": 4298137688,
+      "function_name": "task_info",
+      "evidence": {
+        "technique": "Mach task library enumeration",
+        "detects": "Injected dylibs, hooking frameworks"
+      },
+      "impact": "TASK_DYLD_INFO can enumerate all loaded libraries to detect injection",
+      "recommendation": "Hook task_info to filter injected libraries from results"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Anti-Injection: task_info",
+      "description": "task_info call detected (may enumerate loaded libraries via TASK_DYLD_INFO)",
+      "location": 4298136688,
+      "function_name": "task_info",
+      "evidence": {
+        "technique": "Mach task library enumeration",
+        "detects": "Injected dylibs, hooking frameworks"
+      },
+      "impact": "TASK_DYLD_INFO can enumerate all loaded libraries to detect injection",
+      "recommendation": "Hook task_info to filter injected libraries from results"
+    }
+  ]
+}

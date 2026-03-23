@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "category": "webview",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-175919",
+    "total_findings": 2,
+    "severity_counts": {
+      "critical": 0,
+      "high": 1,
+      "medium": 1,
+      "low": 0
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "MEDIUM",
+      "issue_type": "WebView Load Request",
+      "description": "WebView loading URL request via loadRequest:",
+      "location": 4296350972,
+      "function_name": "loadRequest:",
+      "evidence": {
+        "method": "loadRequest:"
+      },
+      "impact": "WebView loading external content - verify HTTPS and content validation",
+      "recommendation": "Use HTTPS for all loaded URLs and implement WKNavigationDelegate"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "XSS via User Input in loadHTMLString",
+      "description": "loadHTMLString:baseURL: caller also references user input (UITextField/UITextView) — XSS likely",
+      "location": 4296457876,
+      "function_name": "loadHTMLString:baseURL:",
+      "evidence": {
+        "method": "loadHTMLString:baseURL:",
+        "baseURL": "unknown",
+        "taint_source": "UITextField/UITextView reference in caller"
+      },
+      "impact": "User input flows to WebView HTML rendering without sanitization — attacker can inject JavaScript via text fields",
+      "recommendation": "Sanitize all user input before HTML rendering; use textContent instead of innerHTML equivalents"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "metadata": {
+    "category": "keychain",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-175858",
+    "total_findings": 8,
+    "severity_counts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 8,
+      "low": 0
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Missing Keychain Accessibility Attribute",
+      "description": "Keychain item stored without explicit accessibility level",
+      "location": 4296098236,
+      "function_name": "SecItemAdd",
+      "evidence": {
+        "kSecAttrAccessible": "not set (defaults to kSecAttrAccessibleWhenUnlocked)"
+      },
+      "impact": "Developer may be unaware of keychain protection levels, using defaults",
+      "recommendation": "Explicitly set kSecAttrAccessible to an appropriate protection level"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Missing Keychain Accessibility Attribute",
+      "description": "Keychain item stored without explicit accessibility level",
+      "location": 4297124440,
+      "function_name": "SecItemAdd",
+      "evidence": {
+        "kSecAttrAccessible": "not set (defaults to kSecAttrAccessibleWhenUnlocked)"
+      },
+      "impact": "Developer may be unaware of keychain protection levels, using defaults",
+      "recommendation": "Explicitly set kSecAttrAccessible to an appropriate protection level"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Missing Keychain Accessibility Attribute",
+      "description": "Keychain item stored without explicit accessibility level",
+      "location": 4296702632,
+      "function_name": "SecItemAdd",
+      "evidence": {
+        "kSecAttrAccessible": "not set (defaults to kSecAttrAccessibleWhenUnlocked)"
+      },
+      "impact": "Developer may be unaware of keychain protection levels, using defaults",
+      "recommendation": "Explicitly set kSecAttrAccessible to an appropriate protection level"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Missing Keychain Accessibility Attribute",
+      "description": "Keychain item stored without explicit accessibility level",
+      "location": 4298068188,
+      "function_name": "SecItemAdd",
+      "evidence": {
+        "kSecAttrAccessible": "not set (defaults to kSecAttrAccessibleWhenUnlocked)"
+      },
+      "impact": "Developer may be unaware of keychain protection levels, using defaults",
+      "recommendation": "Explicitly set kSecAttrAccessible to an appropriate protection level"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Missing Keychain Accessibility Attribute",
+      "description": "Keychain item stored without explicit accessibility level",
+      "location": 4298214148,
+      "function_name": "SecItemAdd",
+      "evidence": {
+        "kSecAttrAccessible": "not set (defaults to kSecAttrAccessibleWhenUnlocked)"
+      },
+      "impact": "Developer may be unaware of keychain protection levels, using defaults",
+      "recommendation": "Explicitly set kSecAttrAccessible to an appropriate protection level"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Missing Keychain Accessibility Attribute",
+      "description": "Keychain item stored without explicit accessibility level",
+      "location": 4298067884,
+      "function_name": "SecItemAdd",
+      "evidence": {
+        "kSecAttrAccessible": "not set (defaults to kSecAttrAccessibleWhenUnlocked)"
+      },
+      "impact": "Developer may be unaware of keychain protection levels, using defaults",
+      "recommendation": "Explicitly set kSecAttrAccessible to an appropriate protection level"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Missing Keychain Accessibility Attribute",
+      "description": "Keychain item stored without explicit accessibility level",
+      "location": 4296803540,
+      "function_name": "SecItemAdd",
+      "evidence": {
+        "kSecAttrAccessible": "not set (defaults to kSecAttrAccessibleWhenUnlocked)"
+      },
+      "impact": "Developer may be unaware of keychain protection levels, using defaults",
+      "recommendation": "Explicitly set kSecAttrAccessible to an appropriate protection level"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Missing Keychain Accessibility Attribute",
+      "description": "Keychain item stored without explicit accessibility level",
+      "location": 4296803636,
+      "function_name": "SecItemAdd",
+      "evidence": {
+        "kSecAttrAccessible": "not set (defaults to kSecAttrAccessibleWhenUnlocked)"
+      },
+      "impact": "Developer may be unaware of keychain protection levels, using defaults",
+      "recommendation": "Explicitly set kSecAttrAccessible to an appropriate protection level"
+    }
+  ]
+}

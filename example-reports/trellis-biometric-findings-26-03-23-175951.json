@@ -1,0 +1,68 @@
+{
+  "metadata": {
+    "category": "biometric",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-175951",
+    "total_findings": 4,
+    "severity_counts": {
+      "critical": 0,
+      "high": 2,
+      "medium": 0,
+      "low": 0
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "INFO",
+      "issue_type": "Biometric Availability Check",
+      "description": "Application checks biometric availability via canEvaluatePolicy",
+      "location": 4296409188,
+      "function_name": "canEvaluatePolicy:error:",
+      "evidence": {
+        "api": "canEvaluatePolicy:error:"
+      },
+      "impact": "Biometric authentication is available in this app",
+      "recommendation": "Verify biometric is combined with Keychain access control"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "Client-Side Biometric Authentication",
+      "description": "LAContext.evaluatePolicy used for biometric auth - trivially bypassable",
+      "location": 4296409532,
+      "function_name": "evaluatePolicy:localizedReason:reply:",
+      "evidence": {
+        "api": "evaluatePolicy:localizedReason:reply:",
+        "bypass_methods": "Frida hook, binary patch, ObjC swizzle"
+      },
+      "impact": "Client-side biometric check returns a simple BOOL that can be hooked to always return true",
+      "recommendation": "Bind biometric to Keychain with SecAccessControlCreateWithFlags + kSecAccessControlBiometryAny"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "Biometric Availability Check",
+      "description": "Application checks biometric availability via canEvaluatePolicy",
+      "location": 4298570088,
+      "function_name": "canEvaluatePolicy:error:",
+      "evidence": {
+        "api": "canEvaluatePolicy:error:"
+      },
+      "impact": "Biometric authentication is available in this app",
+      "recommendation": "Verify biometric is combined with Keychain access control"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "Client-Side Biometric Authentication",
+      "description": "LAContext.evaluatePolicy used for biometric auth - trivially bypassable",
+      "location": 4298578184,
+      "function_name": "evaluatePolicy:localizedReason:reply:",
+      "evidence": {
+        "api": "evaluatePolicy:localizedReason:reply:",
+        "bypass_methods": "Frida hook, binary patch, ObjC swizzle"
+      },
+      "impact": "Client-side biometric check returns a simple BOOL that can be hooked to always return true",
+      "recommendation": "Bind biometric to Keychain with SecAccessControlCreateWithFlags + kSecAccessControlBiometryAny"
+    }
+  ]
+}

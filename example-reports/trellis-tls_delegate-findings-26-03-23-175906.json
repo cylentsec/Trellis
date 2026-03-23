@@ -1,0 +1,292 @@
+{
+  "metadata": {
+    "category": "tls_delegate",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-175906",
+    "total_findings": 20,
+    "severity_counts": {
+      "critical": 2,
+      "high": 6,
+      "medium": 1,
+      "low": 3
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Legacy NSURLConnection Delegate",
+      "description": "Legacy NSURLConnection authentication delegate found",
+      "location": 4296264044,
+      "function_name": "connection:willSendRequestForAuthenticationChallenge:",
+      "evidence": {
+        "method": "connection:willSendRequestForAuthenticationChallenge:",
+        "pattern": "connection:willSendRequestForAuthenticationChallenge:"
+      },
+      "impact": "NSURLConnection is deprecated; legacy delegates may lack modern security",
+      "recommendation": "Migrate to URLSession with proper delegate implementation"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "No Certificate Pinning in TLS Delegate",
+      "description": "TLS delegate does not perform certificate pinning",
+      "location": 4296264044,
+      "function_name": "connection:willSendRequestForAuthenticationChallenge:",
+      "evidence": {
+        "method": "connection:willSendRequestForAuthenticationChallenge:",
+        "missing": "SecCertificateCopyData / certificate comparison"
+      },
+      "impact": "Without pinning, a CA-issued rogue certificate could be accepted",
+      "recommendation": "Consider implementing certificate pinning for sensitive connections"
+    },
+    {
+      "severity": "CRITICAL",
+      "issue_type": "Unconditional TLS Trust",
+      "description": "TLS delegate unconditionally accepts all certificates without any conditional checks",
+      "location": 4296264044,
+      "function_name": "connection:willSendRequestForAuthenticationChallenge:",
+      "evidence": {
+        "method": "connection:willSendRequestForAuthenticationChallenge:",
+        "trust_evaluation": "NONE",
+        "conditional_logic": "NONE"
+      },
+      "impact": "All TLS certificates are accepted without validation - trivial MitM",
+      "recommendation": "Implement proper SecTrustEvaluateWithError and check result"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "No Certificate Pinning in TLS Delegate",
+      "description": "TLS delegate does not perform certificate pinning",
+      "location": 4297000044,
+      "function_name": "URLSession:task:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:task:didReceiveChallenge:completionHandler:",
+        "missing": "SecCertificateCopyData / certificate comparison"
+      },
+      "impact": "Without pinning, a CA-issued rogue certificate could be accepted",
+      "recommendation": "Consider implementing certificate pinning for sensitive connections"
+    },
+    {
+      "severity": "CRITICAL",
+      "issue_type": "Unconditional TLS Trust",
+      "description": "TLS delegate unconditionally accepts all certificates without any conditional checks",
+      "location": 4297000044,
+      "function_name": "URLSession:task:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:task:didReceiveChallenge:completionHandler:",
+        "trust_evaluation": "NONE",
+        "conditional_logic": "NONE"
+      },
+      "impact": "All TLS certificates are accepted without validation - trivial MitM",
+      "recommendation": "Implement proper SecTrustEvaluateWithError and check result"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "No Certificate Pinning in TLS Delegate",
+      "description": "TLS delegate does not perform certificate pinning",
+      "location": 4297948572,
+      "function_name": "URLSession:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:didReceiveChallenge:completionHandler:",
+        "missing": "SecCertificateCopyData / certificate comparison"
+      },
+      "impact": "Without pinning, a CA-issued rogue certificate could be accepted",
+      "recommendation": "Consider implementing certificate pinning for sensitive connections"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "Conditional TLS Trust Bypass",
+      "description": "TLS delegate has conditional logic but no trust evaluation - bypass may be reachable",
+      "location": 4297948572,
+      "function_name": "URLSession:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:didReceiveChallenge:completionHandler:",
+        "trust_evaluation": "NONE",
+        "has_conditional": true,
+        "debug_guard": "NOT DETECTED"
+      },
+      "impact": "Certificate validation bypass may be reachable under certain conditions",
+      "recommendation": "Review the conditional logic; implement proper SecTrustEvaluateWithError"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "No Certificate Pinning in TLS Delegate",
+      "description": "TLS delegate does not perform certificate pinning",
+      "location": 4297948572,
+      "function_name": "URLSession:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:didReceiveChallenge:completionHandler:",
+        "missing": "SecCertificateCopyData / certificate comparison"
+      },
+      "impact": "Without pinning, a CA-issued rogue certificate could be accepted",
+      "recommendation": "Consider implementing certificate pinning for sensitive connections"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "Conditional TLS Trust Bypass",
+      "description": "TLS delegate has conditional logic but no trust evaluation - bypass may be reachable",
+      "location": 4297948572,
+      "function_name": "URLSession:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:didReceiveChallenge:completionHandler:",
+        "trust_evaluation": "NONE",
+        "has_conditional": true,
+        "debug_guard": "NOT DETECTED"
+      },
+      "impact": "Certificate validation bypass may be reachable under certain conditions",
+      "recommendation": "Review the conditional logic; implement proper SecTrustEvaluateWithError"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "No Certificate Pinning in TLS Delegate",
+      "description": "TLS delegate does not perform certificate pinning",
+      "location": 4297948572,
+      "function_name": "URLSession:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:didReceiveChallenge:completionHandler:",
+        "missing": "SecCertificateCopyData / certificate comparison"
+      },
+      "impact": "Without pinning, a CA-issued rogue certificate could be accepted",
+      "recommendation": "Consider implementing certificate pinning for sensitive connections"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "Conditional TLS Trust Bypass",
+      "description": "TLS delegate has conditional logic but no trust evaluation - bypass may be reachable",
+      "location": 4297948572,
+      "function_name": "URLSession:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:didReceiveChallenge:completionHandler:",
+        "trust_evaluation": "NONE",
+        "has_conditional": true,
+        "debug_guard": "NOT DETECTED"
+      },
+      "impact": "Certificate validation bypass may be reachable under certain conditions",
+      "recommendation": "Review the conditional logic; implement proper SecTrustEvaluateWithError"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "No Certificate Pinning in TLS Delegate",
+      "description": "TLS delegate does not perform certificate pinning",
+      "location": 4297950616,
+      "function_name": "URLSession:task:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:task:didReceiveChallenge:completionHandler:",
+        "missing": "SecCertificateCopyData / certificate comparison"
+      },
+      "impact": "Without pinning, a CA-issued rogue certificate could be accepted",
+      "recommendation": "Consider implementing certificate pinning for sensitive connections"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "Conditional TLS Trust Bypass",
+      "description": "TLS delegate has conditional logic but no trust evaluation - bypass may be reachable",
+      "location": 4297950616,
+      "function_name": "URLSession:task:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:task:didReceiveChallenge:completionHandler:",
+        "trust_evaluation": "NONE",
+        "has_conditional": true,
+        "debug_guard": "NOT DETECTED"
+      },
+      "impact": "Certificate validation bypass may be reachable under certain conditions",
+      "recommendation": "Review the conditional logic; implement proper SecTrustEvaluateWithError"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "No Certificate Pinning in TLS Delegate",
+      "description": "TLS delegate does not perform certificate pinning",
+      "location": 4297950616,
+      "function_name": "URLSession:task:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:task:didReceiveChallenge:completionHandler:",
+        "missing": "SecCertificateCopyData / certificate comparison"
+      },
+      "impact": "Without pinning, a CA-issued rogue certificate could be accepted",
+      "recommendation": "Consider implementing certificate pinning for sensitive connections"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "Conditional TLS Trust Bypass",
+      "description": "TLS delegate has conditional logic but no trust evaluation - bypass may be reachable",
+      "location": 4297950616,
+      "function_name": "URLSession:task:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:task:didReceiveChallenge:completionHandler:",
+        "trust_evaluation": "NONE",
+        "has_conditional": true,
+        "debug_guard": "NOT DETECTED"
+      },
+      "impact": "Certificate validation bypass may be reachable under certain conditions",
+      "recommendation": "Review the conditional logic; implement proper SecTrustEvaluateWithError"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "No Certificate Pinning in TLS Delegate",
+      "description": "TLS delegate does not perform certificate pinning",
+      "location": 4297950616,
+      "function_name": "URLSession:task:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:task:didReceiveChallenge:completionHandler:",
+        "missing": "SecCertificateCopyData / certificate comparison"
+      },
+      "impact": "Without pinning, a CA-issued rogue certificate could be accepted",
+      "recommendation": "Consider implementing certificate pinning for sensitive connections"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "Conditional TLS Trust Bypass",
+      "description": "TLS delegate has conditional logic but no trust evaluation - bypass may be reachable",
+      "location": 4297950616,
+      "function_name": "URLSession:task:didReceiveChallenge:completionHandler:",
+      "evidence": {
+        "method": "URLSession:task:didReceiveChallenge:completionHandler:",
+        "trust_evaluation": "NONE",
+        "has_conditional": true,
+        "debug_guard": "NOT DETECTED"
+      },
+      "impact": "Certificate validation bypass may be reachable under certain conditions",
+      "recommendation": "Review the conditional logic; implement proper SecTrustEvaluateWithError"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Deprecated Trust Evaluation",
+      "description": "Using deprecated SecTrustEvaluate API",
+      "location": 4296817976,
+      "function_name": "SecTrustEvaluate",
+      "evidence": {
+        "api": "SecTrustEvaluate",
+        "recommended": "SecTrustEvaluateWithError"
+      },
+      "impact": "Deprecated API may lack modern security features",
+      "recommendation": "Use SecTrustEvaluateWithError (iOS 12+) for better error handling"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Deprecated Trust Evaluation",
+      "description": "Using deprecated SecTrustEvaluate API",
+      "location": 4296915708,
+      "function_name": "SecTrustEvaluate",
+      "evidence": {
+        "api": "SecTrustEvaluate",
+        "recommended": "SecTrustEvaluateWithError"
+      },
+      "impact": "Deprecated API may lack modern security features",
+      "recommendation": "Use SecTrustEvaluateWithError (iOS 12+) for better error handling"
+    },
+    {
+      "severity": "LOW",
+      "issue_type": "Deprecated Trust Evaluation",
+      "description": "Using deprecated SecTrustEvaluate API",
+      "location": 4296915488,
+      "function_name": "SecTrustEvaluate",
+      "evidence": {
+        "api": "SecTrustEvaluate",
+        "recommended": "SecTrustEvaluateWithError"
+      },
+      "impact": "Deprecated API may lack modern security features",
+      "recommendation": "Use SecTrustEvaluateWithError (iOS 12+) for better error handling"
+    }
+  ]
+}

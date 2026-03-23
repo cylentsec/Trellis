@@ -1,0 +1,149 @@
+{
+  "metadata": {
+    "category": "deeplinks",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-175924",
+    "total_findings": 10,
+    "severity_counts": {
+      "critical": 0,
+      "high": 0,
+      "medium": 4,
+      "low": 0
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "INFO",
+      "issue_type": "URL Scheme Check",
+      "description": "App checks if URL schemes are available",
+      "location": 4296283056,
+      "function_name": "canOpenURL:",
+      "evidence": {
+        "function": "canOpenURL:",
+        "purpose": "scheme_detection"
+      },
+      "impact": "Can be used for app detection or jailbreak checks.",
+      "recommendation": "Ensure LSApplicationQueriesSchemes is properly configured."
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "URL Scheme Check",
+      "description": "App checks if URL schemes are available",
+      "location": 4296287796,
+      "function_name": "canOpenURL:",
+      "evidence": {
+        "function": "canOpenURL:",
+        "purpose": "scheme_detection"
+      },
+      "impact": "Can be used for app detection or jailbreak checks.",
+      "recommendation": "Ensure LSApplicationQueriesSchemes is properly configured."
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "URL Scheme Check",
+      "description": "App checks if URL schemes are available",
+      "location": 4296290348,
+      "function_name": "canOpenURL:",
+      "evidence": {
+        "function": "canOpenURL:",
+        "purpose": "scheme_detection"
+      },
+      "impact": "Can be used for app detection or jailbreak checks.",
+      "recommendation": "Ensure LSApplicationQueriesSchemes is properly configured."
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "URL Scheme Check",
+      "description": "App checks if URL schemes are available",
+      "location": 4296294948,
+      "function_name": "canOpenURL:",
+      "evidence": {
+        "function": "canOpenURL:",
+        "purpose": "scheme_detection"
+      },
+      "impact": "Can be used for app detection or jailbreak checks.",
+      "recommendation": "Ensure LSApplicationQueriesSchemes is properly configured."
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Deep Link Entry Point",
+      "description": "Deep link handler found: application:openURL:options:",
+      "location": 4296355732,
+      "function_name": "application:openURL:options:",
+      "evidence": {
+        "handler": "application:openURL:options:",
+        "modern_api": true,
+        "dangerous_destinations": "evaluateJavaScript:, evaluateJavaScript:completionHandler:, loadData:MIMEType:textEncodingName:baseURL:, loadFileURL:, loadFileURL:allowingReadAccessToURL:..."
+      },
+      "impact": "Deep link handlers receive untrusted URL input from other apps. If URL data flows into WebView loading, JavaScript execution, or file operations, it can lead to XSS, local file access, or code injection.",
+      "recommendation": "Validate URL scheme, host, and all parameters. Never pass URL data directly to loadHTMLString, evaluateJavaScript, or file I/O functions."
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "URL Scheme Check",
+      "description": "App checks if URL schemes are available",
+      "location": 4296482136,
+      "function_name": "canOpenURL:",
+      "evidence": {
+        "function": "canOpenURL:",
+        "purpose": "scheme_detection"
+      },
+      "impact": "Can be used for app detection or jailbreak checks.",
+      "recommendation": "Ensure LSApplicationQueriesSchemes is properly configured."
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "External URL Opening",
+      "description": "App opens external URLs",
+      "location": 4296482488,
+      "function_name": "openURL:options:completionHandler:",
+      "evidence": {
+        "function": "openURL:options:completionHandler:",
+        "can_launch_apps": true
+      },
+      "impact": "Can launch other apps or open web content.",
+      "recommendation": "Validate URL schemes before opening. Consider user confirmation."
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "External URL Opening",
+      "description": "App opens external URLs",
+      "location": 4297964784,
+      "function_name": "openURL:options:completionHandler:",
+      "evidence": {
+        "function": "openURL:options:completionHandler:",
+        "can_launch_apps": true
+      },
+      "impact": "Can launch other apps or open web content.",
+      "recommendation": "Validate URL schemes before opening. Consider user confirmation."
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "External URL Opening",
+      "description": "App opens external URLs",
+      "location": 4298127988,
+      "function_name": "openURL:options:completionHandler:",
+      "evidence": {
+        "function": "openURL:options:completionHandler:",
+        "can_launch_apps": true
+      },
+      "impact": "Can launch other apps or open web content.",
+      "recommendation": "Validate URL schemes before opening. Consider user confirmation."
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "URL Scheme Check",
+      "description": "App checks if URL schemes are available",
+      "location": 4298570120,
+      "function_name": "canOpenURL:",
+      "evidence": {
+        "function": "canOpenURL:",
+        "purpose": "scheme_detection"
+      },
+      "impact": "Can be used for app detection or jailbreak checks.",
+      "recommendation": "Ensure LSApplicationQueriesSchemes is properly configured."
+    }
+  ]
+}

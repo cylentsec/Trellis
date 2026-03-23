@@ -1,0 +1,1506 @@
+{
+  "metadata": {
+    "category": "sqlite",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-175934",
+    "total_findings": 124,
+    "severity_counts": {
+      "critical": 0,
+      "high": 45,
+      "medium": 0,
+      "low": 0
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295866516,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295506596,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295866916,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295867316,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4297473476,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295867716,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295868116,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295868516,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295406132,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295226512,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295865316,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295865716,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295407176,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295866116,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295065360,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295878916,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295536812,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295404180,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295879316,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295130652,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295405112,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295618548,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4296188352,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295876916,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295402080,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295877316,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4296188900,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295877716,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4296156632,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295402972,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295878116,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295060608,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295731552,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295878516,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295682612,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295158440,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4296186160,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295874916,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295122616,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295123968,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4296186708,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295875316,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295875716,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4296187256,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295876116,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4296187804,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295876516,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295872916,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295873316,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295056048,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4296185564,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295873716,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295547596,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295874116,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295694312,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295874516,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295411920,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295870916,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295871316,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295871716,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4297477476,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4297117176,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295872116,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4296118208,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295970740,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4296184428,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295872516,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295688788,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295868916,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4297474796,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295869316,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4297481612,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4298523860,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295869716,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295411092,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295870116,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295756724,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295870516,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "INFO",
+      "issue_type": "SQLite Prepared Statement",
+      "description": "sqlite3_prepare_v2 used (safer than sqlite3_exec)",
+      "location": 4295437180,
+      "function_name": "sqlite3_prepare_v2",
+      "evidence": {
+        "api": "sqlite3_prepare_v2"
+      },
+      "impact": "Prepared statements prevent SQL injection when used correctly",
+      "recommendation": "Ensure all dynamic values use sqlite3_bind_* functions"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295407948,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295146292,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295408312,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295408616,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295408888,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295737068,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295737612,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295671924,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4296159748,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4296160076,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295600404,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295503384,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295503904,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295504680,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295505456,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295372216,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295192496,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4296139660,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295399648,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295399924,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295400208,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295400468,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295400816,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295401180,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295401460,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295401740,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295234220,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295955468,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295611556,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295234956,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295235308,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295235660,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295236012,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295612928,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295673228,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295673904,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295855076,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295738244,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295738596,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295410372,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295410700,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295943832,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295944116,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295945776,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    },
+    {
+      "severity": "HIGH",
+      "issue_type": "SQLite Direct Execution",
+      "description": "sqlite3_exec used - high risk of SQL injection if query is dynamic",
+      "location": 4295946060,
+      "function_name": "sqlite3_exec",
+      "evidence": {
+        "api": "sqlite3_exec"
+      },
+      "impact": "SQL injection can lead to data theft, modification, or deletion",
+      "recommendation": "Use sqlite3_prepare_v2 with parameterized queries instead"
+    }
+  ]
+}

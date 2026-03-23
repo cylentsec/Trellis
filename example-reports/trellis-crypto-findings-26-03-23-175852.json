@@ -1,0 +1,89 @@
+{
+  "metadata": {
+    "category": "crypto",
+    "binary_name": "DVIA-v2",
+    "timestamp": "26-03-23-175852",
+    "total_findings": 5,
+    "severity_counts": {
+      "critical": 1,
+      "high": 0,
+      "medium": 4,
+      "low": 0
+    },
+    "format_version": "1.1",
+    "image_base": 4294967296
+  },
+  "findings": [
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Crypto Call — Manual Review Required",
+      "description": "CCCryptorCreate call in crypto-related function (parameters unresolved)",
+      "location": 4297124768,
+      "function_name": "CCCryptorCreate",
+      "evidence": {
+        "caller": "createEncryptor",
+        "crypto_context": "symmetric encryption",
+        "note": "Parameter values could not be extracted from decompiler; manual review needed to determine algorithm, key, rounds, etc."
+      },
+      "impact": "Crypto implementation may use weak parameters (algorithm, key size, iteration count) but static analysis could not confirm",
+      "recommendation": "Use Frida to hook CCCryptorCreate at runtime and inspect actual parameters, or analyze the caller function in Ghidra decompiler"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Crypto Call — Manual Review Required",
+      "description": "CCCryptorCreate call in crypto-related function (parameters unresolved)",
+      "location": 4297126648,
+      "function_name": "CCCryptorCreate",
+      "evidence": {
+        "caller": "___33-[CBLSymmetricKey_decryptStream:]_block_invoke",
+        "crypto_context": "symmetric encryption",
+        "note": "Parameter values could not be extracted from decompiler; manual review needed to determine algorithm, key, rounds, etc."
+      },
+      "impact": "Crypto implementation may use weak parameters (algorithm, key size, iteration count) but static analysis could not confirm",
+      "recommendation": "Use Frida to hook CCCryptorCreate at runtime and inspect actual parameters, or analyze the caller function in Ghidra decompiler"
+    },
+    {
+      "severity": "CRITICAL",
+      "issue_type": "Critically Low PBKDF2 Iterations (Decompiler)",
+      "description": "PBKDF2 caller contains integer 200 — likely iteration count (minimum 10000 recommended)",
+      "location": 4297122692,
+      "function_name": "CCKeyDerivationPBKDF",
+      "evidence": {
+        "rounds_candidate": "200",
+        "minimum_recommended": "100000",
+        "caller": "initWithPassword:salt:rounds:",
+        "detection_method": "decompiler_fallback"
+      },
+      "impact": "Low iteration count allows brute-force key recovery in seconds",
+      "recommendation": "Use at least 10000 iterations (OWASP recommends 100000+)"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Crypto Call — Manual Review Required",
+      "description": "CCKeyDerivationPBKDF call in crypto-related function (parameters unresolved)",
+      "location": 4296555028,
+      "function_name": "CCKeyDerivationPBKDF",
+      "evidence": {
+        "caller": "$$closure_#1_(Swift.UnsafePointer<Swift.UInt8>)_->_Swift.Int32_in_closure_#1_...",
+        "crypto_context": "key derivation",
+        "note": "Parameter values could not be extracted from decompiler; manual review needed to determine algorithm, key, rounds, etc."
+      },
+      "impact": "Crypto implementation may use weak parameters (algorithm, key size, iteration count) but static analysis could not confirm",
+      "recommendation": "Use Frida to hook CCKeyDerivationPBKDF at runtime and inspect actual parameters, or analyze the caller function in Ghidra decompiler"
+    },
+    {
+      "severity": "MEDIUM",
+      "issue_type": "Crypto Call — Manual Review Required",
+      "description": "CCCrypt call in crypto-related function (parameters unresolved)",
+      "location": 4297125956,
+      "function_name": "CCCrypt",
+      "evidence": {
+        "caller": "decryptData:",
+        "crypto_context": "symmetric encryption",
+        "note": "Parameter values could not be extracted from decompiler; manual review needed to determine algorithm, key, rounds, etc."
+      },
+      "impact": "Crypto implementation may use weak parameters (algorithm, key size, iteration count) but static analysis could not confirm",
+      "recommendation": "Use Frida to hook CCCrypt at runtime and inspect actual parameters, or analyze the caller function in Ghidra decompiler"
+    }
+  ]
+}
