@@ -102,12 +102,12 @@ def generate_findings_for_category(category, output_dir, binary_name, monitor):
     """
     Generate a findings-driven Frida script for a single category.
 
-    Decoupled from the Ghidra GUI; callable from the interactive script
-    and from the headless CLI.
+    This function is decoupled from the Ghidra GUI and can be called from
+    both the interactive script and the headless CLI.
 
     Args:
         category:    Analysis category name (e.g. "crypto", "keychain")
-        output_dir:  Directory containing the findings JSON files (Path or str)
+        output_dir:  Directory that contains the findings JSON files (Path or str)
         binary_name: Binary filename (as returned by program.filename)
         monitor:     Ghidra TaskMonitor
 
@@ -160,8 +160,8 @@ def run_frida_generation(program, output_dir, monitor):
     """
     Generate all Frida scripts (generic tracers + findings-driven) and save them.
 
-    Decoupled from the Ghidra GUI; callable from the interactive script
-    and from the headless CLI.
+    This function is decoupled from the Ghidra GUI and can be called from
+    both the interactive Ghidra script and the headless CLI.
 
     Args:
         program:    GhidraProgram wrapper
@@ -224,14 +224,14 @@ def run_frida_generation(program, output_dir, monitor):
 
     # --- Findings-driven scripts (require prior TrellisAnalyze run) ---
     for category, script_name in [
-        ("crypto",          "crypto-findings"),
-        ("keychain",        "keychain-findings"),
-        ("tls_delegate",    "tls-findings"),
-        ("antidebug",       "antidebug-findings"),
-        ("jailbreak",       "jailbreak-findings"),
-        ("webview",         "webview-findings"),
-        ("deeplinks",       "deeplinks-findings"),
-        ("storage",         "storage-findings"),
+        ("crypto",        "crypto-findings"),
+        ("keychain",      "keychain-findings"),
+        ("tls_delegate",  "tls-findings"),
+        ("antidebug",     "antidebug-findings"),
+        ("jailbreak",     "jailbreak-findings"),
+        ("webview",       "webview-findings"),
+        ("deeplinks",     "deeplinks-findings"),
+        ("storage",       "storage-findings"),
         ("deserialization", "deserialization-findings"),
     ]:
         script = generate_findings_for_category(category, output_dir, binary_name, monitor)

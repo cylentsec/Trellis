@@ -55,14 +55,14 @@ class SecretSinkSecurityChecker(SecurityChecker):
             return findings
 
         # Check parameters for hardcoded values
-        if not extracted_info or not extracted_info.params:
+        if not extracted_info or not extracted_info.parameters:
             return findings
 
         for idx in config.get("indices", []):
-            if idx >= len(extracted_info.params):
+            if idx >= len(extracted_info.parameters):
                 continue
 
-            param = extracted_info.params[idx]
+            param = extracted_info.parameters[idx]
 
             # Check if parameter is a string constant
             if param.value_as_string:

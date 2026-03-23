@@ -739,13 +739,13 @@ def run_analysis(program, output_dir, monitor):
     """
     Core analysis logic — runs all security categories and saves reports.
 
-    Decoupled from the Ghidra GUI; callable from the interactive script
-    (main) and from the headless CLI.
+    This function is decoupled from the Ghidra GUI and can be called from
+    both the interactive Ghidra script (main) and the headless CLI.
 
     Args:
-        program:    GhidraProgram wrapper
+        program: GhidraProgram wrapper
         output_dir: pathlib.Path for report output
-        monitor:    Ghidra TaskMonitor (use TaskMonitor.DUMMY for headless)
+        monitor: Ghidra TaskMonitor (use TaskMonitor.DUMMY for headless)
 
     Returns:
         List of result dicts (keys: category, findings, functions, report_path)
@@ -754,6 +754,7 @@ def run_analysis(program, output_dir, monitor):
     print("[Trellis] Image base: {}".format(hex(program.image_base)))
     print("[Trellis] Reports will be saved to: {}".format(output_dir))
 
+    # Get available categories
     categories = get_available_categories()
     print("[Trellis] Available categories: {}".format(", ".join(categories)))
 

@@ -229,18 +229,12 @@ class GhidraProgram:
     
     def get_function_symbols(self) -> Iterator[GhidraSymbol]:
         """Get all function symbols (both internal and external)."""
-        symbol_table = self._program.getSymbolTable()
         func_manager = self._program.getFunctionManager()
         
-        # External functions
-        ext_manager = self._program.getExternalManager()
-        for ext_loc in ext_manager.getExternalLocations():
-            yield GhidraSymbol(
-                name=ext_loc.getLabel(),
-                address=ext_loc.getExternalSpaceAddress().getOffset() if ext_loc.getExternalSpaceAddress() else 0,
-                symbol_type=GhidraSymbolType.IMPORT,
-                is_external=True
-            )
+        # External functions — iterate the symbol table filtered to externals,
+        # since ExternalManager.getExternalLocations() has no zero-arg overload.
+        for sym in self.get_external_symbols():
+            yield sym
         
         # Internal functions
         func_iter = func_manager.getFunctions(True)
