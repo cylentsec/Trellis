@@ -67,6 +67,50 @@ You should now see two options under the `Tools` -> `Trellis` menu, `Analyze All
 4. Run the script
 5. When prompted, choose an output directory for reports or Frida scripts
 
+### Running the Analysis from the Command Line
+
+`trellis_headless.py` runs the full pipeline — Ghidra auto-analysis, Markdown reports, and Frida scripts — without opening the GUI. It uses [PyGhidra](https://github.com/NationalSecurityAgency/ghidra/tree/master/Ghidra/Features/PyGhidra) to drive Ghidra headlessly.
+
+**Prerequisites:** Run the script with the Python interpreter from Ghidra's virtual environment (the same one created by `pyghidraRun`):
+
+```bash
+~/.config/ghidra/ghidra_<version>/venv/bin/python trellis_headless.py --help
+```
+
+**Full pipeline** (Ghidra analysis + Markdown reports + Frida scripts):
+
+```bash
+python trellis_headless.py -b /path/to/DecryptedApp -o /tmp/trellis-results
+```
+
+**Reports only** (skip Frida script generation):
+
+```bash
+python trellis_headless.py -b /path/to/DecryptedApp -o /tmp/trellis-results --skip-frida
+```
+
+**Frida scripts only** (re-generate scripts from a prior analysis run without re-running Ghidra):
+
+```bash
+python trellis_headless.py -b /path/to/DecryptedApp -o /tmp/trellis-results --skip-analysis
+```
+
+**Persistent Ghidra project** (saves the Ghidra project so subsequent runs skip re-analysis):
+
+```bash
+python trellis_headless.py -b /path/to/DecryptedApp -o /tmp/trellis-results --project-dir /tmp/ghidra-proj
+```
+
+| Argument | Description |
+|----------|-------------|
+| `-b / --binary` | Path to the decrypted iOS Mach-O binary |
+| `-o / --output` | Output directory for reports and Frida scripts (created if needed) |
+| `--project-dir` | Ghidra project directory (default: temp dir, deleted after run) |
+| `--skip-analysis` | Skip Markdown report generation |
+| `--skip-frida` | Skip Frida script generation |
+
+The output directory will contain per-category `.md` reports, findings `.json` files (used by findings-driven Frida hooks), and `.js` Frida scripts — identical to what the GUI workflow produces.
+
 ### Analysis Categories
 
 | Category | Description |
