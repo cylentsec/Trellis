@@ -68,6 +68,7 @@ class SecretSinkSecurityChecker(SecurityChecker):
     def __init__(self, program):
         super().__init__(program)
         self._secret_strings = None  # Lazy: set of (address, value) from StringScan
+        self._reported_forward_matches = set()  # Dedup: (func_addr, secret_addr, sel_name)
 
     def set_secret_strings(self, secret_findings):
         """
@@ -336,6 +337,12 @@ class SecretSinkSecurityChecker(SecurityChecker):
                         if ref_func and ref_func.address == func_addr:
                             # This function references BOTH a secret AND a crypto selector
                             for secret_addr, secret_value in secrets:
+                                # Deduplicate across multiple check_call_site invocations
+                                dedup_key = (func_addr, secret_addr, sel_name)
+                                if dedup_key in self._reported_forward_matches:
+                                    continue
+                                self._reported_forward_matches.add(dedup_key)
+
                                 func_obj = self.program.get_function_at(func_addr)
                                 func_name = func_obj.name if func_obj else hex(func_addr)
                                 findings.append(SecurityFinding(
@@ -346,8 +353,8 @@ class SecretSinkSecurityChecker(SecurityChecker):
                                     location=func_addr,
                                     function_name=func_name,
                                     evidence={
-                                        "sink": function_sig.name,
-                                        "sink_type": config["desc"],
+                                        "sink": sel_name,
+                                        "sink_type": "Crypto operation (ObjC dispatch)",
                                         "secret_value": secret_value[:50],
                                         "secret_address": hex(secret_addr),
                                         "crypto_selector": sel_name,
