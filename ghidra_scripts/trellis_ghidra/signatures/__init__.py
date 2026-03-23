@@ -113,7 +113,7 @@ class FunctionSignature:
         
         return cls(
             name=data["name"],
-            library=data["library"],
+            library=data.get("library") or data.get("framework", ""),
             parameters=parameters,
             return_type=return_type,
             security_notes=data.get("security_notes", []),

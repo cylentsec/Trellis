@@ -735,38 +735,30 @@ def run_url_handler_analysis(program, monitor, output_dir):
     }
 
 
-def main():
-    """Main entry point for the Trellis analysis script."""
-    if not TRELLIS_AVAILABLE:
-        print("[Trellis] ERROR: Trellis modules not available")
-        return
-    
-    # Get Ghidra globals
-    try:
-        program = GhidraProgram(currentProgram, monitor)
-    except Exception as e:
-        print("[Trellis] Error initializing: {}".format(e))
-        return
-    
+def run_analysis(program, output_dir, monitor):
+    """
+    Core analysis logic — runs all security categories and saves reports.
+
+    This function is decoupled from the Ghidra GUI and can be called from
+    both the interactive Ghidra script (main) and the headless CLI.
+
+    Args:
+        program: GhidraProgram wrapper
+        output_dir: pathlib.Path for report output
+        monitor: Ghidra TaskMonitor (use TaskMonitor.DUMMY for headless)
+
+    Returns:
+        List of result dicts (keys: category, findings, functions, report_path)
+    """
     print("[Trellis] Starting analysis of: {}".format(program.filename))
     print("[Trellis] Image base: {}".format(hex(program.image_base)))
-    
-    # Prompt user for output directory
-    try:
-        output_java_file = askDirectory("Trellis: Choose Report Output Directory", "Save Reports")
-        output_dir = Path(str(output_java_file))
-    except Exception:
-        output_dir = Path.home() / "Documents"
-        print("[Trellis] No directory selected, defaulting to: {}".format(output_dir))
-    
     print("[Trellis] Reports will be saved to: {}".format(output_dir))
-    
+
     # Get available categories
     categories = get_available_categories()
     print("[Trellis] Available categories: {}".format(", ".join(categories)))
-    
-    # Analyze key security categories
-    # These match the YAML signature files available
+
+    # Analyze key security categories (must match available YAML signature files)
     categories_to_analyze = [
         "crypto", "cryptokit", "keychain", "networking", "tls_delegate",
         "jailbreak", "antidebug", "storage", "deserialization",
@@ -774,37 +766,35 @@ def main():
         "privacy", "integrity", "secrets", "biometric", "runtime",
         "insecure_storage", "obfuscation", "secret_sinks",
     ]
-    
-    # Run analysis
+
     all_results = []
     for category in categories_to_analyze:
         if monitor.isCancelled():
             break
-        
         result = analyze_category(program, category, monitor, output_dir)
         if result:
             all_results.append(result)
-    
-    # Run standalone string-table scans (credentials, HTTP URLs, jailbreak fallback)
+
+    # Standalone string-table scans (credentials, HTTP URLs, jailbreak fallback)
     if not monitor.isCancelled():
         string_result = run_string_table_scan(program, monitor, output_dir)
         if string_result:
             all_results.append(string_result)
-    
-    # Run URL handler analysis (SwiftUI/UIKit handlers, custom schemes, UI entry points)
+
+    # URL handler analysis (SwiftUI/UIKit handlers, custom schemes, UI entry points)
     if not monitor.isCancelled():
         url_result = run_url_handler_analysis(program, monitor, output_dir)
         if url_result:
             all_results.append(url_result)
-    
+
     # Print summary
     print("\n" + "=" * 60)
     print("[Trellis] ANALYSIS COMPLETE")
     print("=" * 60)
-    
+
     total_findings = sum(r.get("findings", 0) for r in all_results)
     total_functions = sum(r.get("functions", 0) for r in all_results)
-    
+
     for result in all_results:
         print("  {}: {} findings in {} functions".format(
             result["category"],
@@ -813,10 +803,38 @@ def main():
         ))
         if result.get("report_path"):
             print("    Report: {}".format(result["report_path"]))
-    
+
     print("\nTotal: {} security issues across {} functions".format(
         total_findings, total_functions
     ))
+
+    return all_results
+
+
+def main():
+    """Ghidra GUI entry point for the Trellis analysis script."""
+    if not TRELLIS_AVAILABLE:
+        print("[Trellis] ERROR: Trellis modules not available")
+        return
+
+    # Get Ghidra globals (injected by the Ghidra script runtime)
+    try:
+        program = GhidraProgram(currentProgram, monitor)  # noqa: F821
+    except Exception as e:
+        print("[Trellis] Error initializing: {}".format(e))
+        return
+
+    # Prompt user for output directory
+    try:
+        output_java_file = askDirectory(  # noqa: F821
+            "Trellis: Choose Report Output Directory", "Save Reports"
+        )
+        output_dir = Path(str(output_java_file))
+    except Exception:
+        output_dir = Path.home() / "Documents"
+        print("[Trellis] No directory selected, defaulting to: {}".format(output_dir))
+
+    run_analysis(program, output_dir, monitor)  # noqa: F821
 
 
 # Run the script
