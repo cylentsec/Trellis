@@ -66,6 +66,10 @@ except ImportError:
     JArrayList = None
 
 
+# Categories that need immediate hook installation (no lazy loading)
+# and global fallback hooks to cover inlined/dynamic-resolved APIs.
+_ANTIDEBUG_CATEGORIES = {"antidebug"}
+
 # Maps user-facing tracer names to the categories they scan and their generator
 TRACER_OPTIONS = [
     "All Tracers",
@@ -92,6 +96,160 @@ TRACER_OPTIONS = [
     "Deserialization Findings",
     "Custom — All Found Functions",
 ]
+
+
+def generate_findings_for_category(category, output_dir, binary_name, monitor):
+    """
+    Generate a findings-driven Frida script for a single category.
+
+    Decoupled from the Ghidra GUI; callable from the interactive script
+    and from the headless CLI.
+
+    Args:
+        category:    Analysis category name (e.g. "crypto", "keychain")
+        output_dir:  Directory containing the findings JSON files (Path or str)
+        binary_name: Binary filename (as returned by program.filename)
+        monitor:     Ghidra TaskMonitor
+
+    Returns:
+        Frida script string, or None if no actionable findings exist
+    """
+    monitor.setMessage("Loading {} findings...".format(category))
+    result = load_findings_with_metadata(str(output_dir), category, binary_name)
+
+    if not result or not result["findings"]:
+        print("[Trellis] No {} findings found. Run TrellisAnalyze first.".format(category))
+        return None
+
+    findings = result["findings"]
+    metadata = result["metadata"]
+    image_base = metadata.get("image_base", 0)
+
+    if not image_base:
+        print("[Trellis] WARNING: No image_base in {} findings JSON.".format(category))
+        print("[Trellis]   Re-run TrellisAnalyze to regenerate findings with image_base.")
+        print("[Trellis]   Frida hooks will use raw Ghidra addresses (likely wrong at runtime).")
+
+    print("[Trellis] Loaded {} {} findings (image_base=0x{:x})".format(
+        len(findings), category, image_base))
+    monitor.setMessage("Generating findings-driven script for {}...".format(category))
+
+    is_antidebug = category in _ANTIDEBUG_CATEGORIES
+    script = generate_findings_script(
+        findings, binary_name, category,
+        image_base=image_base,
+        lazy_loading=not is_antidebug,
+        include_global_fallbacks=is_antidebug,
+    )
+
+    from trellis_ghidra.analysis.security_checks import Severity
+    actionable_count = sum(1 for f in findings if f.severity != Severity.INFO)
+    if actionable_count == 0 and not is_antidebug:
+        print("[Trellis] Skipping {} findings script: all {} findings are INFO-level".format(
+            category, len(findings)))
+        return None
+
+    if is_antidebug and actionable_count == 0:
+        print("[Trellis] Note: all {} findings are INFO-level, "
+              "but global fallback hooks will provide coverage.".format(category))
+
+    return script
+
+
+def run_frida_generation(program, output_dir, monitor):
+    """
+    Generate all Frida scripts (generic tracers + findings-driven) and save them.
+
+    Decoupled from the Ghidra GUI; callable from the interactive script
+    and from the headless CLI.
+
+    Args:
+        program:    GhidraProgram wrapper
+        output_dir: pathlib.Path for script output (also used to find findings JSON)
+        monitor:    Ghidra TaskMonitor (use TaskMonitor.DUMMY for headless)
+
+    Returns:
+        List of saved script file paths
+    """
+    binary_name = program.filename
+    timestamp = datetime.now().strftime("%y-%m-%d-%H%M%S")
+    saved_scripts = []
+
+    def _save(script, name):
+        if script:
+            path = output_dir / "trellis-{}-{}.js".format(name, timestamp)
+            if save_frida_script(script, str(path)):
+                saved_scripts.append(str(path))
+                print("[Trellis] Saved: {}".format(path))
+                return True
+        return False
+
+    # --- Generic tracers ---
+    monitor.setMessage("Finding crypto functions...")
+    crypto_db = load_category("crypto")
+    if crypto_db:
+        found = find_functions(program, crypto_db)
+        if found:
+            print("[Trellis] Found {} crypto functions".format(len(found)))
+            _save(generate_crypto_tracer(found), "crypto")
+        else:
+            print("[Trellis] No crypto functions found in binary")
+    else:
+        print("[Trellis] Failed to load crypto signatures")
+
+    monitor.setMessage("Generating keychain tracer...")
+    _save(generate_keychain_tracer(None), "keychain")
+
+    monitor.setMessage("Generating TLS/networking tracer...")
+    _save(generate_tls_tracer(), "tls")
+    _save(generate_networking_script(binary_name), "networking")
+
+    monitor.setMessage("Generating anti-debug tracer...")
+    _save(generate_antidebug_script(binary_name, include_bypass=False), "antidebug")
+
+    monitor.setMessage("Generating jailbreak detection tracer...")
+    _save(generate_jailbreak_script(binary_name, include_bypass=False), "jailbreak")
+
+    monitor.setMessage("Generating WebView bridge tracer...")
+    _save(generate_webview_bridge_script(binary_name), "webview")
+
+    monitor.setMessage("Generating deep link tracer...")
+    _save(generate_deeplinks_script(binary_name), "deeplinks")
+
+    monitor.setMessage("Generating storage tracer...")
+    _save(generate_storage_script(binary_name), "storage")
+
+    monitor.setMessage("Generating deserialization tracer...")
+    _save(generate_deserialization_script(binary_name), "deserialization")
+
+    # --- Findings-driven scripts (require prior TrellisAnalyze run) ---
+    for category, script_name in [
+        ("crypto",          "crypto-findings"),
+        ("keychain",        "keychain-findings"),
+        ("tls_delegate",    "tls-findings"),
+        ("antidebug",       "antidebug-findings"),
+        ("jailbreak",       "jailbreak-findings"),
+        ("webview",         "webview-findings"),
+        ("deeplinks",       "deeplinks-findings"),
+        ("storage",         "storage-findings"),
+        ("deserialization", "deserialization-findings"),
+    ]:
+        script = generate_findings_for_category(category, output_dir, binary_name, monitor)
+        _save(script, script_name)
+
+    # Summary
+    print("\n" + "=" * 60)
+    print("[Trellis] FRIDA SCRIPT GENERATION COMPLETE")
+    print("=" * 60)
+    if saved_scripts:
+        for s in saved_scripts:
+            print("  {}".format(s))
+        print("\nRun with:")
+        print("  frida -U -f <bundle_id> -l <script.js>")
+    else:
+        print("  No scripts were generated.")
+
+    return saved_scripts
 
 
 def generate_custom_tracer(program, monitor):
@@ -211,10 +369,6 @@ def main():
                 return True
         return False
     
-    # Categories that need immediate hook installation (no lazy loading)
-    # and global fallback hooks to cover inlined/dynamic-resolved APIs.
-    _ANTIDEBUG_CATEGORIES = {"antidebug"}
-
     def _generate_findings(category):
         """Helper to generate findings-driven script for a category."""
         monitor.setMessage("Loading {} findings...".format(category))
