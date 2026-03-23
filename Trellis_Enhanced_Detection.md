@@ -519,9 +519,152 @@ This immediately tells the analyst: this is a confirmed critical finding, not a 
 
 ---
 
+## 5. Interprocedural Call-Chain Analysis for Secret Sinks
+
+### What It Does
+
+When Trellis detects a hardcoded secret string in the binary (via the string-table scanner) and a sensitive crypto/keychain/network sink function (via import scanning), the interprocedural call-chain analyzer determines whether the secret *flows* to the sink — even when they are in different functions connected through intermediate library calls.
+
+### Why It's Needed
+
+iOS apps commonly use wrapper libraries for cryptographic operations. A developer writes `RNEncryptor.encryptData(data, password: "@daloq3as$qweasdlasasjdnj")` in their view controller, but the actual `CCCrypt` call happens deep inside the RNEncryptor library. The hardcoded password and the crypto sink are separated by one or more function call boundaries:
+
+```
+textFieldShouldReturn  (references "@daloq3as$qweasdlasasjdnj")
+    └── RNEncryptor.encryptData
+            └── initWithOperation:settings:key:IV:error:
+                    └── CCCryptorCreate  (crypto sink)
+```
+
+Single-hop cross-referencing (checking only the sink's direct caller) misses this entirely — the direct caller is an RNEncryptor internal function that doesn't reference the password string. The secret and the sink only connect through the call chain.
+
+### How It Works
+
+The analyzer uses BFS (breadth-first search) to walk *up* the call graph from each sink call site, checking at each hop whether the current function references a known secret string.
+
+**Step 1 — Build the secret-ref cache (once per analysis run):**
+
+For every CRITICAL/HIGH string finding from the string-table scanner, query Ghidra's cross-references to find which functions reference that string. Build a lookup table: `function_address → [(secret_address, secret_value), ...]`.
+
+**Step 2 — BFS from each sink call site:**
+
+For each unresolved sink call (where parameter extraction failed), start BFS from the sink's direct caller:
+
+1. Check if the current function is in the secret-ref cache → if yes, we found a match
+2. If depth < max (3 hops), query `get_callers()` for this function and add each caller to the BFS queue
+3. Track visited functions to avoid cycles
+4. Record the full call chain for each match
+
+**Step 3 — Report with call chain evidence:**
+
+Matched findings include the complete call chain from the secret source to the sink, enabling the analyst to verify the data flow.
+
+### Source Code
+
+**File:** `ghidra_scripts/trellis_ghidra/analysis/security_checks_secret_sinks.py`
+
+**Cache construction:**
+
+```python
+def _build_secret_ref_cache(self):
+    """Build lookup: function_address → [(secret_addr, secret_value), ...]"""
+    cache = {}
+    for secret_addr, secret_value in self._secret_strings.items():
+        refs = self.program.get_references_to(secret_addr)
+        for ref in refs:
+            func = self.program.get_function_containing(ref.from_address)
+            if func:
+                if func.address not in cache:
+                    cache[func.address] = []
+                cache[func.address].append((secret_addr, secret_value))
+    return cache
+```
+
+**BFS traversal:**
+
+```python
+_MAX_CALL_CHAIN_DEPTH = 3
+
+def _find_secret_in_call_chain(self, start_func):
+    """BFS up the call chain, checking each function for secret refs."""
+    if not hasattr(self, '_secret_ref_cache'):
+        self._secret_ref_cache = self._build_secret_ref_cache()
+
+    results = []
+    visited = set()
+    queue = [(start_func.address, 0, [start_func.name])]
+    visited.add(start_func.address)
+
+    while queue:
+        func_addr, depth, chain = queue.pop(0)
+
+        # Check if this function references any secret
+        if func_addr in self._secret_ref_cache:
+            for secret_addr, secret_value in self._secret_ref_cache[func_addr]:
+                display_chain = list(reversed(chain))
+                results.append((secret_addr, secret_value, display_chain))
+
+        if depth >= _MAX_CALL_CHAIN_DEPTH:
+            continue
+
+        # Walk up: find callers of this function
+        callers = self.program.get_callers(func_addr)
+        for ref in callers:
+            caller_func = self.program.get_function_containing(ref.from_address)
+            if caller_func and caller_func.address not in visited:
+                visited.add(caller_func.address)
+                queue.append((
+                    caller_func.address,
+                    depth + 1,
+                    chain + [caller_func.name]
+                ))
+
+    return results
+```
+
+**Integration in the xref fallback:**
+
+```python
+def _xref_fallback(self, function_sig, call_site, config):
+    caller_func = self.program.get_function_containing(
+        call_site.call_instruction_address
+    )
+
+    # Interprocedural BFS up the call chain
+    matched = self._find_secret_in_call_chain(caller_func)
+
+    for secret_addr, secret_value, chain in matched:
+        chain_display = " → ".join(n[:40] for n in chain)
+        findings.append(SecurityFinding(
+            severity=Severity.CRITICAL,
+            issue_type="Hardcoded Secret Flows to Crypto Sink",
+            evidence={
+                "sink": function_sig.name,
+                "secret_value": secret_value[:50],
+                "call_chain": chain_display,
+                "chain_depth": str(len(chain)),
+                "detection_method": "interprocedural_xref",
+            },
+        ))
+```
+
+### Performance
+
+The secret-ref cache is built once per analysis run (one xref query per known secret string). BFS is bounded by `_MAX_CALL_CHAIN_DEPTH = 3` and a visited-set that prevents revisiting functions. For a binary with 55 sink functions and ~7 secret strings, the total work is approximately 385 starting pairs × a few hops each — completing in seconds even on large binaries.
+
+### Practical Impact
+
+Without interprocedural analysis, the hardcoded encryption key `@daloq3as$qweasdlasasjdnj` is flagged by the string scanner as a suspicious password, but the secret sinks module reports 0 findings — it cannot connect the key to the `CCCryptorCreate` call through the RNEncryptor wrapper.
+
+With interprocedural analysis, Trellis reports:
+
+> **Hardcoded Secret Flows to Crypto Sink** — Hardcoded secret reaches `CCCryptorCreate` sink via call chain: `textFieldShouldReturn → encryptData → initWithOperation:settings:key:IV:error: → CCCryptorCreate`. Detection method: interprocedural_xref (depth: 3).
+
+---
+
 ## How the Techniques Work Together
 
-The four techniques form a detection pipeline:
+The five techniques form a detection pipeline:
 
 ```
 Binary Analysis Pipeline
@@ -543,6 +686,10 @@ Binary Analysis Pipeline
 4. String cross-referencing
    ├── String table scan        → finds suspicious strings (passwords, keys, URLs)
    └── Xref enrichment          → links strings to crypto/auth/payment functions
+
+5. Interprocedural secret-sink analysis
+   ├── Secret-ref cache         → maps functions to known secret strings
+   └── BFS call-chain traversal → walks callers up to 3 hops to connect secrets to sinks
 ```
 
 Each layer catches what the previous one missed, producing comprehensive coverage without requiring any single technique to be perfect.
