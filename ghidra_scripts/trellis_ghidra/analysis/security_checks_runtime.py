@@ -31,9 +31,13 @@ _AUTH_CALLER_KEYWORDS = [
 ]
 
 # Keywords in caller names that indicate comparison / validation logic
+# NOTE: bare "check" matched too broadly (e.g. "checkNetworkStatus").
+# Use compound patterns that imply security context.
 _VALIDATION_CALLER_KEYWORDS = [
-    "compare", "check", "validate", "verify",
+    "compare", "validate", "verify",
     "match", "confirm", "equal",
+    "checkPassword", "checkCredential", "checkPin",
+    "checkCode", "checkAuth", "checkAccess",
 ]
 
 

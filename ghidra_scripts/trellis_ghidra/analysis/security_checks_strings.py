@@ -100,12 +100,15 @@ _AUTH_FUNCTION_KEYWORDS = [
     'login', 'auth', 'authenticate', 'credential', 'password',
     'token', 'session', 'signin', 'signup', 'register',
     'validate', 'verify',
+    'oauth', 'sso', 'saml', 'mfa', '2fa', 'totp', 'otp', 'pincode',
 ]
 
 # Keywords that indicate PCI/payment context
 _PAYMENT_FUNCTION_KEYWORDS = [
     'payment', 'card', 'credit', 'billing', 'checkout',
     'purchase', 'transaction', 'stripe', 'braintree',
+    'storekit', 'apple_pay', 'applepay', 'in_app_purchase',
+    'iap', 'subscription', 'receipt',
 ]
 
 
