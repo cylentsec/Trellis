@@ -6,7 +6,8 @@ This module traces data flow from hardcoded/obfuscated sources to sensitive
 security sinks, such as crypto functions, keychain operations, and network requests.
 """
 
-from typing import List, Dict, TYPE_CHECKING
+import re
+from typing import List, Dict, Set, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..ghidra_api import GhidraProgram
@@ -36,8 +37,39 @@ SENSITIVE_SINKS = {
 }
 
 
+# Patterns for identifying secret-like strings in decompiled output
+_DECOMPILER_STRING_RE = re.compile(r'"([^"]{8,80})"')
+
+# Crypto/encryption related function name keywords
+_CRYPTO_SINK_KEYWORDS = [
+    'encrypt', 'decrypt', 'crypto', 'cipher', 'aes', 'des',
+    'RNEncryptor', 'RNDecryptor', 'CCCrypt', 'CCKey',
+    'SymmetricKey', 'hmac', 'pbkdf', 'derive',
+]
+
+
 class SecretSinkSecurityChecker(SecurityChecker):
     """Analyzes data flow from hardcoded strings to sensitive sinks."""
+
+    def __init__(self, program):
+        super().__init__(program)
+        self._secret_strings = None  # Lazy: set of (address, value) from StringScan
+
+    def set_secret_strings(self, secret_findings):
+        """
+        Accept CRITICAL/HIGH string findings from StringTableSecurityChecker
+        to enable cross-reference fallback when parameter extraction fails.
+
+        Args:
+            secret_findings: List of SecurityFinding from string scan
+        """
+        self._secret_strings = {}
+        for f in secret_findings:
+            if f.severity in (Severity.CRITICAL, Severity.HIGH):
+                addr = f.location
+                val = f.evidence.get("value", f.evidence.get("value_preview", ""))
+                if val:
+                    self._secret_strings[addr] = val
 
     def check_call_site(self, function_sig, call_site, extracted_info):
         """Check if hardcoded strings flow into sensitive sinks."""
@@ -54,54 +86,196 @@ class SecretSinkSecurityChecker(SecurityChecker):
         if not config:
             return findings
 
-        # Check parameters for hardcoded values
-        if not extracted_info or not extracted_info.parameters:
-            return findings
+        # --- Primary path: parameter extraction succeeded ---
+        if extracted_info and extracted_info.parameters:
+            for idx in config.get("indices", []):
+                if idx >= len(extracted_info.parameters):
+                    continue
 
-        for idx in config.get("indices", []):
-            if idx >= len(extracted_info.parameters):
-                continue
+                param = extracted_info.parameters[idx]
 
-            param = extracted_info.parameters[idx]
-
-            # Check if parameter is a string constant
-            if param.value_as_string:
-                # Hardcoded string directly passed to sink
-                findings.append(SecurityFinding(
-                    severity=Severity.HIGH,
-                    issue_type="Hardcoded Secret in Sink",
-                    description=f"Hardcoded string passed to {config['desc']} sink",
-                    location=call_site.call_instruction_address,
-                    function_name=call_site.caller_name,
-                    evidence={
-                        "sink": func_name,
-                        "value": param.value_as_string[:50],  # Truncate
-                        "param_index": idx,
-                        "full_value_length": len(param.value_as_string)
-                    },
-                    impact="Secret is hardcoded and easily extractable from binary",
-                    recommendation="Store secrets in Keychain with proper access control, or load from secure configuration"
-                ))
-
-            # Check if parameter is a constant from data section
-            elif param.value_if_constant is not None:
-                addr = param.value_if_constant
-                if self.program.is_address_in_data_section(addr):
-                    # Constant data address (possible obfuscated key/data)
+                # Check if parameter is a string constant
+                if param.value_as_string:
+                    # Hardcoded string directly passed to sink
                     findings.append(SecurityFinding(
-                        severity=Severity.MEDIUM,
-                        issue_type="Constant Data in Sink",
-                        description=f"Constant data passed to {config['desc']} sink",
+                        severity=Severity.HIGH,
+                        issue_type="Hardcoded Secret in Sink",
+                        description="Hardcoded string passed to {} sink".format(
+                            config['desc']),
                         location=call_site.call_instruction_address,
                         function_name=call_site.caller_name,
                         evidence={
                             "sink": func_name,
-                            "data_address": hex(addr),
+                            "value": param.value_as_string[:50],
                             "param_index": idx,
+                            "full_value_length": len(param.value_as_string)
                         },
-                        impact="Data may be easily extracted; check if obfuscated or encrypted",
-                        recommendation="Verify data is properly encrypted/obfuscated before use"
+                        impact="Secret is hardcoded and easily extractable from binary",
+                        recommendation="Store secrets in Keychain with proper access control, or load from secure configuration"
                     ))
+
+                # Check if parameter is a constant from data section
+                elif param.value_if_constant is not None:
+                    addr = param.value_if_constant
+                    if self.program.is_address_in_data_section(addr):
+                        findings.append(SecurityFinding(
+                            severity=Severity.MEDIUM,
+                            issue_type="Constant Data in Sink",
+                            description="Constant data passed to {} sink".format(
+                                config['desc']),
+                            location=call_site.call_instruction_address,
+                            function_name=call_site.caller_name,
+                            evidence={
+                                "sink": func_name,
+                                "data_address": hex(addr),
+                                "param_index": idx,
+                            },
+                            impact="Data may be easily extracted; check if obfuscated or encrypted",
+                            recommendation="Verify data is properly encrypted/obfuscated before use"
+                        ))
+
+        # --- Fallback path: parameter extraction failed ---
+        # Use string-table cross-reference to find secrets in the caller
+        if not findings:
+            findings.extend(self._xref_fallback(
+                function_sig, call_site, config
+            ))
+
+        return findings
+
+    def _xref_fallback(self, function_sig, call_site, config):
+        """
+        Fallback: when parameter extraction fails, check if the caller function
+        references any known secret strings from the StringScan.
+
+        This catches hardcoded encryption keys in Swift code where the
+        decompiler/backward-slice cannot resolve parameters.
+        """
+        findings = []
+
+        if not self._secret_strings:
+            return findings
+
+        caller_name = call_site.caller_name if call_site else None
+        if not caller_name:
+            return findings
+
+        # Get the caller function object
+        caller_func = None
+        try:
+            caller_func = self.program.get_function_containing(
+                call_site.call_instruction_address
+            )
+        except Exception:
+            return findings
+
+        if not caller_func:
+            return findings
+
+        # Strategy 1: Check if any known secret string addresses are
+        # referenced within the caller function's body
+        matched_secrets = self._find_secret_refs_in_function(caller_func)
+
+        for secret_addr, secret_value in matched_secrets:
+            findings.append(SecurityFinding(
+                severity=Severity.CRITICAL,
+                issue_type="Hardcoded Secret Flows to Crypto Sink",
+                description="Function referencing hardcoded secret also calls {} sink".format(
+                    function_sig.name),
+                location=call_site.call_instruction_address,
+                function_name=caller_name,
+                evidence={
+                    "sink": function_sig.name,
+                    "sink_type": config["desc"],
+                    "secret_value": secret_value[:50],
+                    "secret_address": hex(secret_addr),
+                    "detection_method": "string_xref_fallback",
+                },
+                impact="Hardcoded secret is used in {} — all app installations "
+                       "share the same key/password".format(config["desc"]),
+                recommendation="Derive keys from user input at runtime or use "
+                               "iOS Keychain for secret storage"
+            ))
+
+        # Strategy 2: Decompile the caller and search for string literals
+        if not findings:
+            findings.extend(self._decompiler_string_scan(
+                function_sig, call_site, config, caller_func
+            ))
+
+        return findings
+
+    def _find_secret_refs_in_function(self, func):
+        """
+        Check if any known secret-string addresses are referenced
+        within the given function.
+
+        Returns list of (address, value) tuples for matched secrets.
+        """
+        matched = []
+        if not self._secret_strings:
+            return matched
+
+        for secret_addr, secret_value in self._secret_strings.items():
+            try:
+                refs = self.program.get_references_to(secret_addr)
+                for ref in refs:
+                    ref_func = self.program.get_function_containing(ref.from_address)
+                    if ref_func and ref_func.address == func.address:
+                        matched.append((secret_addr, secret_value))
+                        break
+            except Exception:
+                continue
+
+        return matched
+
+    def _decompiler_string_scan(self, function_sig, call_site, config, caller_func):
+        """
+        Decompile the caller function and search for string literals
+        that look like secrets (high entropy, special chars).
+
+        This catches cases where backward-slice fails but the decompiler
+        still shows the string in the pseudocode.
+        """
+        findings = []
+
+        try:
+            decomp_code = self.program.get_decompiled_code(caller_func)
+        except Exception:
+            return findings
+
+        if not decomp_code:
+            return findings
+
+        # Check if the sink function is called in this decompiled code
+        if function_sig.name not in decomp_code:
+            return findings
+
+        # Extract string literals from decompiled code
+        for match in _DECOMPILER_STRING_RE.finditer(decomp_code):
+            literal = match.group(1)
+            # Check if it looks like a secret (has special chars + alpha)
+            has_special = bool(re.search(r'[@#$%^&*!]', literal))
+            has_alpha = bool(re.search(r'[a-zA-Z]', literal))
+            if has_special and has_alpha and len(literal) >= 10:
+                findings.append(SecurityFinding(
+                    severity=Severity.HIGH,
+                    issue_type="Hardcoded Secret in Decompiled Sink Caller",
+                    description="String literal in function calling {} sink".format(
+                        function_sig.name),
+                    location=call_site.call_instruction_address,
+                    function_name=call_site.caller_name or "<unknown>",
+                    evidence={
+                        "sink": function_sig.name,
+                        "sink_type": config["desc"],
+                        "string_literal": literal[:50],
+                        "detection_method": "decompiler_string_scan",
+                    },
+                    impact="String literal found in decompiled code near crypto "
+                           "sink — likely a hardcoded key or password",
+                    recommendation="Replace hardcoded secret with runtime-derived "
+                                   "key or iOS Keychain"
+                ))
 
         return findings
 

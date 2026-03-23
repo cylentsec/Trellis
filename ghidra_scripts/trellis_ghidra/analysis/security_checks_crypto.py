@@ -5,11 +5,13 @@ This module implements security analysis for cryptographic operations,
 detecting weak algorithms, ECB mode, hardcoded keys, and other crypto issues.
 """
 
+import re
 from typing import Optional, List, TYPE_CHECKING
 
 from .security_checks import SecurityChecker, SecurityFinding, Severity
 
 if TYPE_CHECKING:
+    from ..ghidra_api import GhidraProgram
     from ..signatures import FunctionSignature
     from .calltree import CallSite
     from .extractor import ExtractedCallInfo
@@ -95,6 +97,12 @@ def _caller_suggests_crypto(caller_name):
     return False
 
 
+# Regex patterns for extracting parameters from decompiled code
+_DECOMP_INT_LITERAL_RE = re.compile(r'\b(\d{1,7})\b')
+_DECOMP_PBKDF_CALL_RE = re.compile(r'CCKeyDerivationPBKDF\s*\(')
+_DECOMP_HEX_ARRAY_RE = re.compile(r'\{\s*(0x[0-9a-fA-F]{1,4}(?:\s*,\s*0x[0-9a-fA-F]{1,4})+)\s*\}')
+
+
 class CryptoSecurityChecker(SecurityChecker):
     """Security checker for cryptographic operations."""
     
@@ -124,7 +132,12 @@ class CryptoSecurityChecker(SecurityChecker):
         elif func_name == "CCKeyDerivationPBKDF":
             if has_params:
                 findings.extend(self._check_pbkdf2(function_sig, call_site, extracted_info))
-            # Caller-name heuristic fallback
+            # Decompiler-based fallback for PBKDF2 when params unresolved
+            if not findings:
+                findings.extend(self._check_pbkdf2_decompiler_fallback(
+                    function_sig, call_site
+                ))
+            # Caller-name heuristic fallback (lowest priority)
             if not findings:
                 findings.extend(self._check_crypto_caller_heuristic(
                     function_sig, call_site, extracted_info, "key derivation"
@@ -425,6 +438,138 @@ class CryptoSecurityChecker(SecurityChecker):
                                "or analyze the caller function in Ghidra decompiler".format(
                                    function_sig.name)
             ))
+
+        return findings
+
+
+    def _check_pbkdf2_decompiler_fallback(
+        self,
+        function_sig: "FunctionSignature",
+        call_site: "CallSite",
+    ) -> List[SecurityFinding]:
+        """
+        Fallback: decompile the caller and search for PBKDF2 parameters
+        when standard parameter extraction fails (common with Swift code).
+
+        Looks for:
+        - Low integer literals (rounds count)
+        - kCCPRFHmacAlgSHA1 / constant 1 (weak PRF)
+        - Hex byte arrays (hardcoded salts)
+        """
+        findings = []
+
+        caller_func = None
+        try:
+            caller_func = self.program.get_function_containing(
+                call_site.call_instruction_address
+            )
+        except Exception:
+            return findings
+
+        if not caller_func:
+            return findings
+
+        try:
+            decomp_code = self.program.get_decompiled_code(caller_func)
+        except Exception:
+            return findings
+
+        if not decomp_code:
+            return findings
+
+        # Only analyze if the decompiled code actually calls PBKDF
+        if not _DECOMP_PBKDF_CALL_RE.search(decomp_code):
+            return findings
+
+        caller_name = call_site.caller_name or "<unknown>"
+        display_caller = caller_name[:77] + "..." if len(caller_name) > 80 else caller_name
+
+        # --- Check for low iteration counts ---
+        # Look for small integer literals that could be the rounds parameter
+        int_literals = [int(m.group(1)) for m in _DECOMP_INT_LITERAL_RE.finditer(decomp_code)]
+        # Filter to plausible round values (1-99999)
+        candidate_rounds = [v for v in int_literals if 1 <= v < PBKDF2_ROUNDS_HIGH and v not in (0, 1, 2, 4, 8, 16, 32, 64)]
+
+        for rounds_val in candidate_rounds:
+            if rounds_val < PBKDF2_ROUNDS_CRITICAL:
+                findings.append(SecurityFinding(
+                    severity=Severity.CRITICAL,
+                    issue_type="Critically Low PBKDF2 Iterations (Decompiler)",
+                    description="PBKDF2 caller contains integer {} — likely iteration count "
+                                "(minimum {} recommended)".format(rounds_val, PBKDF2_ROUNDS_CRITICAL),
+                    location=call_site.call_instruction_address,
+                    function_name=function_sig.name,
+                    evidence={
+                        "rounds_candidate": str(rounds_val),
+                        "minimum_recommended": str(PBKDF2_ROUNDS_HIGH),
+                        "caller": display_caller,
+                        "detection_method": "decompiler_fallback",
+                    },
+                    impact="Low iteration count allows brute-force key recovery in seconds",
+                    recommendation="Use at least {} iterations (OWASP recommends {}+)".format(
+                        PBKDF2_ROUNDS_CRITICAL, PBKDF2_ROUNDS_HIGH)
+                ))
+                break  # One finding per call site
+            elif rounds_val < PBKDF2_ROUNDS_HIGH:
+                findings.append(SecurityFinding(
+                    severity=Severity.HIGH,
+                    issue_type="Low PBKDF2 Iterations (Decompiler)",
+                    description="PBKDF2 caller contains integer {} — likely iteration count "
+                                "({}+ recommended)".format(rounds_val, PBKDF2_ROUNDS_HIGH),
+                    location=call_site.call_instruction_address,
+                    function_name=function_sig.name,
+                    evidence={
+                        "rounds_candidate": str(rounds_val),
+                        "recommended": str(PBKDF2_ROUNDS_HIGH),
+                        "caller": display_caller,
+                        "detection_method": "decompiler_fallback",
+                    },
+                    impact="Moderate iteration count may be brute-forceable with GPU hardware",
+                    recommendation="Use at least {} iterations for PBKDF2".format(PBKDF2_ROUNDS_HIGH)
+                ))
+                break
+
+        # --- Check for weak PRF (SHA-1) ---
+        if 'kCCPRFHmacAlgSHA1' in decomp_code or 'HmacAlgSHA1' in decomp_code:
+            findings.append(SecurityFinding(
+                severity=Severity.MEDIUM,
+                issue_type="Weak PBKDF2 PRF Algorithm (Decompiler)",
+                description="PBKDF2 caller references HMAC-SHA1 PRF",
+                location=call_site.call_instruction_address,
+                function_name=function_sig.name,
+                evidence={
+                    "prf": "HMAC-SHA1",
+                    "caller": display_caller,
+                    "detection_method": "decompiler_fallback",
+                },
+                impact="SHA-1 based PRF provides less security margin than SHA-256+",
+                recommendation="Use kCCPRFHmacAlgSHA256 or kCCPRFHmacAlgSHA512"
+            ))
+
+        # --- Check for hardcoded salt (hex byte array) ---
+        hex_arrays = _DECOMP_HEX_ARRAY_RE.findall(decomp_code)
+        for hex_str in hex_arrays:
+            byte_count = hex_str.count('0x')
+            if 4 <= byte_count <= 32:  # Salt-sized byte arrays
+                findings.append(SecurityFinding(
+                    severity=Severity.HIGH,
+                    issue_type="Hardcoded PBKDF2 Salt (Decompiler)",
+                    description="PBKDF2 caller contains hardcoded byte array ({} bytes) — "
+                                "likely salt".format(byte_count),
+                    location=call_site.call_instruction_address,
+                    function_name=function_sig.name,
+                    evidence={
+                        "salt_bytes": hex_str[:60],
+                        "salt_length": str(byte_count),
+                        "caller": display_caller,
+                        "detection_method": "decompiler_fallback",
+                    },
+                    impact="All users share the same salt, enabling precomputed "
+                           "rainbow table attacks",
+                    recommendation="Generate a random salt per user/password and "
+                                   "store alongside the derived key"
+                ))
+                break
 
         return findings
 

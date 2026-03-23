@@ -56,6 +56,14 @@ PATH_SANITIZATION_FUNCTIONS = {
 }
 
 
+# User input selectors that indicate taint sources
+_USER_INPUT_SELECTORS = {
+    'text', 'getText', 'textField', 'nameTextField',
+    'passwordTextField', 'inputTextField', 'searchTextField',
+    'UITextField', 'UITextView', 'editingChanged',
+}
+
+
 class WebViewSecurityChecker(SecurityChecker):
     """Security checker for WebView JavaScript bridge attack surface."""
 
@@ -304,7 +312,28 @@ class WebViewSecurityChecker(SecurityChecker):
                 except (AttributeError, TypeError):
                     pass
 
-        if base_url_is_nil:
+        # Check for user-input taint: does the caller also reference UITextField?
+        has_user_input = self._caller_has_user_input_ref(call_site)
+
+        if has_user_input:
+            findings.append(SecurityFinding(
+                severity=Severity.HIGH,
+                issue_type="XSS via User Input in loadHTMLString",
+                description="loadHTMLString:baseURL: caller also references user input "
+                            "(UITextField/UITextView) — XSS likely",
+                location=call_site.call_instruction_address,
+                function_name=function_sig.name,
+                evidence={
+                    "method": "loadHTMLString:baseURL:",
+                    "baseURL": "nil" if base_url_is_nil else "unknown",
+                    "taint_source": "UITextField/UITextView reference in caller",
+                },
+                impact="User input flows to WebView HTML rendering without sanitization — "
+                       "attacker can inject JavaScript via text fields",
+                recommendation="Sanitize all user input before HTML rendering; "
+                               "use textContent instead of innerHTML equivalents"
+            ))
+        elif base_url_is_nil:
             findings.append(SecurityFinding(
                 severity=Severity.HIGH,
                 issue_type="loadHTMLString with nil baseURL",
@@ -329,6 +358,39 @@ class WebViewSecurityChecker(SecurityChecker):
 
         return findings
 
+    def _caller_has_user_input_ref(self, call_site):
+        """
+        Check if the caller function references UITextField/UITextView
+        or other user-input selectors, indicating a taint source.
+        """
+        if not call_site:
+            return False
+
+        caller_name = call_site.caller_name or ""
+
+        # Check caller name for text field references
+        lower = caller_name.lower()
+        for sel in _USER_INPUT_SELECTORS:
+            if sel.lower() in lower:
+                return True
+
+        # Try decompiling the caller to look for UITextField references
+        try:
+            func = self.program.get_function_containing(
+                call_site.call_instruction_address
+            )
+            if func:
+                decomp = self.program.get_decompiled_code(func)
+                if decomp:
+                    for sel in ('UITextField', 'UITextView', 'textField',
+                                'nameTextField', 'text()'):
+                        if sel in decomp:
+                            return True
+        except Exception:
+            pass
+
+        return False
+
     def _check_load_request(
         self,
         function_sig: "FunctionSignature",
@@ -348,6 +410,42 @@ class WebViewSecurityChecker(SecurityChecker):
             impact="WebView loading external content - verify HTTPS and content validation",
             recommendation="Use HTTPS for all loaded URLs and implement WKNavigationDelegate"
         ))
+
+        return findings
+
+
+    def scan_uiwebview_deprecation(self):
+        """
+        Standalone scan for deprecated UIWebView usage.
+
+        Searches the binary's string table and symbol table for UIWebView
+        class references. UIWebView is deprecated since iOS 12 and has
+        severe security limitations (no JS disable, no same-origin policy).
+
+        Returns:
+            List of SecurityFinding objects.
+        """
+        findings = []
+        seen = False
+
+        for address, string_value in self.program.get_defined_strings():
+            if 'UIWebView' in string_value and not seen:
+                seen = True
+                findings.append(SecurityFinding(
+                    severity=Severity.HIGH,
+                    issue_type="Deprecated UIWebView Usage",
+                    description="UIWebView class reference found — deprecated since iOS 12",
+                    location=address,
+                    function_name="<string_table>",
+                    evidence={
+                        "class": "UIWebView",
+                        "string_context": string_value[:80],
+                    },
+                    impact="UIWebView cannot disable JavaScript, has no same-origin policy, "
+                           "and no out-of-process rendering. Memory corruption bugs in "
+                           "JavaScriptCore affect the main app process.",
+                    recommendation="Migrate to WKWebView or SFSafariViewController"
+                ))
 
         return findings
 

@@ -221,4 +221,87 @@ class RuntimeSecurityChecker(SecurityChecker):
         return findings
 
 
+    def scan_hardcoded_comparison_constants(self):
+        """
+        Standalone scan: detect hardcoded integer comparison constants in
+        authentication/validation functions.
+
+        Searches for functions with auth-related names that contain `cmp`
+        instructions with immediate operands (magic numbers like 8848).
+
+        This catches patterns like `if (code==8848)` in LoginValidate.m
+        that call-site-based checking misses because the comparison is
+        done via a CMP instruction rather than an ObjC message send.
+
+        Returns:
+            List of SecurityFinding objects.
+        """
+        findings = []
+        seen_functions = set()
+
+        for func in self.program.get_all_functions():
+            func_name = func.name
+
+            # Only check auth/validation functions
+            if not (_caller_suggests_auth(func_name) or
+                    _caller_suggests_validation(func_name)):
+                continue
+
+            # Avoid duplicate findings per function
+            if func.address in seen_functions:
+                continue
+            seen_functions.add(func.address)
+
+            # Decompile to find integer comparisons
+            try:
+                decomp_code = self.program.get_decompiled_code(func)
+            except Exception:
+                continue
+
+            if not decomp_code:
+                continue
+
+            # Search for comparisons with literal integers in decompiled code
+            # Patterns: == 8848, != 1234, == 0x2288, etc.
+            import re
+            cmp_pattern = re.compile(
+                r'[!=]=\s*(0x[0-9a-fA-F]{2,8}|\d{3,8})\b'
+            )
+
+            for match in cmp_pattern.finditer(decomp_code):
+                val_str = match.group(1)
+                try:
+                    val = int(val_str, 0)  # Handles both decimal and hex
+                except ValueError:
+                    continue
+
+                # Skip trivial values (0, 1, -1, common sizes)
+                if val in (0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024):
+                    continue
+
+                display_name = func_name
+                if len(display_name) > 80:
+                    display_name = display_name[:77] + "..."
+
+                findings.append(SecurityFinding(
+                    severity=Severity.HIGH,
+                    issue_type="Hardcoded Validation Constant",
+                    description="Integer comparison with constant {} in "
+                                "auth/validation function".format(val_str),
+                    location=func.address,
+                    function_name=func_name,
+                    evidence={
+                        "constant_value": val_str,
+                        "function": display_name,
+                        "detection_method": "decompiler_cmp_scan",
+                    },
+                    impact="Hardcoded validation code can be extracted from binary "
+                           "or bypassed by patching the comparison",
+                    recommendation="Move validation logic server-side; do not use "
+                                   "hardcoded codes for authentication"
+                ))
+
+        return findings
+
+
 __all__ = ["RuntimeSecurityChecker"]

@@ -89,6 +89,7 @@ from .security_checks_biometric import BiometricSecurityChecker
 from .security_checks_runtime import RuntimeSecurityChecker
 from .security_checks_obfuscation import ObfuscationSecurityChecker
 from .security_checks_secret_sinks import SecretSinkSecurityChecker
+from .security_checks_pci import PCIDataFlowChecker
 
 # URL handlers and UI entry points
 from .url_handlers import (
@@ -162,6 +163,7 @@ __all__ = [
     "RuntimeSecurityChecker",
     "ObfuscationSecurityChecker",
     "SecretSinkSecurityChecker",
+    "PCIDataFlowChecker",
     # URL handlers
     "URLHandler",
     "URLScheme",

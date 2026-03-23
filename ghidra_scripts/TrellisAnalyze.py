@@ -62,6 +62,7 @@ try:
     from trellis_ghidra.analysis.security_checks_runtime import RuntimeSecurityChecker
     from trellis_ghidra.analysis.security_checks_obfuscation import ObfuscationSecurityChecker
     from trellis_ghidra.analysis.security_checks_secret_sinks import SecretSinkSecurityChecker
+    from trellis_ghidra.analysis.security_checks_pci import PCIDataFlowChecker
     from trellis_ghidra.analysis.url_handlers import (
         find_url_handlers, find_ui_entry_points, extract_url_schemes,
         cross_reference_schemes_with_handlers, generate_url_handler_frida_script,
@@ -356,7 +357,8 @@ def format_standalone_findings_report(binary_name, category_title, description, 
     return report
 
 
-def analyze_category(program, category, monitor, output_dir):
+def analyze_category(program, category, monitor, output_dir,
+                     secret_string_findings=None):
     """
     Run analysis for a single security category.
     
@@ -365,6 +367,8 @@ def analyze_category(program, category, monitor, output_dir):
         category: Category name
         monitor: Ghidra TaskMonitor
         output_dir: Path to save the report
+        secret_string_findings: Optional list of string findings to pass to
+            SecretSinkSecurityChecker for cross-reference fallback
         
     Returns:
         Dict with findings, functions, report_path keys
@@ -392,6 +396,13 @@ def analyze_category(program, category, monitor, output_dir):
     
     # Initialize security checker
     security_checker = get_security_checker(category, program)
+
+    # If this is secret_sinks and we have string findings, inject them
+    if (category == "secret_sinks" and secret_string_findings and
+            security_checker and hasattr(security_checker, 'set_secret_strings')):
+        security_checker.set_secret_strings(secret_string_findings)
+        print("[Trellis] Injected {} string findings into secret_sinks checker".format(
+            len(secret_string_findings)))
     
     # Analyze each function
     results = []
@@ -587,7 +598,40 @@ def run_string_table_scan(program, monitor, output_dir):
     if bio_findings:
         print("[Trellis] Biometric scan produced {} findings".format(len(bio_findings)))
 
-    all_findings = string_findings + xref_findings + jb_findings + bio_findings
+    # Credential-pair proximity detection
+    monitor.setMessage("Detecting credential pairs by proximity...")
+    pair_findings = string_checker.detect_credential_pairs()
+    if pair_findings:
+        print("[Trellis] Credential pair detection produced {} findings".format(
+            len(pair_findings)))
+
+    # UIWebView deprecation scan
+    monitor.setMessage("Scanning for deprecated UIWebView usage...")
+    webview_checker = WebViewSecurityChecker(program)
+    uiwebview_findings = webview_checker.scan_uiwebview_deprecation()
+    if uiwebview_findings:
+        print("[Trellis] UIWebView deprecation scan produced {} findings".format(
+            len(uiwebview_findings)))
+
+    # PCI data flow scan
+    monitor.setMessage("Scanning for PCI data over cleartext HTTP...")
+    pci_checker = PCIDataFlowChecker(program)
+    pci_findings = pci_checker.scan_pci_data_flow()
+    if pci_findings:
+        print("[Trellis] PCI data flow scan produced {} findings".format(
+            len(pci_findings)))
+
+    # Runtime hardcoded comparison constant scan
+    monitor.setMessage("Scanning for hardcoded validation constants...")
+    runtime_checker = RuntimeSecurityChecker(program)
+    runtime_const_findings = runtime_checker.scan_hardcoded_comparison_constants()
+    if runtime_const_findings:
+        print("[Trellis] Runtime constant scan produced {} findings".format(
+            len(runtime_const_findings)))
+
+    all_findings = (string_findings + xref_findings + pair_findings +
+                    jb_findings + bio_findings + uiwebview_findings +
+                    pci_findings + runtime_const_findings)
 
     if not all_findings:
         print("[Trellis] No string-table findings")
@@ -620,7 +664,8 @@ def run_string_table_scan(program, monitor, output_dir):
         "findings": len(all_findings),
         "functions": 0,
         "report_path": str(report_path) if report_path else None,
-        "category": "string_scan"
+        "category": "string_scan",
+        "_string_findings": string_findings + xref_findings,
     }
 
 
@@ -759,12 +804,14 @@ def run_analysis(program, output_dir, monitor):
     print("[Trellis] Available categories: {}".format(", ".join(categories)))
 
     # Analyze key security categories (must match available YAML signature files)
+    # NOTE: secret_sinks is excluded here — it runs after the string scan so it
+    # can receive string findings for cross-reference fallback.
     categories_to_analyze = [
         "crypto", "cryptokit", "keychain", "networking", "tls_delegate",
         "jailbreak", "antidebug", "storage", "deserialization",
         "webview", "deeplinks", "sqlite", "logging", "endpoints",
         "privacy", "integrity", "secrets", "biometric", "runtime",
-        "insecure_storage", "obfuscation", "secret_sinks",
+        "insecure_storage", "obfuscation",
     ]
 
     all_results = []
@@ -776,10 +823,22 @@ def run_analysis(program, output_dir, monitor):
             all_results.append(result)
 
     # Standalone string-table scans (credentials, HTTP URLs, jailbreak fallback)
+    # Must run BEFORE secret_sinks so we can pass string findings for xref fallback.
+    string_scan_findings = []  # Will hold string findings for secret_sinks
     if not monitor.isCancelled():
         string_result = run_string_table_scan(program, monitor, output_dir)
         if string_result:
             all_results.append(string_result)
+            # Collect the string findings for secret_sinks xref fallback
+            if string_result.get("_string_findings"):
+                string_scan_findings = string_result["_string_findings"]
+
+    # Secret sinks analysis — runs after string scan to enable xref fallback
+    if not monitor.isCancelled():
+        result = analyze_category(program, "secret_sinks", monitor, output_dir,
+                                  secret_string_findings=string_scan_findings)
+        if result:
+            all_results.append(result)
 
     # URL handler analysis (SwiftUI/UIKit handlers, custom schemes, UI entry points)
     if not monitor.isCancelled():

@@ -8,8 +8,9 @@ decompiler/parameter extraction — it works purely on string data, making
 it effective for Swift binaries where parameter extraction often fails.
 """
 
+import math
 import re
-from typing import List, Set, TYPE_CHECKING
+from typing import List, Set, Tuple, TYPE_CHECKING
 
 from .security_checks import SecurityChecker, SecurityFinding, Severity
 
@@ -43,9 +44,26 @@ SECRET_VALUE_INDICATORS = [
 
 # String patterns that indicate hardcoded credentials near crypto operations
 HARDCODED_PASSWORD_PATTERNS = [
-    # Strings used as encryption passwords (high entropy, special chars)
+    # Original: Strings starting with special char (encryption passwords)
     re.compile(r'^[@#$%&!][a-zA-Z0-9@#$%&!]{10,}$'),
+    # Mixed-case alphanumeric with embedded special characters (e.g., This!sA5Ecret)
+    re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9@#$%^&*!]{5,}$'),
 ]
+
+# Format string patterns — these are NOT passwords (false positive filter)
+_FORMAT_STRING_RE = re.compile(r'%[@dDuUfFeEgGsSiIlLcCpPxXo]|%[0-9]*l[udxo]')
+
+# Template marker patterns — NOT passwords (e.g., @@TEMPVIEW@@)
+_TEMPLATE_MARKER_RE = re.compile(r'^@@[A-Z_]+@@$')
+
+# ObjC type encoding patterns — runtime metadata, NOT passwords
+# Examples: v32@?0q8@"NSString"16^B24, @"NSString", v24@0:8@16
+_OBJC_TYPE_ENCODING_RE = re.compile(
+    r'@\?'          # block type
+    r'|@"[A-Z]'     # ObjC object type @"ClassName"
+    r'|\^[A-Z]'     # pointer type ^B, ^v, etc.
+    r'|^[vVBbcCsSiIlLqQfd@#:?]+\d'  # type string starting with type codes + offset
+)
 
 # HTTP URL patterns (non-HTTPS)
 HTTP_URL_PATTERN = re.compile(r'^https?://', re.IGNORECASE)
@@ -77,14 +95,31 @@ SKIP_PATTERNS = [
     'xmlns', '<!DOCTYPE', '<?xml',
 ]
 
+# Maximum address gap (bytes) for credential-pair proximity detection
+_CREDENTIAL_PAIR_MAX_GAP = 64
+
+# Entropy threshold for password-like strings (Shannon entropy in bits/char)
+_ENTROPY_THRESHOLD = 3.5
+
+# Min/max lengths for entropy-based password detection
+_ENTROPY_MIN_LEN = 8
+_ENTROPY_MAX_LEN = 64
+
 # Swift/ObjC compiler-generated metadata prefixes — never credentials
 _METADATA_PREFIXES = (
     '$s', '$S',           # Swift mangled symbols
     '_$s', '_$S',         # Swift mangled symbols (underscore-prefixed)
+    '$__',                # Swift lazy storage ivars ($__lazy_storage_$_...)
     '@objc_',             # ObjC interop stubs
     '_OBJC_',             # ObjC metadata symbols
     '__swift_',           # Swift runtime metadata
     '_swift_',            # Swift runtime metadata
+    '_TtC',              # Swift class type metadata (_TtC7Module...)
+    '_TtGC',             # Swift generic class metadata
+    '_TtV',              # Swift value type metadata
+    '_TtO',              # Swift enum type metadata
+    'T@,',               # ObjC property type encoding (T@,C,N,V_...)
+    'T@"',               # ObjC property type with class (T@"NSString",...)
 )
 
 # Keywords in function names that indicate crypto usage
@@ -182,6 +217,31 @@ class StringTableSecurityChecker(SecurityChecker):
                 return True
         return False
 
+    def _is_format_string(self, value):
+        """Check if a string is a format specifier, template, or ObjC type encoding."""
+        if _FORMAT_STRING_RE.search(value):
+            return True
+        if _TEMPLATE_MARKER_RE.match(value):
+            return True
+        if _OBJC_TYPE_ENCODING_RE.search(value):
+            return True
+        # Strings containing double-quotes are type encodings or code, not passwords
+        if '"' in value:
+            return True
+        return False
+
+    @staticmethod
+    def _shannon_entropy(s):
+        """Calculate Shannon entropy of a string in bits per character."""
+        if not s:
+            return 0.0
+        freq = {}
+        for c in s:
+            freq[c] = freq.get(c, 0) + 1
+        length = float(len(s))
+        return -sum((count / length) * math.log2(count / length)
+                     for count in freq.values())
+
     def _is_ui_label(self, value):
         """Check if a string looks like a UI label rather than a secret."""
         lower = value.lower()
@@ -269,24 +329,105 @@ class StringTableSecurityChecker(SecurityChecker):
         if self._is_ui_label(value):
             return findings
 
+        # Skip format strings and template markers (false positive filter)
+        if self._is_format_string(value):
+            return findings
+
         # Check for password-like strings (high entropy, special chars, no spaces)
         for pattern in HARDCODED_PASSWORD_PATTERNS:
             if pattern.match(value):
-                findings.append(SecurityFinding(
-                    severity=Severity.CRITICAL,
-                    issue_type="Potential Hardcoded Password",
-                    description="String with password-like characteristics found in binary",
-                    location=address,
-                    function_name="<string_table>",
-                    evidence={
-                        "value": value,
-                        "length": str(len(value)),
-                        "pattern": "High-entropy string with special characters",
-                    },
-                    impact="Hardcoded passwords can be extracted from the binary by any attacker",
-                    recommendation="Never hardcode passwords — derive from user input or fetch from secure storage"
-                ))
-                break
+                # Secondary filter: require at least one special char
+                # AND at least one alphanumeric to avoid template markers
+                has_special = bool(re.search(r'[@#$%^&*!]', value))
+                has_alpha = bool(re.search(r'[a-zA-Z]', value))
+                has_digit = bool(re.search(r'[0-9]', value))
+
+                if has_special and has_alpha:
+                    findings.append(SecurityFinding(
+                        severity=Severity.CRITICAL,
+                        issue_type="Potential Hardcoded Password",
+                        description="String with password-like characteristics found in binary",
+                        location=address,
+                        function_name="<string_table>",
+                        evidence={
+                            "value": value,
+                            "length": str(len(value)),
+                            "pattern": "High-entropy string with special characters",
+                        },
+                        impact="Hardcoded passwords can be extracted from the binary by any attacker",
+                        recommendation="Never hardcode passwords — derive from user input or fetch from secure storage"
+                    ))
+                    break
+
+        # Entropy-based detection for strings that don't match regex patterns
+        # Catches passwords like 'ev8848@1953', 'tenzinnorgay', etc.
+        if not findings:
+            findings.extend(self._check_entropy_password(address, value))
+
+        return findings
+
+    def _check_entropy_password(self, address, value):
+        """Detect passwords via Shannon entropy analysis."""
+        findings = []
+
+        # Length filter
+        if len(value) < _ENTROPY_MIN_LEN or len(value) > _ENTROPY_MAX_LEN:
+            return findings
+
+        # Must not contain spaces (passwords don't have spaces)
+        if ' ' in value:
+            return findings
+
+        # Must not look like a path, URL, selector, or source filename
+        if any(c in value for c in ('/', ':', '[', ']', '{', '}', '(', ')')):
+            return findings
+
+        # Skip format strings, ObjC type encodings, and template markers
+        if self._is_format_string(value):
+            return findings
+
+        # Skip source filenames (e.g., YapDatabaseTransaction.m)
+        if '.' in value and value.rsplit('.', 1)[-1] in (
+            'm', 'h', 'c', 'mm', 'cpp', 'swift', 'py', 'js', 'json',
+            'plist', 'xib', 'storyboard', 'strings', 'dat', 'db',
+            'sqlite', 'der', 'pem', 'cer', 'enc', 'png', 'jpg',
+        ):
+            return findings
+
+        # Must not be all lowercase alpha (too many common words would match)
+        if value.isalpha() and value.islower():
+            return findings
+
+        # Calculate entropy
+        entropy = self._shannon_entropy(value)
+        if entropy < _ENTROPY_THRESHOLD:
+            return findings
+
+        # Require mixed character classes (letters+digits, or letters+password-special)
+        # IMPORTANT: only count password-typical special chars (@#$%^&*!), NOT
+        # identifier separators (- _ . ,) which are normal in ObjC/Swift strings
+        has_alpha = bool(re.search(r'[a-zA-Z]', value))
+        has_digit = bool(re.search(r'[0-9]', value))
+        has_password_special = bool(re.search(r'[@#$%^&*!]', value))
+        mixed_classes = sum([has_alpha, has_digit, has_password_special])
+
+        if mixed_classes >= 2:
+            findings.append(SecurityFinding(
+                severity=Severity.HIGH,
+                issue_type="Potential Hardcoded Credential (Entropy)",
+                description="High-entropy string detected (possible password or token)",
+                location=address,
+                function_name="<string_table>",
+                evidence={
+                    "value": value,
+                    "length": str(len(value)),
+                    "entropy": "{:.2f}".format(entropy),
+                    "pattern": "Entropy-based detection (>{:.1f} bits/char)".format(
+                        _ENTROPY_THRESHOLD),
+                },
+                impact="Hardcoded credentials can be extracted from the binary by any attacker",
+                recommendation="Never hardcode credentials — use secure storage or server-side validation"
+            ))
 
         return findings
 
@@ -425,6 +566,115 @@ class StringTableSecurityChecker(SecurityChecker):
                     matched.append(name)
                     break
         return matched
+
+    def detect_credential_pairs(self):
+        """
+        Detect credential pairs by proximity in the string table.
+
+        When two strings at adjacent addresses look like a username+password
+        pair (e.g., 'edhillary' at 0x100386310 followed by 'ev8848@1953' at
+        0x10038631a), flag as CRITICAL.
+
+        Must be called after scan_strings().
+
+        Returns:
+            List of SecurityFinding objects for detected credential pairs.
+        """
+        if not self._scanned:
+            self.scan_strings()
+
+        pair_findings = []
+
+        # Collect high-entropy / password-like strings with their addresses
+        # Re-scan string table for candidates (lightweight — no decompilation)
+        candidates = []  # list of (address, string_value)
+        seen = set()
+
+        for address, string_value in self.program.get_defined_strings():
+            if not string_value or len(string_value) < 4:
+                continue
+            if string_value in seen:
+                continue
+            seen.add(string_value)
+
+            # Skip known benign
+            if self._is_skip_pattern(string_value):
+                continue
+            if self._is_ui_label(string_value):
+                continue
+            if self._is_format_string(string_value):
+                continue
+            if ' ' in string_value:
+                continue
+            # Skip long strings (paths, URLs, selectors, sentences)
+            if len(string_value) > _ENTROPY_MAX_LEN:
+                continue
+            if any(c in string_value for c in ('/', ':', '[', ']', '{', '}')):
+                continue
+            # Skip query-string fragments
+            if string_value.startswith('&') or string_value.startswith('?'):
+                continue
+
+            # Must be short-ish, no spaces — plausible credential
+            if _ENTROPY_MIN_LEN <= len(string_value) <= 40:
+                candidates.append((address, string_value))
+
+        # Sort by address for proximity scanning
+        candidates.sort(key=lambda x: x[0])
+
+        # Slide a window over adjacent strings
+        for i in range(len(candidates) - 1):
+            addr_a, val_a = candidates[i]
+            addr_b, val_b = candidates[i + 1]
+
+            # Check proximity
+            gap = addr_b - addr_a
+            if gap > _CREDENTIAL_PAIR_MAX_GAP or gap < 0:
+                continue
+
+            # One should look like a username, the other like a password
+            entropy_a = self._shannon_entropy(val_a)
+            entropy_b = self._shannon_entropy(val_b)
+
+            # A credential pair: one lower-entropy (username) + one higher-entropy (password)
+            # Use password-typical special chars only (not _ - . which are identifier separators)
+            has_special_a = bool(re.search(r'[@#$%^&*!]', val_a))
+            has_special_b = bool(re.search(r'[@#$%^&*!]', val_b))
+
+            # Heuristic: if one has password-special chars and the other doesn't,
+            # they look like a credential pair (username + password)
+            is_pair = False
+            username_val = None
+            password_val = None
+
+            if has_special_b and not has_special_a and entropy_b > 3.0:
+                is_pair = True
+                username_val = val_a
+                password_val = val_b
+            elif has_special_a and not has_special_b and entropy_a > 3.0:
+                is_pair = True
+                username_val = val_b
+                password_val = val_a
+
+            if is_pair:
+                pair_findings.append(SecurityFinding(
+                    severity=Severity.CRITICAL,
+                    issue_type="Hardcoded Credential Pair",
+                    description="Adjacent strings appear to be a username/password pair",
+                    location=addr_a,
+                    function_name="<string_table>",
+                    evidence={
+                        "username_candidate": username_val,
+                        "password_candidate": password_val,
+                        "username_address": hex(addr_a if username_val == val_a else addr_b),
+                        "password_address": hex(addr_b if password_val == val_b else addr_a),
+                        "gap_bytes": str(gap),
+                    },
+                    impact="Hardcoded username/password pair can be extracted from binary",
+                    recommendation="Remove hardcoded credentials; use server-side authentication"
+                ))
+
+        return pair_findings
 
 
 __all__ = ["StringTableSecurityChecker"]
