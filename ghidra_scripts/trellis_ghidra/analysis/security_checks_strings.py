@@ -8,6 +8,7 @@ decompiler/parameter extraction — it works purely on string data, making
 it effective for Swift binaries where parameter extraction often fails.
 """
 
+import base64
 import math
 import re
 from typing import List, Set, Tuple, TYPE_CHECKING
@@ -93,6 +94,54 @@ SKIP_PATTERNS = [
     'example.com/placeholder', 'schema.org',
     'apple.com/DTDs', 'w3.org/',
     'xmlns', '<!DOCTYPE', '<?xml',
+]
+
+# Valid Base64 string pattern — requires characteristics that distinguish
+# intentionally-encoded strings from normal identifiers:
+#  - Must be 20+ chars (shorter strings have too many false positives)
+#  - Must contain at least one of: +, /, or trailing = (Base64 specific chars)
+#    OR be a multiple-of-4 length AND contain mixed case + digits
+_BASE64_RE = re.compile(r'^[A-Za-z0-9+/]{19,}={0,3}$')
+
+
+def _looks_like_base64(value: str) -> bool:
+    """Check if a string looks intentionally Base64-encoded vs a normal identifier."""
+    if not _BASE64_RE.match(value):
+        return False
+
+    # Strings with +, /, or = are almost certainly Base64 (these chars don't
+    # appear in identifiers, paths, or natural language)
+    if '+' in value or '/' in value or value.endswith('='):
+        return True
+
+    # For pure-alphanumeric strings, require multiple signals:
+    # 1. Length is a multiple of 4 (Base64 output characteristic)
+    # 2. Contains mixed case AND digits (identifiers rarely mix all three)
+    # 3. Does NOT look like a camelCase/PascalCase identifier
+    if len(value) % 4 != 0:
+        return False
+
+    has_upper = bool(re.search(r'[A-Z]', value))
+    has_lower = bool(re.search(r'[a-z]', value))
+    has_digit = bool(re.search(r'[0-9]', value))
+
+    if not (has_upper and has_lower and has_digit):
+        return False
+
+    # Reject camelCase identifiers: if the string has a lowercase letter
+    # immediately followed by an uppercase letter, it's likely an identifier
+    # like "passwordResetToken" not Base64 like "cGFzc3dvcmQ="
+    camel_transitions = len(re.findall(r'[a-z][A-Z]', value))
+    if camel_transitions >= 2:
+        return False
+
+    return True
+
+# Keywords that indicate a decoded Base64 value is sensitive
+_DECODED_SECRET_KEYWORDS = [
+    'password', 'passwd', 'secret', 'token', 'api_key', 'apikey',
+    'api-key', 'auth', 'credential', 'private_key', 'privatekey',
+    'access_key', 'accesskey', 'client_secret', 'bearer',
 ]
 
 # Maximum address gap (bytes) for credential-pair proximity detection
@@ -198,6 +247,9 @@ class StringTableSecurityChecker(SecurityChecker):
 
             # Check for API key patterns
             findings.extend(self._check_api_key(address, string_value))
+
+            # Check for Base64-encoded secrets
+            findings.extend(self._check_base64_encoded_secret(address, string_value))
 
             # Check for hardcoded password patterns
             findings.extend(self._check_hardcoded_password(address, string_value))
@@ -318,6 +370,118 @@ class StringTableSecurityChecker(SecurityChecker):
                     recommendation="Store API keys in server-side config or iOS Keychain, not in the binary"
                 ))
                 break  # One finding per string
+
+        return findings
+
+    def _check_base64_encoded_secret(self, address, value):
+        """Check if a string is a Base64-encoded secret."""
+        findings = []
+
+        # Must look like an intentionally Base64-encoded string (not a normal
+        # identifier that happens to use only Base64-safe characters)
+        if not _looks_like_base64(value):
+            return findings
+
+        # Skip very long strings (likely binary blobs, not encoded secrets)
+        if len(value) > 256:
+            return findings
+
+        # Attempt decode
+        try:
+            decoded_bytes = base64.b64decode(value, validate=True)
+        except Exception:
+            return findings
+
+        # Must decode to valid UTF-8 text
+        try:
+            decoded_str = decoded_bytes.decode('utf-8')
+        except (UnicodeDecodeError, ValueError):
+            return findings
+
+        # Skip if decoded result is empty or too short
+        if len(decoded_str) < 4:
+            return findings
+
+        # Check if decoded value matches secret patterns
+        decoded_lower = decoded_str.lower()
+
+        # Strategy 1: Decoded text contains sensitive keywords
+        keyword_hit = None
+        for kw in _DECODED_SECRET_KEYWORDS:
+            if kw in decoded_lower:
+                keyword_hit = kw
+                break
+
+        # Strategy 2: Decoded text matches API key patterns
+        api_key_hit = False
+        if not keyword_hit:
+            for pattern in API_KEY_PATTERNS:
+                if pattern.search(decoded_str):
+                    api_key_hit = True
+                    break
+
+        # Strategy 3: Decoded text is high-entropy (password-like)
+        entropy_hit = False
+        if not keyword_hit and not api_key_hit:
+            if (len(decoded_str) >= _ENTROPY_MIN_LEN and
+                    len(decoded_str) <= _ENTROPY_MAX_LEN and
+                    ' ' not in decoded_str):
+                entropy = self._shannon_entropy(decoded_str)
+                has_alpha = bool(re.search(r'[a-zA-Z]', decoded_str))
+                has_digit = bool(re.search(r'[0-9]', decoded_str))
+                has_special = bool(re.search(r'[@#$%^&*!]', decoded_str))
+                mixed = sum([has_alpha, has_digit, has_special])
+                if entropy >= _ENTROPY_THRESHOLD and mixed >= 2:
+                    entropy_hit = True
+
+        if not (keyword_hit or api_key_hit or entropy_hit):
+            return findings
+
+        # Determine detection method for evidence
+        if keyword_hit:
+            method = "keyword '{}' in decoded value".format(keyword_hit)
+        elif api_key_hit:
+            method = "API key pattern in decoded value"
+        else:
+            method = "high-entropy decoded value ({:.2f} bits/char)".format(
+                self._shannon_entropy(decoded_str))
+
+        # Collect xrefs to show where this encoded string is used
+        referencing_functions = []
+        try:
+            refs = self.program.get_references_to(address)
+            for ref in refs:
+                func = self.program.get_function_containing(ref.from_address)
+                if func:
+                    referencing_functions.append(func.name)
+        except Exception:
+            pass
+
+        evidence = {
+            "encoded_value": value[:60] + ("..." if len(value) > 60 else ""),
+            "decoded_preview": decoded_str[:60] + (
+                "..." if len(decoded_str) > 60 else ""),
+            "detection_method": method,
+        }
+        if referencing_functions:
+            display_funcs = [f[:80] for f in referencing_functions[:5]]
+            evidence["used_by"] = ", ".join(display_funcs)
+            if len(referencing_functions) > 5:
+                evidence["used_by"] += " (+{} more)".format(
+                    len(referencing_functions) - 5)
+
+        findings.append(SecurityFinding(
+            severity=Severity.HIGH,
+            issue_type="Base64-Encoded Secret in String Table",
+            description="Base64 string decodes to a value matching secret patterns",
+            location=address,
+            function_name="<string_table>",
+            evidence=evidence,
+            impact="Encoded secret can be trivially decoded by any attacker "
+                   "who extracts the string from the binary",
+            recommendation="Do not store secrets in the binary even if encoded; "
+                          "use iOS Keychain or server-side configuration"
+        ))
 
         return findings
 

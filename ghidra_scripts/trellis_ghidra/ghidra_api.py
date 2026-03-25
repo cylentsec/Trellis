@@ -464,6 +464,25 @@ class GhidraProgram:
             pass
         return None
 
+    def read_bytes_at(self, address: int, length: int) -> Optional[bytes]:
+        """
+        Read raw bytes from the binary at an address.
+
+        Args:
+            address: Virtual address to read from
+            length: Number of bytes to read
+
+        Returns:
+            bytes object, or None if the read failed
+        """
+        try:
+            addr = self.get_address(address)
+            buf = bytearray(length)
+            self._program.getMemory().getBytes(addr, buf)
+            return bytes(buf)
+        except Exception:
+            return None
+
     # =========================================================================
     # Instruction Operations
     # =========================================================================

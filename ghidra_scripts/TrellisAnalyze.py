@@ -669,6 +669,118 @@ def run_string_table_scan(program, monitor, output_dir):
     }
 
 
+def run_obfuscated_secrets_scan(program, monitor, output_dir):
+    """
+    Run decompiler-based obfuscated secret detection scans.
+
+    Includes:
+    - Decode→Sink flow analysis (Base64, Hex, XOR, decrypt patterns)
+    - XOR obfuscation scan with plaintext recovery
+    - AES hardcoded key + ciphertext co-location detection
+
+    All scans use decompiler pseudocode and work for both Swift and ObjC.
+
+    Args:
+        program: GhidraProgram wrapper
+        monitor: Ghidra TaskMonitor
+        output_dir: Path to save the report
+    """
+    print("[Trellis] Running obfuscated secrets scan...")
+
+    checker = ObfuscationSecurityChecker(program)
+    all_findings = []
+
+    # 1. Decompiler-based decode→sink flow analysis (core engine)
+    if not monitor.isCancelled():
+        monitor.setMessage("Scanning for decode→sink data flow...")
+        decode_sink_findings = checker.scan_decode_to_sink()
+        if decode_sink_findings:
+            print("[Trellis] Decode→Sink scan: {} findings".format(
+                len(decode_sink_findings)))
+            all_findings.extend(decode_sink_findings)
+
+    # 2. XOR decode loop detector (byte-by-byte decode with transform chain)
+    if not monitor.isCancelled():
+        monitor.setMessage("Scanning for XOR decode loops...")
+        loop_findings = checker.scan_xor_decode_loops()
+        if loop_findings:
+            print("[Trellis] XOR decode loop scan: {} findings".format(
+                len(loop_findings)))
+            all_findings.extend(loop_findings)
+
+    # 3. XOR obfuscation with recovery (single-expression, non-loop)
+    if not monitor.isCancelled():
+        monitor.setMessage("Scanning for XOR-obfuscated secrets...")
+        xor_findings = checker.scan_for_xor_obfuscation()
+        if xor_findings:
+            print("[Trellis] XOR scan: {} findings".format(
+                len(xor_findings)))
+            all_findings.extend(xor_findings)
+
+    # 4. AES key + ciphertext co-location
+    if not monitor.isCancelled():
+        monitor.setMessage("Scanning for hardcoded AES key+ciphertext pairs...")
+        aes_findings = checker.scan_for_aes_key_ciphertext_pairs()
+        if aes_findings:
+            print("[Trellis] AES co-location: {} findings".format(
+                len(aes_findings)))
+            all_findings.extend(aes_findings)
+
+    if not all_findings:
+        print("[Trellis] No obfuscated secret findings")
+        return {"findings": 0, "functions": 0, "report_path": None,
+                "category": "obfuscated_secrets"}
+
+    print("[Trellis] Total obfuscated secret findings: {}".format(
+        len(all_findings)))
+
+    # Generate report
+    binary_name = program.filename
+    report = format_standalone_findings_report(
+        binary_name,
+        "Obfuscated Secrets",
+        "Decompiler-based detection of encoded/encrypted secrets "
+        "(Base64, Hex, XOR, AES) flowing into sensitive sinks",
+        all_findings,
+        program
+    )
+
+    timestamp = datetime.now().strftime("%y-%m-%d-%H%M%S")
+    report_path = output_dir / "Trellis-ObfuscatedSecrets-{}.md".format(
+        timestamp)
+
+    try:
+        with open(str(report_path), "w") as f:
+            f.write(report)
+        print("[Trellis] Obfuscated secrets report: {}".format(report_path))
+    except Exception as e:
+        print("[Trellis] Failed to save report: {}".format(e))
+        report_path = None
+
+    # Save findings JSON for Frida generator
+    findings_json_path = None
+    try:
+        findings_json_path = save_findings(
+            all_findings,
+            str(output_dir),
+            "obfuscated_secrets",
+            binary_name,
+            timestamp,
+            image_base=program.image_base
+        )
+        print("[Trellis] Saved findings JSON: {}".format(findings_json_path))
+    except Exception as e:
+        print("[Trellis] Failed to save findings JSON: {}".format(e))
+
+    return {
+        "findings": len(all_findings),
+        "functions": 0,
+        "report_path": str(report_path) if report_path else None,
+        "findings_json_path": findings_json_path,
+        "category": "obfuscated_secrets"
+    }
+
+
 def run_url_handler_analysis(program, monitor, output_dir):
     """
     Run URL handler detection and analysis.
@@ -841,6 +953,14 @@ def run_analysis(program, output_dir, monitor):
                                   secret_string_findings=string_scan_findings)
         if result:
             all_results.append(result)
+
+    # Obfuscated secrets analysis — decompiler-based decode→sink scan,
+    # XOR recovery, and AES key+ciphertext co-location detection.
+    if not monitor.isCancelled():
+        obfuscated_result = run_obfuscated_secrets_scan(
+            program, monitor, output_dir)
+        if obfuscated_result:
+            all_results.append(obfuscated_result)
 
     # URL handler analysis (SwiftUI/UIKit handlers, custom schemes, UI entry points)
     if not monitor.isCancelled():
