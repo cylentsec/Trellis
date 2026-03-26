@@ -62,21 +62,42 @@ def _is_likely_obfuscation_key(const_val: int) -> bool:
 
 # Sensitive sinks — if a function's pseudocode contains any of these, it is a
 # candidate for decode→sink analysis.  Covers both ObjC and Swift patterns.
+#
+# NOTE: Hash functions (CC_SHA*, CC_MD5, CCHmac, etc.) are deliberately
+# excluded.  Hashing is a one-way operation — a decoded value flowing into
+# a hash is normal data processing, not an "obfuscated secret" pattern.
+# Key derivation (PBKDF) is also excluded: if a decoded value is used as
+# the password input to PBKDF, the interesting finding is the hardcoded
+# password, which is caught by the string-table and secret-sinks checkers.
 _SINK_PATTERNS = [
-    # CommonCrypto
-    'CCCrypt', 'CCCryptorCreate', 'CCHmac', 'CCKeyDerivationPBKDF',
-    # Security framework
+    # CommonCrypto — encryption/decryption only (NOT hashing)
+    'CCCrypt', 'CCCryptorCreate',
+    # Security framework — keychain storage
     'SecItemAdd', 'SecItemUpdate', 'SecItemCopyMatching',
     # Network headers (ObjC)
     'setValue:forHTTPHeaderField:', 'addValue:forHTTPHeaderField:',
     # WebKit
     'evaluateJavaScript:',
-    # Swift CryptoKit (appear in pseudocode even for Swift binaries)
+    # Swift CryptoKit — encryption only (NOT SHA/HMAC/HKDF)
     'AES.GCM.seal', 'ChaChaPoly.seal', 'SymmetricKey',
-    'HKDF.deriveKey',
-    # ObjC crypto wrappers
+    # ObjC crypto wrappers — encryption only
     'RNEncryptor', 'RNDecryptor',
     'encryptData:', 'decryptData:',
+]
+
+# Functions whose presence in pseudocode should EXCLUDE a candidate from
+# decode→sink analysis.  If a function is primarily a hash/digest wrapper,
+# a decoded value flowing into it is not an obfuscated-secret pattern.
+_HASH_FUNCTION_INDICATORS = [
+    # CommonCrypto hashing
+    'CC_SHA1', 'CC_SHA256', 'CC_SHA384', 'CC_SHA512', 'CC_MD5',
+    'CCHmac', 'CCHmacInit', 'CCHmacUpdate', 'CCHmacFinal',
+    'CCKeyDerivationPBKDF',
+    # Swift CryptoKit hashing
+    'SHA256.hash', 'SHA384.hash', 'SHA512.hash',
+    'HMAC.authenticationCode', 'HKDF.deriveKey',
+    # Generic hash indicators in function/variable names
+    'digest', 'Digest', 'hashValue', 'checksum',
 ]
 
 # Decode/deobfuscation patterns — searched in pseudocode text.
@@ -375,6 +396,12 @@ class ObfuscationSecurityChecker(SecurityChecker):
             if not matched_sinks:
                 continue
 
+            # Skip functions that are primarily hash/digest operations.
+            # A decoded value flowing into a hash is normal data processing,
+            # not an obfuscated secret being recovered.
+            if self._is_hash_function(decomp):
+                continue
+
             candidate_count += 1
 
             # Step 2: does this function contain any decode pattern?
@@ -408,9 +435,9 @@ class ObfuscationSecurityChecker(SecurityChecker):
                         # Confirmed flow: decode output reaches sink
                         severity = Severity.CRITICAL if any(
                             s in sink_name for s in (
-                                'CCCrypt', 'CCCryptorCreate', 'CCHmac',
-                                'CCKeyDerivation', 'SecItemAdd',
-                                'SecItemUpdate', 'SymmetricKey')
+                                'CCCrypt', 'CCCryptorCreate',
+                                'SecItemAdd', 'SecItemUpdate',
+                                'SymmetricKey')
                         ) else Severity.HIGH
 
                         findings.append(SecurityFinding(
@@ -557,6 +584,26 @@ class ObfuscationSecurityChecker(SecurityChecker):
 
         self._decomp_cache[func.address] = decomp
         return decomp
+
+    @staticmethod
+    def _is_hash_function(decomp: str) -> bool:
+        """
+        Check if decompiled pseudocode is primarily a hash/digest operation.
+
+        Hash functions are one-way — a decoded value flowing into a hash
+        is normal data processing, not an obfuscated secret being recovered.
+        Returns True if any hash indicator is found AND no encryption sink
+        is also present (mixed functions that both hash and encrypt should
+        still be analyzed).
+        """
+        has_hash = any(ind in decomp for ind in _HASH_FUNCTION_INDICATORS)
+        if not has_hash:
+            return False
+
+        # If the function ALSO calls an encryption sink, don't exclude it.
+        # Some functions hash AND encrypt (e.g., derive key then encrypt).
+        has_encrypt = any(sink in decomp for sink in _SINK_PATTERNS)
+        return not has_encrypt
 
     # =================================================================
     # XOR decode loop detector
