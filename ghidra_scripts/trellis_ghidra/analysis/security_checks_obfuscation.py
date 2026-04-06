@@ -37,6 +37,95 @@ FALSE_POSITIVE_XOR_KEYS = {
     0x8000000000000000, 0xffffffffffffffff,
 }
 
+# Well-known constants used in crypto/hash algorithms (NOT obfuscation)
+_KNOWN_CRYPTO_CONSTANTS = {
+    # ChaCha20/Salsa20 sigma "expand 32-byte k"
+    0x61707865, 0x3320646e, 0x79622d32, 0x6b206574,
+    # ChaCha20/Salsa20 tau "expand 16-byte k"
+    0x61707865, 0x3120646e, 0x79622d36, 0x6b206574,
+    # TEA/XTEA delta
+    0x9e3779b9,
+    # TEA sum initial
+    0xc6ef3720,
+    # Golden ratio related (used in various hash functions)
+    0x9e3779b97f4a7c15,
+    # FNV-1/FNV-1a primes and offsets
+    0x01000193,         # FNV-1 32-bit prime
+    0x811c9dc5,         # FNV-1 32-bit offset basis
+    0x00000100000001b3, # FNV-1 64-bit prime
+    0xcbf29ce484222325, # FNV-1 64-bit offset basis
+    # MurmurHash constants
+    0xcc9e2d51, 0x1b873593,  # MurmurHash3 32-bit
+    0xff51afd7ed558ccd, 0xc4ceb9fe1a85ec53,  # MurmurHash3 128-bit finalize
+    0x87c37b91114253d5, 0x4cf5ad432745937f,  # MurmurHash3 128-bit
+    # CityHash / FarmHash constants
+    0x9ae16a3b2f90404f,
+    0x9ddfea08eb382d69,
+    # SipHash constants
+    0x736f6d6570736575, 0x646f72616e646f6d,
+    0x6c7967656e657261, 0x7465646279746573,
+    # xxHash constants
+    0x9e3779b185ebca87,  # xxHash64 PRIME1
+    0xc2b2ae3d27d4eb4f,  # xxHash64 PRIME2
+    0x165667b19e3779f9,  # xxHash64 PRIME3
+    0x85ebca77c2b2ae63,  # xxHash64 PRIME4
+    0x27d4eb2f165667c5,  # xxHash64 PRIME5
+    # CRC-32 polynomial
+    0xedb88320,
+    0x82f63b78,  # CRC-32C (Castagnoli)
+    # AES round constants / AESNI related
+    0x63636363,
+    # SHA-256 initial hash values (first 8 primes)
+    0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+    0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+    # MD5 constants (T table, derived from sin)
+    0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
+    # BLAKE2 IV
+    0x6a09e667f3bcc908, 0xbb67ae8584caa73b,
+}
+
+# Function name fragments indicating crypto/hash algorithm implementations
+_CRYPTO_HASH_FUNC_FRAGMENTS = [
+    # Hash algorithms
+    'hash', 'Hash', 'HASH',
+    'sha1', 'sha2', 'sha3', 'sha256', 'sha384', 'sha512',
+    'SHA1', 'SHA2', 'SHA3', 'SHA256', 'SHA384', 'SHA512',
+    'md5', 'MD5', 'md4', 'MD4',
+    'hmac', 'HMAC',
+    'blake', 'BLAKE',
+    'crc32', 'CRC32', 'crc', 'CRC',
+    # Cipher algorithms
+    'chacha', 'ChaCha', 'CHACHA',
+    'salsa', 'Salsa', 'SALSA',
+    'aes', 'AES', 'Aes',
+    'poly1305', 'Poly1305',
+    'siphash', 'SipHash', 'SIPHASH',
+    'tea_', 'TEA_', 'xtea', 'XTEA',
+    # Hash library namespaces
+    'hash_internal', 'HashInternal',
+    'absl', 'ABSL',
+    'fnv', 'FNV',
+    'murmur', 'Murmur', 'MURMUR',
+    'city', 'City', 'CITY',
+    'farm', 'Farm', 'FARM',
+    'xxhash', 'xxHash', 'XXHash', 'XXH',
+    'wyhash', 'WyHash',
+    'spooky', 'Spooky',
+    'metro', 'Metro',
+    # Crypto library namespaces
+    'CommonCrypto', 'CCCrypt',
+    'CryptoKit',
+    'BoringSSL', 'boringssl',
+    'OpenSSL', 'openssl',
+    'libsodium', 'sodium',
+    'NaCl', 'nacl',
+]
+
+
+def _is_crypto_hash_function(func_name: str) -> bool:
+    """Check if the function name indicates a crypto or hash algorithm implementation."""
+    return any(frag in func_name for frag in _CRYPTO_HASH_FUNC_FRAGMENTS)
+
 
 def _is_likely_obfuscation_key(const_val: int) -> bool:
     """
@@ -45,6 +134,9 @@ def _is_likely_obfuscation_key(const_val: int) -> bool:
     if const_val in FALSE_POSITIVE_XOR_KEYS:
         return False
     const_val = const_val & 0xffffffffffffffff
+    # Check against known crypto/hash algorithm constants
+    if const_val in _KNOWN_CRYPTO_CONSTANTS:
+        return False
     if const_val != 0 and (const_val & (const_val - 1)) == 0:
         return False
     if const_val < 0x100:
@@ -412,6 +504,9 @@ class ObfuscationSecurityChecker(SecurityChecker):
 
                 # For XOR patterns, apply false-positive filtering
                 if decode_type == 'xor':
+                    # Skip XOR inside known crypto/hash implementations
+                    if _is_crypto_hash_function(func.name):
+                        continue
                     hex_match = re.search(
                         r'0x([0-9a-fA-F]+)', match.group(0))
                     if hex_match:
@@ -641,6 +736,10 @@ class ObfuscationSecurityChecker(SecurityChecker):
 
             decomp = self._get_decomp(func)
             if not decomp:
+                continue
+
+            # Skip known crypto/hash implementations
+            if _is_crypto_hash_function(func.name):
                 continue
 
             # Fast pre-filter: must contain both a loop keyword AND
@@ -890,6 +989,10 @@ class ObfuscationSecurityChecker(SecurityChecker):
         for func_addr, decomp in sink_callers.items():
             func = self.program.get_function_at(func_addr)
             if not func:
+                continue
+
+            # Skip known crypto/hash implementations
+            if _is_crypto_hash_function(func.name):
                 continue
 
             matches = xor_pattern.findall(decomp)
