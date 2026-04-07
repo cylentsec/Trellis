@@ -1,7 +1,7 @@
-#@category iOS Security
-#@menupath Tools.Trellis.Generate Frida Scripts
-#@toolbar trellis.png
-#@description Generate Frida instrumentation scripts for functions found in the binary
+# @category iOS Security
+# @menupath Tools.Trellis.Generate Frida Scripts
+# @toolbar python.png
+# @description Generate Frida instrumentation scripts for functions found in the binary
 
 """
 Trellis for Ghidra - Frida Script Generator
@@ -32,7 +32,10 @@ try:
     from trellis_ghidra.ghidra_api import GhidraProgram
     from trellis_ghidra.signatures import load_category
     from trellis_ghidra.analysis.finder import find_functions, find_all_categories
-    from trellis_ghidra.analysis.findings_storage import load_findings, load_findings_with_metadata
+    from trellis_ghidra.analysis.findings_storage import (
+        load_findings,
+        load_findings_with_metadata,
+    )
     from trellis_ghidra.generators import (
         generate_hook_for_function,
         generate_crypto_tracer,
@@ -49,10 +52,13 @@ try:
         generate_findings_script,
         generate_hybrid_script,
     )
+
     TRELLIS_AVAILABLE = True
 except ImportError as e:
     print("[Trellis] Error importing Trellis modules: {}".format(e))
-    print("[Trellis] Make sure trellis_ghidra package is in the same directory as this script")
+    print(
+        "[Trellis] Make sure trellis_ghidra package is in the same directory as this script"
+    )
     TRELLIS_AVAILABLE = False
 
 # Ghidra imports
@@ -118,7 +124,9 @@ def generate_findings_for_category(category, output_dir, binary_name, monitor):
     result = load_findings_with_metadata(str(output_dir), category, binary_name)
 
     if not result or not result["findings"]:
-        print("[Trellis] No {} findings found. Run TrellisAnalyze first.".format(category))
+        print(
+            "[Trellis] No {} findings found. Run TrellisAnalyze first.".format(category)
+        )
         return None
 
     findings = result["findings"]
@@ -127,31 +135,46 @@ def generate_findings_for_category(category, output_dir, binary_name, monitor):
 
     if not image_base:
         print("[Trellis] WARNING: No image_base in {} findings JSON.".format(category))
-        print("[Trellis]   Re-run TrellisAnalyze to regenerate findings with image_base.")
-        print("[Trellis]   Frida hooks will use raw Ghidra addresses (likely wrong at runtime).")
+        print(
+            "[Trellis]   Re-run TrellisAnalyze to regenerate findings with image_base."
+        )
+        print(
+            "[Trellis]   Frida hooks will use raw Ghidra addresses (likely wrong at runtime)."
+        )
 
-    print("[Trellis] Loaded {} {} findings (image_base=0x{:x})".format(
-        len(findings), category, image_base))
+    print(
+        "[Trellis] Loaded {} {} findings (image_base=0x{:x})".format(
+            len(findings), category, image_base
+        )
+    )
     monitor.setMessage("Generating findings-driven script for {}...".format(category))
 
     is_antidebug = category in _ANTIDEBUG_CATEGORIES
     script = generate_findings_script(
-        findings, binary_name, category,
+        findings,
+        binary_name,
+        category,
         image_base=image_base,
         lazy_loading=not is_antidebug,
         include_global_fallbacks=is_antidebug,
     )
 
     from trellis_ghidra.analysis.security_checks import Severity
+
     actionable_count = sum(1 for f in findings if f.severity != Severity.INFO)
     if actionable_count == 0 and not is_antidebug:
-        print("[Trellis] Skipping {} findings script: all {} findings are INFO-level".format(
-            category, len(findings)))
+        print(
+            "[Trellis] Skipping {} findings script: all {} findings are INFO-level".format(
+                category, len(findings)
+            )
+        )
         return None
 
     if is_antidebug and actionable_count == 0:
-        print("[Trellis] Note: all {} findings are INFO-level, "
-              "but global fallback hooks will provide coverage.".format(category))
+        print(
+            "[Trellis] Note: all {} findings are INFO-level, "
+            "but global fallback hooks will provide coverage.".format(category)
+        )
 
     return script
 
@@ -224,17 +247,19 @@ def run_frida_generation(program, output_dir, monitor):
 
     # --- Findings-driven scripts (require prior TrellisAnalyze run) ---
     for category, script_name in [
-        ("crypto",        "crypto-findings"),
-        ("keychain",      "keychain-findings"),
-        ("tls_delegate",  "tls-findings"),
-        ("antidebug",     "antidebug-findings"),
-        ("jailbreak",     "jailbreak-findings"),
-        ("webview",       "webview-findings"),
-        ("deeplinks",     "deeplinks-findings"),
-        ("storage",       "storage-findings"),
+        ("crypto", "crypto-findings"),
+        ("keychain", "keychain-findings"),
+        ("tls_delegate", "tls-findings"),
+        ("antidebug", "antidebug-findings"),
+        ("jailbreak", "jailbreak-findings"),
+        ("webview", "webview-findings"),
+        ("deeplinks", "deeplinks-findings"),
+        ("storage", "storage-findings"),
         ("deserialization", "deserialization-findings"),
     ]:
-        script = generate_findings_for_category(category, output_dir, binary_name, monitor)
+        script = generate_findings_for_category(
+            category, output_dir, binary_name, monitor
+        )
         _save(script, script_name)
 
     # Summary
@@ -286,9 +311,11 @@ def generate_custom_tracer(program, monitor):
             break
         monitor.setMessage("Generating hooks for {}...".format(category))
 
-        parts.append("// === {} ({} functions) ===".format(
-            category.upper(), len(found_functions)
-        ))
+        parts.append(
+            "// === {} ({} functions) ===".format(
+                category.upper(), len(found_functions)
+            )
+        )
 
         for func in found_functions:
             parts.append(generate_hook_for_function(func.signature))
@@ -330,7 +357,7 @@ def main():
     else:
         # Fallback to Python list (may fail)
         tracer_list = TRACER_OPTIONS
-    
+
     choice = askChoice(
         "Trellis: Generate Frida Scripts",
         "Select which Frida tracer to generate:",
@@ -344,7 +371,9 @@ def main():
 
     # Prompt for output directory
     try:
-        output_java_file = askDirectory("Trellis: Choose Frida Script Output Directory", "Save Scripts")
+        output_java_file = askDirectory(
+            "Trellis: Choose Frida Script Output Directory", "Save Scripts"
+        )
         output_dir = Path(str(output_java_file))
     except Exception:
         output_dir = Path.home() / "Documents"
@@ -368,54 +397,78 @@ def main():
                 print("[Trellis] Saved: {}".format(path))
                 return True
         return False
-    
+
     def _generate_findings(category):
         """Helper to generate findings-driven script for a category."""
         monitor.setMessage("Loading {} findings...".format(category))
         result = load_findings_with_metadata(str(output_dir), category, binary_name)
-        
+
         if not result or not result["findings"]:
-            print("[Trellis] No {} findings found. Run TrellisAnalyze first.".format(category))
+            print(
+                "[Trellis] No {} findings found. Run TrellisAnalyze first.".format(
+                    category
+                )
+            )
             return None
-        
+
         findings = result["findings"]
         metadata = result["metadata"]
         image_base = metadata.get("image_base", 0)
-        
+
         if not image_base:
-            print("[Trellis] WARNING: No image_base in {} findings JSON.".format(category))
-            print("[Trellis]   Re-run TrellisAnalyze to regenerate findings with image_base.")
-            print("[Trellis]   Frida hooks will use raw Ghidra addresses (likely wrong at runtime).")
-        
-        print("[Trellis] Loaded {} {} findings (image_base=0x{:x})".format(
-            len(findings), category, image_base))
-        monitor.setMessage("Generating findings-driven script for {}...".format(category))
+            print(
+                "[Trellis] WARNING: No image_base in {} findings JSON.".format(category)
+            )
+            print(
+                "[Trellis]   Re-run TrellisAnalyze to regenerate findings with image_base."
+            )
+            print(
+                "[Trellis]   Frida hooks will use raw Ghidra addresses (likely wrong at runtime)."
+            )
+
+        print(
+            "[Trellis] Loaded {} {} findings (image_base=0x{:x})".format(
+                len(findings), category, image_base
+            )
+        )
+        monitor.setMessage(
+            "Generating findings-driven script for {}...".format(category)
+        )
 
         # Anti-debug scripts: disable lazy loading so hooks catch startup
         # checks, and enable global fallback hooks to cover inlined or
         # dynamically-resolved APIs (e.g. always_inline + dlsym patterns).
         is_antidebug = category in _ANTIDEBUG_CATEGORIES
         script = generate_findings_script(
-            findings, binary_name, category,
+            findings,
+            binary_name,
+            category,
             image_base=image_base,
             lazy_loading=not is_antidebug,
             include_global_fallbacks=is_antidebug,
         )
-        
+
         # Check if script has any actionable hooks (INFO-only = 0 hooks)
         # For antidebug, global fallback hooks provide coverage even when
         # all findings are INFO, so don't skip.
         from trellis_ghidra.analysis.security_checks import Severity
+
         actionable_count = sum(1 for f in findings if f.severity != Severity.INFO)
         if actionable_count == 0 and not is_antidebug:
-            print("[Trellis] Skipping {} findings script: all {} findings are INFO-level (no actionable hooks)".format(
-                category, len(findings)))
+            print(
+                "[Trellis] Skipping {} findings script: all {} findings are INFO-level (no actionable hooks)".format(
+                    category, len(findings)
+                )
+            )
             return None
-        
+
         if is_antidebug and actionable_count == 0:
-            print("[Trellis] Note: all {} findings are INFO-level, but global fallback hooks will provide coverage.".format(
-                category))
-        
+            print(
+                "[Trellis] Note: all {} findings are INFO-level, but global fallback hooks will provide coverage.".format(
+                    category
+                )
+            )
+
         return script
 
     # --- Crypto Tracer ---
@@ -451,7 +504,10 @@ def main():
     # --- Anti-Debug Bypass ---
     if choice == "Anti-Debug Bypass":
         monitor.setMessage("Generating anti-debug bypass...")
-        _save(generate_antidebug_script(binary_name, include_bypass=True), "antidebug-bypass")
+        _save(
+            generate_antidebug_script(binary_name, include_bypass=True),
+            "antidebug-bypass",
+        )
 
     # --- Jailbreak Detection Tracer ---
     if choice == "Jailbreak Detection Tracer" or generate_all:
@@ -461,7 +517,10 @@ def main():
     # --- Jailbreak Detection Bypass ---
     if choice == "Jailbreak Detection Bypass":
         monitor.setMessage("Generating jailbreak detection bypass...")
-        _save(generate_jailbreak_script(binary_name, include_bypass=True), "jailbreak-bypass")
+        _save(
+            generate_jailbreak_script(binary_name, include_bypass=True),
+            "jailbreak-bypass",
+        )
 
     # --- WebView Bridge Tracer ---
     if choice == "WebView Bridge Tracer" or generate_all:
@@ -491,39 +550,39 @@ def main():
             print("[Trellis] No security-relevant functions found in binary")
 
     # --- FINDINGS-DRIVEN MODES ---
-    
+
     # Crypto Findings
     if choice == "Crypto Findings" or generate_all_findings:
         _save(_generate_findings("crypto"), "crypto-findings")
-    
+
     # Keychain Findings
     if choice == "Keychain Findings" or generate_all_findings:
         _save(_generate_findings("keychain"), "keychain-findings")
-    
+
     # TLS Findings
     if choice == "TLS Findings" or generate_all_findings:
         _save(_generate_findings("tls_delegate"), "tls-findings")
-    
+
     # Anti-Debug Findings
     if choice == "Anti-Debug Findings" or generate_all_findings:
         _save(_generate_findings("antidebug"), "antidebug-findings")
-    
+
     # Jailbreak Findings
     if choice == "Jailbreak Findings" or generate_all_findings:
         _save(_generate_findings("jailbreak"), "jailbreak-findings")
-    
+
     # WebView Findings
     if choice == "WebView Findings" or generate_all_findings:
         _save(_generate_findings("webview"), "webview-findings")
-    
+
     # Deeplinks Findings
     if choice == "Deeplinks Findings" or generate_all_findings:
         _save(_generate_findings("deeplinks"), "deeplinks-findings")
-    
+
     # Storage Findings
     if choice == "Storage Findings" or generate_all_findings:
         _save(_generate_findings("storage"), "storage-findings")
-    
+
     # Deserialization Findings
     if choice == "Deserialization Findings" or generate_all_findings:
         _save(_generate_findings("deserialization"), "deserialization-findings")

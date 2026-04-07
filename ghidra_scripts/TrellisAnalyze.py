@@ -1,7 +1,7 @@
-#@category iOS Security
-#@menupath Tools.Trellis.Analyze All
-#@toolbar trellis.png
-#@description iOS Security Analysis - Analyze for crypto, networking, keychain, and other security-relevant functions
+# @category iOS Security
+# @menupath Tools.Trellis.Analyze All
+# @toolbar python.png
+# @description iOS Security Analysis - Analyze for crypto, networking, keychain, and other security-relevant functions
 
 """
 Trellis for Ghidra - iOS Security Analysis Toolkit
@@ -37,42 +37,83 @@ if script_dir not in sys.path:
 # Import Trellis modules
 try:
     from trellis_ghidra.ghidra_api import GhidraProgram
-    from trellis_ghidra.signatures import load_category, load_all, get_available_categories
+    from trellis_ghidra.signatures import (
+        load_category,
+        load_all,
+        get_available_categories,
+    )
     from trellis_ghidra.analysis.finder import find_functions, FoundFunction
     from trellis_ghidra.analysis.calltree import build_call_tree, CallSite
     from trellis_ghidra.analysis.extractor import extract_call_info
-    from trellis_ghidra.analysis.security_checks import Severity, SecurityFinding, SEVERITY_EMOJI
+    from trellis_ghidra.analysis.security_checks import (
+        Severity,
+        SecurityFinding,
+        SEVERITY_EMOJI,
+    )
     from trellis_ghidra.analysis.findings_storage import save_findings
     from trellis_ghidra.analysis.security_checks_crypto import CryptoSecurityChecker
-    from trellis_ghidra.analysis.security_checks_tls import TLSDelegateSecurityChecker, TLS_DELEGATE_PATTERNS
+    from trellis_ghidra.analysis.security_checks_tls import (
+        TLSDelegateSecurityChecker,
+        TLS_DELEGATE_PATTERNS,
+    )
     from trellis_ghidra.analysis.security_checks_keychain import KeychainSecurityChecker
-    from trellis_ghidra.analysis.security_checks_jailbreak import JailbreakSecurityChecker
+    from trellis_ghidra.analysis.security_checks_jailbreak import (
+        JailbreakSecurityChecker,
+    )
     from trellis_ghidra.analysis.security_checks_storage import StorageSecurityChecker
-    from trellis_ghidra.analysis.security_checks_deserialization import DeserializationSecurityChecker
-    from trellis_ghidra.analysis.security_checks_antidebug import AntiDebugSecurityChecker
+    from trellis_ghidra.analysis.security_checks_deserialization import (
+        DeserializationSecurityChecker,
+    )
+    from trellis_ghidra.analysis.security_checks_antidebug import (
+        AntiDebugSecurityChecker,
+    )
     from trellis_ghidra.analysis.security_checks_webview import WebViewSecurityChecker
-    from trellis_ghidra.analysis.security_checks_deeplinks import DeepLinkSecurityChecker, DEEPLINK_DELEGATE_PATTERNS
-    from trellis_ghidra.analysis.security_checks_cryptokit import CryptoKitSecurityChecker
-    from trellis_ghidra.analysis.security_checks_networking import NetworkingSecurityChecker
+    from trellis_ghidra.analysis.security_checks_deeplinks import (
+        DeepLinkSecurityChecker,
+        DEEPLINK_DELEGATE_PATTERNS,
+    )
+    from trellis_ghidra.analysis.security_checks_cryptokit import (
+        CryptoKitSecurityChecker,
+    )
+    from trellis_ghidra.analysis.security_checks_networking import (
+        NetworkingSecurityChecker,
+    )
     from trellis_ghidra.analysis.security_checks_sqlite import SQLiteSecurityChecker
     from trellis_ghidra.analysis.security_checks_logging import LoggingSecurityChecker
-    from trellis_ghidra.analysis.security_checks_endpoints import EndpointsSecurityChecker
-    from trellis_ghidra.analysis.security_checks_strings import StringTableSecurityChecker
-    from trellis_ghidra.analysis.security_checks_biometric import BiometricSecurityChecker
+    from trellis_ghidra.analysis.security_checks_endpoints import (
+        EndpointsSecurityChecker,
+    )
+    from trellis_ghidra.analysis.security_checks_strings import (
+        StringTableSecurityChecker,
+    )
+    from trellis_ghidra.analysis.security_checks_biometric import (
+        BiometricSecurityChecker,
+    )
     from trellis_ghidra.analysis.security_checks_runtime import RuntimeSecurityChecker
-    from trellis_ghidra.analysis.security_checks_obfuscation import ObfuscationSecurityChecker
-    from trellis_ghidra.analysis.security_checks_secret_sinks import SecretSinkSecurityChecker
+    from trellis_ghidra.analysis.security_checks_obfuscation import (
+        ObfuscationSecurityChecker,
+    )
+    from trellis_ghidra.analysis.security_checks_secret_sinks import (
+        SecretSinkSecurityChecker,
+    )
     from trellis_ghidra.analysis.security_checks_pci import PCIDataFlowChecker
     from trellis_ghidra.analysis.url_handlers import (
-        find_url_handlers, find_ui_entry_points, extract_url_schemes,
-        cross_reference_schemes_with_handlers, generate_url_handler_frida_script,
-        format_url_handlers_report, format_url_schemes_report
+        find_url_handlers,
+        find_ui_entry_points,
+        extract_url_schemes,
+        cross_reference_schemes_with_handlers,
+        generate_url_handler_frida_script,
+        format_url_handlers_report,
+        format_url_schemes_report,
     )
     from trellis_ghidra.analysis.swift_demangle import demangle, is_swift_symbol
+
     TRELLIS_AVAILABLE = True
 except ImportError as e:
     print("[Trellis] Error importing Trellis modules: {}".format(e))
-    print("[Trellis] Make sure trellis_ghidra package is in the same directory as this script")
+    print(
+        "[Trellis] Make sure trellis_ghidra package is in the same directory as this script"
+    )
     TRELLIS_AVAILABLE = False
 
 # Ghidra imports
@@ -106,7 +147,7 @@ def get_security_checker(category, program):
         "obfuscation": ObfuscationSecurityChecker,
         "secret_sinks": SecretSinkSecurityChecker,
     }
-    
+
     checker_class = checkers.get(category)
     if checker_class:
         return checker_class(program)
@@ -116,29 +157,29 @@ def get_security_checker(category, program):
 def format_report(category, binary_name, results, program):
     """
     Format analysis results into a Markdown report.
-    
+
     Args:
         category: Category name
         binary_name: Name of the analyzed binary
         results: List of (found_func, refs, call_tree, findings) tuples
         program: GhidraProgram for context
-        
+
     Returns:
         Markdown formatted report string
     """
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
+
     # Collect all findings
     all_findings = []
     for _, _, _, findings in results:
         if findings:
             all_findings.extend(findings)
-    
+
     # Count by severity
     severity_counts = {s: 0 for s in Severity}
     for finding in all_findings:
         severity_counts[finding.severity] += 1
-    
+
     category_descriptions = {
         "crypto": "Cryptographic function usage and potential vulnerabilities",
         "cryptokit": "Swift CryptoKit framework usage and security analysis",
@@ -164,7 +205,7 @@ def format_report(category, binary_name, results, program):
         "obfuscation": "Obfuscation patterns (Base64/Hex decode, XOR operations)",
         "secret_sinks": "Hardcoded secrets flowing into crypto/keychain/network sinks",
     }
-    
+
     report = """# Trellis {category} Analysis Report
 
 **Binary**: `{binary_name}`
@@ -203,19 +244,27 @@ def format_report(category, binary_name, results, program):
         low=severity_counts[Severity.LOW],
         info=severity_counts[Severity.INFO],
     )
-    
+
     if all_findings:
         # Group findings by severity
-        for severity in [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM, Severity.LOW, Severity.INFO]:
+        for severity in [
+            Severity.CRITICAL,
+            Severity.HIGH,
+            Severity.MEDIUM,
+            Severity.LOW,
+            Severity.INFO,
+        ]:
             severity_findings = [f for f in all_findings if f.severity == severity]
             if severity_findings:
                 emoji = SEVERITY_EMOJI.get(severity, "")
-                report += "### {} {} ({})\n\n".format(emoji, severity.value, len(severity_findings))
-                
+                report += "### {} {} ({})\n\n".format(
+                    emoji, severity.value, len(severity_findings)
+                )
+
                 for finding in severity_findings:
                     report += "#### {}\n\n".format(finding.issue_type)
                     report += "**Description**: {}\n\n".format(finding.description)
-                    
+
                     # Calculate offset
                     offset_str = ""
                     try:
@@ -223,41 +272,45 @@ def format_report(category, binary_name, results, program):
                         offset_str = " (Offset: `{}`)".format(hex(offset))
                     except:
                         pass
-                    
+
                     # Demangle function name
                     display_name = finding.function_name
                     if is_swift_symbol(finding.function_name):
                         demangled = demangle(finding.function_name)
                         if demangled != finding.function_name:
                             display_name = demangled
-                    
-                    report += "**Location**: `{}`{}\n\n".format(hex(finding.location), offset_str)
+
+                    report += "**Location**: `{}`{}\n\n".format(
+                        hex(finding.location), offset_str
+                    )
                     report += "**Function**: `{}`\n\n".format(display_name)
-                    
+
                     if finding.evidence:
                         report += "**Evidence**:\n"
                         for key, value in finding.evidence.items():
                             report += "- {}: `{}`\n".format(key, value)
                         report += "\n"
-                    
+
                     report += "**Impact**: {}\n\n".format(finding.impact)
-                    
+
                     if finding.recommendation:
-                        report += "**Recommendation**: {}\n\n".format(finding.recommendation)
-                    
+                        report += "**Recommendation**: {}\n\n".format(
+                            finding.recommendation
+                        )
+
                     report += "---\n\n"
     else:
         report += "*No security issues detected.*\n\n---\n\n"
-    
+
     # Functions analyzed section
     report += "## Functions Analyzed\n\n"
-    
+
     for found_func, refs, call_tree, findings in results:
         report += "### `{}`\n\n".format(found_func.name)
         report += "- **Library**: {}\n".format(found_func.signature.library)
         report += "- **Address**: `{}`\n".format(hex(found_func.address))
         report += "- **Type**: {}\n".format(found_func.symbol_type)
-        
+
         if refs:
             report += "- **Call Sites**: {}\n".format(len(refs))
             report += "\n| Caller | Address |\n|--------|--------|\n"
@@ -267,12 +320,12 @@ def format_report(category, binary_name, results, program):
                 report += "| `{}` | `{}` |\n".format(caller_name, hex(ref.from_address))
             if len(refs) > 20:
                 report += "\n*...and {} more call sites*\n".format(len(refs) - 20)
-        
+
         if findings:
             report += "- **Findings**: {} issue(s)\n".format(len(findings))
-        
+
         report += "\n"
-    
+
     report += """---
 
 ## Next Steps
@@ -286,11 +339,13 @@ def format_report(category, binary_name, results, program):
 
 *Generated by [Trellis](https://github.com/cylentsec/Trellis) - iOS Security Analysis Toolkit for Ghidra*
 """
-    
+
     return report
 
 
-def format_standalone_findings_report(binary_name, category_title, description, findings, program):
+def format_standalone_findings_report(
+    binary_name, category_title, description, findings, program
+):
     """
     Format standalone security findings (not from call-site analysis) into a report.
     Used for string-table scans and other non-signature-based checks.
@@ -319,11 +374,19 @@ def format_standalone_findings_report(binary_name, category_title, description, 
     report += "## Security Findings\n\n"
 
     if findings:
-        for severity in [Severity.CRITICAL, Severity.HIGH, Severity.MEDIUM, Severity.LOW, Severity.INFO]:
+        for severity in [
+            Severity.CRITICAL,
+            Severity.HIGH,
+            Severity.MEDIUM,
+            Severity.LOW,
+            Severity.INFO,
+        ]:
             sev_findings = [f for f in findings if f.severity == severity]
             if sev_findings:
                 emoji = SEVERITY_EMOJI.get(severity, "")
-                report += "### {} {} ({})\n\n".format(emoji, severity.value, len(sev_findings))
+                report += "### {} {} ({})\n\n".format(
+                    emoji, severity.value, len(sev_findings)
+                )
 
                 for finding in sev_findings:
                     report += "#### {}\n\n".format(finding.issue_type)
@@ -336,7 +399,9 @@ def format_standalone_findings_report(binary_name, category_title, description, 
                     except Exception:
                         pass
 
-                    report += "**Location**: `{}`{}\n\n".format(hex(finding.location), offset_str)
+                    report += "**Location**: `{}`{}\n\n".format(
+                        hex(finding.location), offset_str
+                    )
 
                     if finding.evidence:
                         report += "**Evidence**:\n"
@@ -347,21 +412,26 @@ def format_standalone_findings_report(binary_name, category_title, description, 
                     report += "**Impact**: {}\n\n".format(finding.impact)
 
                     if finding.recommendation:
-                        report += "**Recommendation**: {}\n\n".format(finding.recommendation)
+                        report += "**Recommendation**: {}\n\n".format(
+                            finding.recommendation
+                        )
 
                     report += "---\n\n"
     else:
         report += "*No security issues detected.*\n\n---\n\n"
 
-    report += "---\n\n*Generated by Trellis - iOS Security Analysis Toolkit for Ghidra*\n"
+    report += (
+        "---\n\n*Generated by Trellis - iOS Security Analysis Toolkit for Ghidra*\n"
+    )
     return report
 
 
-def analyze_category(program, category, monitor, output_dir,
-                     secret_string_findings=None):
+def analyze_category(
+    program, category, monitor, output_dir, secret_string_findings=None
+):
     """
     Run analysis for a single security category.
-    
+
     Args:
         program: GhidraProgram wrapper
         category: Category name
@@ -369,54 +439,72 @@ def analyze_category(program, category, monitor, output_dir,
         output_dir: Path to save the report
         secret_string_findings: Optional list of string findings to pass to
             SecretSinkSecurityChecker for cross-reference fallback
-        
+
     Returns:
         Dict with findings, functions, report_path keys
     """
     print("[Trellis] Analyzing {}...".format(category))
     monitor.setMessage("Loading {} signatures...".format(category))
-    
+
     # Load signature database
     db = load_category(category)
     if db is None:
         print("[Trellis] Failed to load {} signatures".format(category))
         return None
-    
-    print("[Trellis] Loaded {} function signatures for {}".format(len(db.functions), category))
-    
+
+    print(
+        "[Trellis] Loaded {} function signatures for {}".format(
+            len(db.functions), category
+        )
+    )
+
     # Find matching functions
     monitor.setMessage("Finding {} functions...".format(category))
     found = find_functions(program, db)
-    
+
     if not found:
         print("[Trellis] No {} functions found in binary".format(category))
-        return {"findings": 0, "functions": 0, "report_path": None, "category": category}
-    
+        return {
+            "findings": 0,
+            "functions": 0,
+            "report_path": None,
+            "category": category,
+        }
+
     print("[Trellis] Found {} {} functions".format(len(found), category))
-    
+
     # Initialize security checker
     security_checker = get_security_checker(category, program)
 
     # If this is secret_sinks and we have string findings, inject them
-    if (category == "secret_sinks" and secret_string_findings and
-            security_checker and hasattr(security_checker, 'set_secret_strings')):
+    if (
+        category == "secret_sinks"
+        and secret_string_findings
+        and security_checker
+        and hasattr(security_checker, "set_secret_strings")
+    ):
         security_checker.set_secret_strings(secret_string_findings)
-        print("[Trellis] Injected {} string findings into secret_sinks checker".format(
-            len(secret_string_findings)))
-    
+        print(
+            "[Trellis] Injected {} string findings into secret_sinks checker".format(
+                len(secret_string_findings)
+            )
+        )
+
     # Analyze each function
     results = []
     for idx, found_func in enumerate(found):
         if monitor.isCancelled():
             break
-        
-        monitor.setMessage("Analyzing {} ({}/{}): {}...".format(
-            category, idx + 1, len(found), found_func.name[:40]
-        ))
-        
+
+        monitor.setMessage(
+            "Analyzing {} ({}/{}): {}...".format(
+                category, idx + 1, len(found), found_func.name[:40]
+            )
+        )
+
         all_findings = []
         call_refs = []
-        
+
         # ObjC selectors (found via string-table search) already carry their
         # call-site info: found_func.address is the instruction that references
         # the selector string, and found_func.ghidra_function is the containing
@@ -428,45 +516,55 @@ def analyze_category(program, category, monitor, output_dir,
                     caller_address=found_func.ghidra_function.address,
                     caller_name=found_func.ghidra_function.name,
                     call_instruction_address=found_func.address,
-                    callee_name=found_func.name
+                    callee_name=found_func.name,
                 )
-                
+
                 extracted = extract_call_info(program, call_site, found_func.signature)
-                
+
                 findings = security_checker.check_call_site(
                     found_func.signature, call_site, extracted
                 )
                 all_findings.extend(findings)
                 # Synthetic single-element list so the report shows "Call Sites: 1"
-                call_refs = [type('Ref', (), {
-                    'from_address': found_func.address,
-                    'to_address': found_func.address,
-                    'is_call': True
-                })()]
+                call_refs = [
+                    type(
+                        "Ref",
+                        (),
+                        {
+                            "from_address": found_func.address,
+                            "to_address": found_func.address,
+                            "is_call": True,
+                        },
+                    )()
+                ]
         else:
             # Standard path: imports and internal symbols — look up xrefs
             refs = program.get_references_to(found_func.address)
             call_refs = [r for r in refs if r.is_call]
-            
+
             if call_refs and security_checker:
                 for ref in call_refs:
                     caller_func = program.get_function_containing(ref.from_address)
                     caller_name = caller_func.name if caller_func else "<unknown>"
-                    
+
                     call_site = CallSite(
-                        caller_address=caller_func.address if caller_func else ref.from_address,
+                        caller_address=caller_func.address
+                        if caller_func
+                        else ref.from_address,
                         caller_name=caller_name,
                         call_instruction_address=ref.from_address,
-                        callee_name=found_func.name
+                        callee_name=found_func.name,
                     )
-                    
-                    extracted = extract_call_info(program, call_site, found_func.signature)
-                    
+
+                    extracted = extract_call_info(
+                        program, call_site, found_func.signature
+                    )
+
                     findings = security_checker.check_call_site(
                         found_func.signature, call_site, extracted
                     )
                     all_findings.extend(findings)
-            
+
             # Delegate fallback: delegate methods (e.g. application:openURL:options:,
             # URLSession:didReceiveChallenge:completionHandler:) are called by the
             # iOS runtime — not by other code in the binary — so they have no
@@ -475,9 +573,7 @@ def analyze_category(program, category, monitor, output_dir,
             # CallSite so the checker can still analyze the entry point.
             if not call_refs and security_checker:
                 _DELEGATE_PATTERNS = DEEPLINK_DELEGATE_PATTERNS + TLS_DELEGATE_PATTERNS
-                is_delegate = any(
-                    pat in found_func.name for pat in _DELEGATE_PATTERNS
-                )
+                is_delegate = any(pat in found_func.name for pat in _DELEGATE_PATTERNS)
                 if is_delegate:
                     # The delegate function IS the entry point — use its own
                     # address so the checker can look up and decompile it.
@@ -489,7 +585,7 @@ def analyze_category(program, category, monitor, output_dir,
                         caller_address=delegate_addr,
                         caller_name=delegate_name,
                         call_instruction_address=found_func.address,
-                        callee_name=found_func.name
+                        callee_name=found_func.name,
                     )
 
                     extracted = extract_call_info(
@@ -501,31 +597,37 @@ def analyze_category(program, category, monitor, output_dir,
                     )
                     all_findings.extend(findings)
                     # Synthetic ref so the report shows this function was analyzed
-                    call_refs = [type('Ref', (), {
-                        'from_address': found_func.address,
-                        'to_address': found_func.address,
-                        'is_call': True
-                    })()]
-        
+                    call_refs = [
+                        type(
+                            "Ref",
+                            (),
+                            {
+                                "from_address": found_func.address,
+                                "to_address": found_func.address,
+                                "is_call": True,
+                            },
+                        )()
+                    ]
+
         results.append((found_func, call_refs, None, all_findings))
-    
+
     # Count findings and collect all findings
     all_findings_list = []
     for _, _, _, findings in results:
         if findings:
             all_findings_list.extend(findings)
-    
+
     total_findings = len(all_findings_list)
-    
+
     # Generate report
     monitor.setMessage("Generating {} report...".format(category))
     binary_name = program.filename
     timestamp = datetime.now().strftime("%y-%m-%d-%H%M%S")
-    
+
     report = format_report(category, binary_name, results, program)
     report_filename = "Trellis-{}-{}.md".format(category.title(), timestamp)
     report_path = output_dir / report_filename
-    
+
     try:
         with open(str(report_path), "w") as f:
             f.write(report)
@@ -533,7 +635,7 @@ def analyze_category(program, category, monitor, output_dir,
     except Exception as e:
         print("[Trellis] Failed to save report: {}".format(e))
         report_path = None
-    
+
     # Save findings JSON for Frida generator
     findings_json_path = None
     if all_findings_list:
@@ -544,18 +646,18 @@ def analyze_category(program, category, monitor, output_dir,
                 category,
                 binary_name,
                 timestamp,
-                image_base=program.image_base
+                image_base=program.image_base,
             )
             print("[Trellis] Saved findings JSON: {}".format(findings_json_path))
         except Exception as e:
             print("[Trellis] Failed to save findings JSON: {}".format(e))
-    
+
     return {
         "findings": total_findings,
         "functions": len(results),
         "report_path": str(report_path) if report_path else None,
         "findings_json_path": findings_json_path,
-        "category": category
+        "category": category,
     }
 
 
@@ -584,8 +686,11 @@ def run_string_table_scan(program, monitor, output_dir):
     monitor.setMessage("Cross-referencing string findings with function context...")
     xref_findings = string_checker.cross_reference_findings()
     if xref_findings:
-        print("[Trellis] String xref analysis produced {} additional findings".format(
-            len(xref_findings)))
+        print(
+            "[Trellis] String xref analysis produced {} additional findings".format(
+                len(xref_findings)
+            )
+        )
 
     # Jailbreak string-table fallback
     jb_checker = JailbreakSecurityChecker(program)
@@ -602,40 +707,64 @@ def run_string_table_scan(program, monitor, output_dir):
     monitor.setMessage("Detecting credential pairs by proximity...")
     pair_findings = string_checker.detect_credential_pairs()
     if pair_findings:
-        print("[Trellis] Credential pair detection produced {} findings".format(
-            len(pair_findings)))
+        print(
+            "[Trellis] Credential pair detection produced {} findings".format(
+                len(pair_findings)
+            )
+        )
 
     # UIWebView deprecation scan
     monitor.setMessage("Scanning for deprecated UIWebView usage...")
     webview_checker = WebViewSecurityChecker(program)
     uiwebview_findings = webview_checker.scan_uiwebview_deprecation()
     if uiwebview_findings:
-        print("[Trellis] UIWebView deprecation scan produced {} findings".format(
-            len(uiwebview_findings)))
+        print(
+            "[Trellis] UIWebView deprecation scan produced {} findings".format(
+                len(uiwebview_findings)
+            )
+        )
 
     # PCI data flow scan
     monitor.setMessage("Scanning for PCI data over cleartext HTTP...")
     pci_checker = PCIDataFlowChecker(program)
     pci_findings = pci_checker.scan_pci_data_flow()
     if pci_findings:
-        print("[Trellis] PCI data flow scan produced {} findings".format(
-            len(pci_findings)))
+        print(
+            "[Trellis] PCI data flow scan produced {} findings".format(
+                len(pci_findings)
+            )
+        )
 
     # Runtime hardcoded comparison constant scan
     monitor.setMessage("Scanning for hardcoded validation constants...")
     runtime_checker = RuntimeSecurityChecker(program)
     runtime_const_findings = runtime_checker.scan_hardcoded_comparison_constants()
     if runtime_const_findings:
-        print("[Trellis] Runtime constant scan produced {} findings".format(
-            len(runtime_const_findings)))
+        print(
+            "[Trellis] Runtime constant scan produced {} findings".format(
+                len(runtime_const_findings)
+            )
+        )
 
-    all_findings = (string_findings + xref_findings + pair_findings +
-                    jb_findings + bio_findings + uiwebview_findings +
-                    pci_findings + runtime_const_findings)
+    all_findings = (
+        string_findings
+        + xref_findings
+        + pair_findings
+        + jb_findings
+        + bio_findings
+        + uiwebview_findings
+        + pci_findings
+        + runtime_const_findings
+    )
 
     if not all_findings:
         print("[Trellis] No string-table findings")
-        return {"findings": 0, "functions": 0, "report_path": None, "category": "string_scan"}
+        return {
+            "findings": 0,
+            "functions": 0,
+            "report_path": None,
+            "category": "string_scan",
+        }
 
     print("[Trellis] Found {} string-table findings".format(len(all_findings)))
 
@@ -646,7 +775,7 @@ def run_string_table_scan(program, monitor, output_dir):
         "String-Table Scan",
         "String-table analysis (hardcoded credentials, API keys, HTTP URLs, jailbreak paths)",
         all_findings,
-        program
+        program,
     )
 
     timestamp = datetime.now().strftime("%y-%m-%d-%H%M%S")
@@ -695,8 +824,11 @@ def run_obfuscated_secrets_scan(program, monitor, output_dir):
         monitor.setMessage("Scanning for decode→sink data flow...")
         decode_sink_findings = checker.scan_decode_to_sink()
         if decode_sink_findings:
-            print("[Trellis] Decode→Sink scan: {} findings".format(
-                len(decode_sink_findings)))
+            print(
+                "[Trellis] Decode→Sink scan: {} findings".format(
+                    len(decode_sink_findings)
+                )
+            )
             all_findings.extend(decode_sink_findings)
 
     # 2. XOR decode loop detector (byte-by-byte decode with transform chain)
@@ -704,8 +836,9 @@ def run_obfuscated_secrets_scan(program, monitor, output_dir):
         monitor.setMessage("Scanning for XOR decode loops...")
         loop_findings = checker.scan_xor_decode_loops()
         if loop_findings:
-            print("[Trellis] XOR decode loop scan: {} findings".format(
-                len(loop_findings)))
+            print(
+                "[Trellis] XOR decode loop scan: {} findings".format(len(loop_findings))
+            )
             all_findings.extend(loop_findings)
 
     # 3. XOR obfuscation with recovery (single-expression, non-loop)
@@ -713,8 +846,7 @@ def run_obfuscated_secrets_scan(program, monitor, output_dir):
         monitor.setMessage("Scanning for XOR-obfuscated secrets...")
         xor_findings = checker.scan_for_xor_obfuscation()
         if xor_findings:
-            print("[Trellis] XOR scan: {} findings".format(
-                len(xor_findings)))
+            print("[Trellis] XOR scan: {} findings".format(len(xor_findings)))
             all_findings.extend(xor_findings)
 
     # 4. AES key + ciphertext co-location
@@ -722,17 +854,19 @@ def run_obfuscated_secrets_scan(program, monitor, output_dir):
         monitor.setMessage("Scanning for hardcoded AES key+ciphertext pairs...")
         aes_findings = checker.scan_for_aes_key_ciphertext_pairs()
         if aes_findings:
-            print("[Trellis] AES co-location: {} findings".format(
-                len(aes_findings)))
+            print("[Trellis] AES co-location: {} findings".format(len(aes_findings)))
             all_findings.extend(aes_findings)
 
     if not all_findings:
         print("[Trellis] No obfuscated secret findings")
-        return {"findings": 0, "functions": 0, "report_path": None,
-                "category": "obfuscated_secrets"}
+        return {
+            "findings": 0,
+            "functions": 0,
+            "report_path": None,
+            "category": "obfuscated_secrets",
+        }
 
-    print("[Trellis] Total obfuscated secret findings: {}".format(
-        len(all_findings)))
+    print("[Trellis] Total obfuscated secret findings: {}".format(len(all_findings)))
 
     # Generate report
     binary_name = program.filename
@@ -742,12 +876,11 @@ def run_obfuscated_secrets_scan(program, monitor, output_dir):
         "Decompiler-based detection of encoded/encrypted secrets "
         "(Base64, Hex, XOR, AES) flowing into sensitive sinks",
         all_findings,
-        program
+        program,
     )
 
     timestamp = datetime.now().strftime("%y-%m-%d-%H%M%S")
-    report_path = output_dir / "Trellis-ObfuscatedSecrets-{}.md".format(
-        timestamp)
+    report_path = output_dir / "Trellis-ObfuscatedSecrets-{}.md".format(timestamp)
 
     try:
         with open(str(report_path), "w") as f:
@@ -766,7 +899,7 @@ def run_obfuscated_secrets_scan(program, monitor, output_dir):
             "obfuscated_secrets",
             binary_name,
             timestamp,
-            image_base=program.image_base
+            image_base=program.image_base,
         )
         print("[Trellis] Saved findings JSON: {}".format(findings_json_path))
     except Exception as e:
@@ -777,7 +910,7 @@ def run_obfuscated_secrets_scan(program, monitor, output_dir):
         "functions": 0,
         "report_path": str(report_path) if report_path else None,
         "findings_json_path": findings_json_path,
-        "category": "obfuscated_secrets"
+        "category": "obfuscated_secrets",
     }
 
 
@@ -831,7 +964,12 @@ def run_url_handler_analysis(program, monitor, output_dir):
 
     if not handlers and not schemes and not entry_points:
         print("[Trellis] No URL handlers, schemes, or UI entry points found")
-        return {"findings": 0, "functions": 0, "report_path": None, "category": "url_handlers"}
+        return {
+            "findings": 0,
+            "functions": 0,
+            "report_path": None,
+            "category": "url_handlers",
+        }
 
     # Generate reports
     binary_name = program.filename
@@ -850,12 +988,18 @@ def run_url_handler_analysis(program, monitor, output_dir):
     # UI entry points report
     entry_report = ""
     if entry_points:
-        entry_report = """### UI Entry Points Detected ({})\n\n""".format(len(entry_points))
+        entry_report = """### UI Entry Points Detected ({})\n\n""".format(
+            len(entry_points)
+        )
         entry_report += "| Address | Type | Class | Symbol |\n"
         entry_report += "|---------|------|-------|--------|\n"
         for e in entry_points:
             class_info = e.class_name if e.class_name else "—"
-            symbol_display = e.demangled_name[:50] + "..." if len(e.demangled_name) > 50 else e.demangled_name
+            symbol_display = (
+                e.demangled_name[:50] + "..."
+                if len(e.demangled_name) > 50
+                else e.demangled_name
+            )
             entry_report += "| `{}` | {} | `{}` | `{}` |\n".format(
                 hex(e.address), e.entry_type, class_info, symbol_display
             )
@@ -888,7 +1032,7 @@ def run_url_handler_analysis(program, monitor, output_dir):
         "findings": len(handlers) + len(schemes),
         "functions": len(handlers) + len(entry_points),
         "report_path": str(report_path) if report_path else None,
-        "category": "url_handlers"
+        "category": "url_handlers",
     }
 
 
@@ -919,11 +1063,26 @@ def run_analysis(program, output_dir, monitor):
     # NOTE: secret_sinks is excluded here — it runs after the string scan so it
     # can receive string findings for cross-reference fallback.
     categories_to_analyze = [
-        "crypto", "cryptokit", "keychain", "networking", "tls_delegate",
-        "jailbreak", "antidebug", "storage", "deserialization",
-        "webview", "deeplinks", "sqlite", "logging", "endpoints",
-        "privacy", "integrity", "biometric", "runtime",
-        "insecure_storage", "obfuscation",
+        "crypto",
+        "cryptokit",
+        "keychain",
+        "networking",
+        "tls_delegate",
+        "jailbreak",
+        "antidebug",
+        "storage",
+        "deserialization",
+        "webview",
+        "deeplinks",
+        "sqlite",
+        "logging",
+        "endpoints",
+        "privacy",
+        "integrity",
+        "biometric",
+        "runtime",
+        "insecure_storage",
+        "obfuscation",
     ]
 
     all_results = []
@@ -947,18 +1106,25 @@ def run_analysis(program, output_dir, monitor):
 
     # Secret sinks analysis — runs after string scan to enable xref fallback
     if not monitor.isCancelled():
-        print("[Trellis] Passing {} string findings to secret_sinks".format(
-            len(string_scan_findings)))
-        result = analyze_category(program, "secret_sinks", monitor, output_dir,
-                                  secret_string_findings=string_scan_findings)
+        print(
+            "[Trellis] Passing {} string findings to secret_sinks".format(
+                len(string_scan_findings)
+            )
+        )
+        result = analyze_category(
+            program,
+            "secret_sinks",
+            monitor,
+            output_dir,
+            secret_string_findings=string_scan_findings,
+        )
         if result:
             all_results.append(result)
 
     # Obfuscated secrets analysis — decompiler-based decode→sink scan,
     # XOR recovery, and AES key+ciphertext co-location detection.
     if not monitor.isCancelled():
-        obfuscated_result = run_obfuscated_secrets_scan(
-            program, monitor, output_dir)
+        obfuscated_result = run_obfuscated_secrets_scan(program, monitor, output_dir)
         if obfuscated_result:
             all_results.append(obfuscated_result)
 
@@ -977,17 +1143,21 @@ def run_analysis(program, output_dir, monitor):
     total_functions = sum(r.get("functions", 0) for r in all_results)
 
     for result in all_results:
-        print("  {}: {} findings in {} functions".format(
-            result["category"],
-            result.get("findings", 0),
-            result.get("functions", 0)
-        ))
+        print(
+            "  {}: {} findings in {} functions".format(
+                result["category"],
+                result.get("findings", 0),
+                result.get("functions", 0),
+            )
+        )
         if result.get("report_path"):
             print("    Report: {}".format(result["report_path"]))
 
-    print("\nTotal: {} security issues across {} functions".format(
-        total_findings, total_functions
-    ))
+    print(
+        "\nTotal: {} security issues across {} functions".format(
+            total_findings, total_functions
+        )
+    )
 
     return all_results
 
