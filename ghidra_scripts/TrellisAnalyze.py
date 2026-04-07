@@ -922,7 +922,7 @@ def run_analysis(program, output_dir, monitor):
         "crypto", "cryptokit", "keychain", "networking", "tls_delegate",
         "jailbreak", "antidebug", "storage", "deserialization",
         "webview", "deeplinks", "sqlite", "logging", "endpoints",
-        "privacy", "integrity", "secrets", "biometric", "runtime",
+        "privacy", "integrity", "biometric", "runtime",
         "insecure_storage", "obfuscation",
     ]
 

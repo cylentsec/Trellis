@@ -226,8 +226,10 @@ _ASSIGN_RE = re.compile(
 _SINK_CALL_RE = re.compile(
     r'({})[\s(]'.format('|'.join(re.escape(s) for s in _SINK_PATTERNS)))
 
-# Maximum number of functions to decompile (performance guard)
-_MAX_FUNCTIONS_TO_DECOMPILE = 2000
+# Maximum number of functions to decompile (performance guard).
+# Typical iOS apps have 15-50K functions; 2000 was far too low and caused
+# the scanner to miss findings in the latter ~90% of the binary.
+_MAX_FUNCTIONS_TO_DECOMPILE = 50000
 
 # Maximum bytes to read for XOR recovery attempts
 _XOR_MAX_BLOB_SIZE = 256
@@ -253,13 +255,15 @@ _LOOP_HEAD_RE = re.compile(
 # Matches patterns like:
 #   *(i + 0x10086f668)          — direct pointer arithmetic
 #   *(0x10086f668 + i)          — reversed operand order
-#   data[i]  where data is a hex address  — array-style
+#   (&DAT_10086f668)[i]         — Ghidra array-indexing on data label
 # Captures the constant hex address.
 _LOOP_DATA_LOAD_RE = re.compile(
     r'\*\s*\(\s*(?:'
     r'\w+\s*\+\s*(0x[0-9a-fA-F]{6,16})'
     r'|(0x[0-9a-fA-F]{6,16})\s*\+\s*\w+'
-    r')\s*\)')
+    r')\s*\)'
+    r'|'
+    r'\(\s*&\s*DAT_([0-9a-fA-F]{6,16})\s*\)\s*\[[^\]]+\]')
 
 # Step B-2: Transform expression containing XOR with a hex constant.
 # Matches:  (expr ^ 0xNN)  or  (0xNN ^ expr)
@@ -763,7 +767,8 @@ class ObfuscationSecurityChecker(SecurityChecker):
                     continue
 
                 data_addr_str = (data_load_match.group(1) or
-                                 data_load_match.group(2))
+                                 data_load_match.group(2) or
+                                 data_load_match.group(3))
                 try:
                     data_addr = int(data_addr_str, 16)
                 except (ValueError, TypeError):
@@ -807,36 +812,20 @@ class ObfuscationSecurityChecker(SecurityChecker):
                         transform_chain.append(('ADD', operand))
 
                 # Step D: Extract loop bound
+                # Use the same generous window as the loop body (800 chars)
+                # so do-while bounds at the END of the body are not missed.
                 loop_bound = self._extract_loop_bound(
-                    decomp[loop_start:loop_start + 400])
+                    decomp[loop_start:loop_start + 800])
 
                 # Step E: Check for string constructor
                 has_string_ctor = any(
                     pat in decomp for pat in _STRING_CONSTRUCTOR_PATTERNS)
 
-                # Step F: Attempt recovery
-                read_size = loop_bound if loop_bound and loop_bound <= 256 \
-                    else _XOR_MAX_BLOB_SIZE
-                raw = self.program.read_bytes_at(data_addr, read_size)
-                if not raw:
-                    # Can't read data — still report the structural match
-                    findings.append(self._make_loop_finding(
-                        func, data_addr, transform_chain, loop_bound,
-                        has_string_ctor, None, loop_body))
-                    continue
-
-                # Apply transform chain byte-by-byte
-                decoded = self._apply_transform_chain(
-                    raw, transform_chain, loop_bound)
-
-                # Check if decoded is printable/secret-like
-                # Use relaxed check: any printable text is interesting
-                # since it was intentionally obfuscated
-                recovered = _is_printable_text(decoded)
-
+                # Report the structural match — the analyst has the
+                # data address and transform chain to decode offline.
                 findings.append(self._make_loop_finding(
                     func, data_addr, transform_chain, loop_bound,
-                    has_string_ctor, recovered, loop_body))
+                    has_string_ctor, loop_body))
 
         print("[Trellis] XOR decode loop scan: {} findings".format(
             len(findings)))
@@ -899,7 +888,7 @@ class ObfuscationSecurityChecker(SecurityChecker):
     def _make_loop_finding(
         self, func, data_addr: int, transform_chain: list,
         loop_bound: Optional[int], has_string_ctor: bool,
-        recovered: Optional[str], loop_body: str
+        loop_body: str
     ) -> SecurityFinding:
         """Create a SecurityFinding for a detected XOR decode loop."""
         chain_str = " → ".join(
@@ -916,27 +905,18 @@ class ObfuscationSecurityChecker(SecurityChecker):
         if has_string_ctor:
             evidence["string_constructor"] = "detected"
 
-        if recovered:
-            evidence["recovered_plaintext"] = recovered[:80]
-            severity = Severity.CRITICAL
-            issue_type = "XOR Decode Loop: Secret Recovered"
-            description = (
-                "Byte-by-byte XOR decode loop recovers hidden "
-                "string from data at {}".format(hex(data_addr)))
-            impact = (
-                "Obfuscated string was decoded to: '{}' — attacker "
-                "can extract the encoded data at {} and apply the "
-                "same transform chain offline".format(
-                    recovered[:50], hex(data_addr)))
-        else:
-            severity = Severity.HIGH
-            issue_type = "XOR Decode Loop Detected"
-            description = (
-                "Byte-by-byte XOR decode loop operating on "
-                "hardcoded data at {}".format(hex(data_addr)))
-            impact = (
-                "Function constructs a value by XOR-decoding hardcoded "
-                "binary data — likely hiding a secret string")
+        severity = Severity.HIGH
+        issue_type = "XOR Decode Loop Detected"
+        description = (
+            "Byte-by-byte XOR decode loop operating on "
+            "hardcoded data at {}".format(hex(data_addr)))
+        bound_hint = (" ({} bytes)".format(loop_bound)
+                       if loop_bound else "")
+        impact = (
+            "Function decodes hardcoded data{} using transform "
+            "chain {} — extract the blob at {} and apply the "
+            "chain to recover the hidden value".format(
+                bound_hint, chain_str, hex(data_addr)))
 
         return SecurityFinding(
             severity=severity,
