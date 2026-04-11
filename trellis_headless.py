@@ -150,6 +150,18 @@ def main():
             analyze=True,
         ) as flat_api:
             _run_trellis(flat_api, output_dir, args)
+    except Exception as e:
+        # open_program().__exit__ calls project.save() after analysis completes.
+        # For large binaries this write can exceed available disk space.
+        # The Trellis output files are written inside the with-block, so if
+        # they exist the analysis succeeded — treat the project save failure
+        # as non-fatal and continue.
+        output_files = list(output_dir.glob("*")) if output_dir.exists() else []
+        if output_files and "No space left on device" in str(e):
+            print("\n[Trellis] WARNING: Ghidra project save failed (disk full).")
+            print("[Trellis] Analysis output was generated — treating as complete.")
+        else:
+            raise
     finally:
         if _tmp_dir is not None:
             _tmp_dir.cleanup()
