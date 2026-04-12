@@ -31,6 +31,13 @@ Trellis provides static analysis of iOS binaries to detect security-relevant fun
 - **Report Generation**: Markdown reports saved to a user-chosen directory
 - **Frida Script Generation**: Generate ready-to-use instrumentation scripts
 
+## Important Notes
+
+- Trellis scans may take as long six to twelve hours and may require as much as 16 GB RAM. If you don't have enough RAM your computer will use swap space and take significantly longer to complete a scan. Expect to not be able to use your computer for anything else during the analysis.
+- You can run a scan from CylentSec's hosted environment https://trellis.cs3c.me in return for contributing to hosting and infrastructure costs.
+- You must be familiar with basic iOS penetration testing and how to run and edit Frida scripts, otherwise the reports will not be useful. The reports do not provide findings suitable for copy and pasting into a pentest report. They automate days of reverse engineering and analysis and provide actionable next steps for a penetration tester or bug bounty hunter.
+- If you need technical assistance to complete a full iOS security analysis, contact info@cylentsec.com.
+
 ## Installation
 
 This has been tested only on Kali Linux and macOS. While I'm sure it will work on other Linux distros or Windows, the others will not be supported here.
